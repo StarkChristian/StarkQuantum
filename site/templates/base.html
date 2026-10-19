@@ -30,7 +30,7 @@
   } catch (e) {}
 </script>
 {% if site.get("umami_src") %}
-<script defer src="{{ site.umami_src }}" data-website-id="{{ site.umami_website_id }}"></script>
+<script defer src="{{ site.umami_src }}" data-website-id="{{ site.umami_website_id }}" data-domains="{{ site.domain }}"></script>
 {% endif %}
 </head>
 <body>
