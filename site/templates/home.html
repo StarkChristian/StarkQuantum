@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}{{ site.name }} — independent notes on quantum hardware and error correction{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-inner">
+      <img class="hero-mark" src="{{ asset('mark.png') }}" alt=""
+           width="114" height="64" decoding="async">
+      <p class="hero-tagline">{{ site.tagline }}</p>
+      <h1>Independent notes on quantum hardware, error correction, software, and the gap between a demo and a machine.</h1>
+      <p class="hero-body">
+        Written by one person. No newsroom, no vendor affiliation, nothing for
+        sale. The work here is reading primary sources, separating the claim from
+        the evidence, and writing down what is still missing.
+      </p>
+      <ul class="claims">
+        <li>A demo is not a machine.</li>
+        <li>A physical qubit is not a logical qubit.</li>
+        <li>A press release is not evidence.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="wrap band">
+  <div class="band-head">
+    <h2>Reality Board</h2>
+    <a class="more" href="/reality/">Full board</a>
+  </div>
+  <p class="band-note">
+    Four questions that decide whether this field has actually arrived. Most
+    answers are still no, and saying so plainly is the point of the board.
+    {% set reviewed_dates = cells | map(attribute='reviewed') | select | list %}
+    {% if reviewed_dates %}
+    <span class="muted">Last reviewed {{ reviewed_dates | max | longdate }}.</span>
+    {% endif %}
+  </p>
+  <ul class="board-mini">
+    {% for cell in cells %}
+    <li class="status-{{ cell.status }}">
+      <span class="status-tag">{{ cell.status_label }}</span>
+      <span class="board-q">{{ cell.question }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+
+<section class="wrap band">
+  <div class="band-head">
+    <h2>Start here</h2>
+    <a class="more" href="/articles/">All essays</a>
+  </div>
+  <ol class="start-list">
+    {% for essay in start_here %}
+    <li>
+      <div>
+        <a class="entry-title" href="{{ essay.url }}">{{ essay.title }}</a>
+        <p>{{ essay.summary }}</p>
+      </div>
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+
+<section class="wrap band band-split">
+  <div>
+    <div class="band-head">
+      <h2>Recent briefs</h2>
+      <a class="more" href="/news/">All briefs</a>
+    </div>
+    {% if briefs %}
+    <ul class="entry-list compact">
+      {% for brief in briefs %}
+      <li>
+        <div class="entry-meta">
+          <time datetime="{{ brief.published }}">{{ brief.published | longdate }}</time>
+          {% if brief.example %}<span class="pill pill-example">Example</span>{% endif %}
+        </div>
+        <a class="entry-title" href="{{ brief.url }}">{{ brief.title }}</a>
+        <p class="muted">{{ brief.source_name }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="quiet-day">
+      Nothing this week. Quiet weeks are normal and are not a failure of the
+      field or of this site.
+    </p>
+    {% endif %}
+  </div>
+
+  <div>
+    <div class="band-head">
+      <h2>Latest essays</h2>
+      <a class="more" href="/articles/">All essays</a>
+    </div>
+    <ul class="entry-list compact">
+      {% for essay in essays %}
+      <li>
+        <div class="entry-meta">
+          <span>{{ essay.category_label }}</span>
+          <span>{{ essay.difficulty }}</span>
+        </div>
+        <a class="entry-title" href="{{ essay.url }}">{{ essay.title }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endblock %}

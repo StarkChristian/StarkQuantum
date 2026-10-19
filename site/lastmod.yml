@@ -1,0 +1,13 @@
+# Sitemap lastmod for pages that carry no date of their own.
+#
+# Seeded from the live sitemap on 2026-10-19. Each entry stores a hash of the
+# files the page is built from and the date they last changed. While the hash
+# still matches, build.py uses this date. Once the files are edited the hash no
+# longer matches and build.py falls back to the git commit date, so an edit is
+# always picked up without anyone maintaining this file by hand.
+glossary:
+  hash: 7aa86e5af208cbdb
+  date: 2026-09-08
+sources:
+  hash: 00a369b29d515ede
+  date: 2026-09-08

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}{{ brief.title }} — {{ site.name }}{% endblock %}
+{% block description %}{{ brief.body_text[:180] }}{% endblock %}
+
+{% block content %}
+<article class="wrap prose">
+  <p class="crumbs"><a href="/news/">Briefs</a></p>
+
+  {% if brief.corrections %}
+  <div class="corrections" role="note">
+    <h2>Corrections</h2>
+    {% for correction in brief.corrections %}
+    <p><strong>{{ correction.date }}</strong> — {{ correction.note }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if brief.example %}
+  <p class="example-banner">
+    <strong>Example.</strong> This brief exists to show the format. It does not
+    assert a live result, and nothing in it should be cited.
+  </p>
+  {% endif %}
+
+  <h1>{{ brief.title }}</h1>
+  <p class="dateline">
+    By {{ site.author }} · <time datetime="{{ brief.published }}">{{ brief.published | longdate }}</time>
+    {% if brief.entity %} · {{ brief.entity }}{% endif %}
+    {% if brief.source_type %} · {{ brief.source_type }}{% endif %}
+  </p>
+
+  {{ brief.body_html | safe }}
+
+  {% if brief.numbers %}
+  <section class="brief-block">
+    <h2>The numbers</h2>
+    <ul>
+      {% for number in brief.numbers %}<li>{{ number }}</li>{% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  {% if brief.limits %}
+  <section class="brief-block">
+    <h2>What it does not show</h2>
+    <ul>
+      {% for limit in brief.limits %}<li>{{ limit }}</li>{% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  <section class="brief-block">
+    <h2>Primary source</h2>
+    <p>
+      {% if brief.example %}{{ brief.source_name }} ({{ brief.source_url }})
+      {% else %}<a href="{{ brief.source_url }}" rel="noopener">{{ brief.source_name }}</a>{% endif %}
+    </p>
+  </section>
+
+  <p class="frozen-note">
+    Briefs are frozen after publication. If something here is wrong, the
+    correction appears as a dated note at the top of this page rather than as a
+    silent edit.
+  </p>
+</article>
+{% endblock %}

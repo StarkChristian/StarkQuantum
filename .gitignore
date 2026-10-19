@@ -1,0 +1,23 @@
+# Build output
+site/public/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Secrets and local state
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials*.json
+cert.pem
+*.sql
+*.sqlite*
+agent/state.json
+
+# OS / editor
+.DS_Store
+node_modules/

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Briefs — {{ site.name }}{% endblock %}
+{% block description %}Short, source-tied notes on results with numbers in them.{% endblock %}
+
+{% block content %}
+<div class="wrap prose">
+  <h1>Briefs</h1>
+  <p class="standfirst">
+    Two to four sentences, tied to a primary source, published only when a
+    result carries a number worth reading. Four to six a week is a busy week.
+    Empty weeks are normal.
+  </p>
+</div>
+
+<div class="wrap band">
+  {% if briefs %}
+  <ul class="entry-list">
+    {% for brief in briefs %}
+    <li>
+      <div class="entry-meta">
+        <time datetime="{{ brief.published }}">{{ brief.published | longdate }}</time>
+        {% if brief.entity %}<span>{{ brief.entity }}</span>{% endif %}
+        {% if brief.example %}<span class="pill pill-example">Example</span>{% endif %}
+      </div>
+      <a class="entry-title" href="{{ brief.url }}">{{ brief.title }}</a>
+      <p class="muted">{{ brief.source_name }}</p>
+    </li>
+    {% endfor %}
+  </ul>
+  {% if briefs | length < 4 %}
+  <p class="quiet-day">
+    A short list is the normal state of this page. A brief is written only when
+    a result carries a number worth reading, and nothing is published to fill a
+    week. The longer arguments are in the <a href="/articles/">essays</a>.
+  </p>
+  {% endif %}
+  {% else %}
+  <p class="quiet-day">
+    Nothing yet. When there is nothing with a number in it, this page stays
+    empty on purpose.
+  </p>
+  {% endif %}
+</div>
+{% endblock %}

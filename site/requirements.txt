@@ -1,0 +1,6 @@
+# Stark Quantum build dependencies.
+# Install into a local virtual environment:
+#   python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+Jinja2==3.1.6
+Markdown==3.10.3
+PyYAML==6.0.3

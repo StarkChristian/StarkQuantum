@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Sources — {{ site.name }}{% endblock %}
+{% block description %}The allowlist this site reads from, and the categories it refuses.{% endblock %}
+
+{% block content %}
+<div class="wrap prose">
+  <h1>Sources</h1>
+  <p class="standfirst">
+    This is the full list of what this site reads. It is short on purpose. A
+    source that is not on it does not become a brief, however loud it is.
+  </p>
+  <p>{{ sources.note }}</p>
+</div>
+
+<div class="wrap band">
+  {% for group in sources.allowed %}
+  <section class="source-group">
+    <h2>{{ group.name }}</h2>
+    <p class="muted">{{ group.get('why', '') }}</p>
+    <ul class="source-list">
+      {% for entry in group.entries %}
+      <li>
+        {% if entry.get('url') %}<a href="{{ entry.url }}" rel="noopener">{{ entry.name }}</a>
+        {% else %}<strong>{{ entry.name }}</strong>{% endif %}
+        {% if entry.get('note') %}<span class="source-note">{{ entry.get('note') }}</span>{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    {% if group.get('filter') %}
+    <p class="source-filter"><strong>Filter:</strong> {{ group.get('filter') }}</p>
+    {% endif %}
+  </section>
+  {% endfor %}
+
+  <section class="source-group excluded">
+    <h2>Excluded, without exception</h2>
+    <ul class="source-list">
+      {% for item in sources.excluded %}
+      <li><strong>{{ item.name }}</strong><span class="source-note">{{ item.why }}</span></li>
+      {% endfor %}
+    </ul>
+  </section>
+</div>
+
+<div class="wrap prose">
+  <h2>The three gates</h2>
+  <p>
+    Being on the allowlist is not sufficient. A candidate also has to carry a
+    new number or an inspectable result, tie to hardware or to error, and come
+    from the primary source rather than a description of it. Anything that
+    fails one of those three is dropped, and the reason is recorded.
+  </p>
+</div>
+{% endblock %}
