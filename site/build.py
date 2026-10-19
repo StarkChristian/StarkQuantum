@@ -21,6 +21,7 @@ import hashlib
 import json
 import re
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -522,14 +523,29 @@ def main() -> int:
     # reviewed or published date, a brief's publication date, a legal page's
     # updated date. Index pages take the newest date of what they list. The
     # glossary and sources pages carry no date of their own, so they use the
-    # modification time of the files they are built from. No changefreq and
+    # last git commit date of the files they are built from (file mtime outside git). No changefreq and
     # no priority: both are ignored and neither is a fact about the page.
     def newest(dates):
         real = [d for d in dates if d]
         return max(real) if real else dt.date.today()
 
     def file_date(paths):
-        stamps = [p.stat().st_mtime for p in paths if p.exists()]
+        # Prefer the last git commit that touched these files: a fresh
+        # checkout (CI, Cloudflare Pages) gives every file the checkout time
+        # as its mtime, which would stamp every deploy as "modified today".
+        # In a shallow clone this is the date of the newest commit.
+        existing = [p for p in paths if p.exists()]
+        if existing:
+            try:
+                out = subprocess.run(
+                    ["git", "log", "-1", "--format=%cs", "--", *map(str, existing)],
+                    cwd=ROOT, capture_output=True, text=True, check=True,
+                ).stdout.strip()
+                if out:
+                    return dt.date.fromisoformat(out)
+            except (OSError, subprocess.CalledProcessError, ValueError):
+                pass
+        stamps = [p.stat().st_mtime for p in existing]
         if not stamps:
             return dt.date.today()
         return dt.date.fromtimestamp(max(stamps))
