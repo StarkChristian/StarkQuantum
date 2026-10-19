@@ -529,12 +529,28 @@ def main() -> int:
         real = [d for d in dates if d]
         return max(real) if real else dt.date.today()
 
-    def file_date(paths):
-        # Prefer the last git commit that touched these files: a fresh
-        # checkout (CI, Cloudflare Pages) gives every file the checkout time
-        # as its mtime, which would stamp every deploy as "modified today".
-        # In a shallow clone this is the date of the newest commit.
+    def content_hash(paths):
+        digest = hashlib.sha256()
+        for path in sorted(paths):
+            digest.update(path.name.encode())
+            digest.update(path.read_bytes())
+        return digest.hexdigest()[:16]
+
+    lastmod_file = ROOT / "lastmod.yml"
+    lastmod_map = (yaml.safe_load(lastmod_file.read_text(encoding="utf-8"))
+                   if lastmod_file.exists() else None) or {}
+
+    def file_date(paths, key):
         existing = [p for p in paths if p.exists()]
+        # A committed date wins while the source files are unchanged since it
+        # was recorded (see lastmod.yml). A fresh checkout (CI, Cloudflare
+        # Pages) gives every file the checkout time as its mtime, so mtime is
+        # no use here.
+        entry = lastmod_map.get(key)
+        if entry and existing and entry.get("hash") == content_hash(existing):
+            return dt.date.fromisoformat(str(entry["date"]))
+        # Files changed since the map was written: use the last git commit
+        # that touched them. In a shallow clone this is the newest commit.
         if existing:
             try:
                 out = subprocess.run(
@@ -553,8 +569,8 @@ def main() -> int:
     essay_dates = [e["reviewed"] or e["published"] for e in essays]
     brief_dates = [b["published"] for b in briefs]
     cell_dates = [c["reviewed"] for c in cells]
-    glossary_date = file_date(sorted((CONTENT / "glossary").glob("*.md")))
-    sources_date = file_date([CONTENT / "sources.yml"])
+    glossary_date = file_date(sorted((CONTENT / "glossary").glob("*.md")), "glossary")
+    sources_date = file_date([CONTENT / "sources.yml"], "sources")
 
     pages = [
         ("/about/", about["updated"]),
