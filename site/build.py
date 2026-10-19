@@ -467,6 +467,11 @@ def main() -> int:
         else:
             child.unlink()
     shutil.copytree(STATIC, OUTPUT / "static")
+    # Cloudflare Pages reads _headers (and _redirects) from the output root.
+    pages_config = ROOT / "pages-config"
+    if pages_config.is_dir():
+        for extra in pages_config.iterdir():
+            shutil.copy2(extra, OUTPUT / extra.name)
 
     env = Environment(
         loader=FileSystemLoader(TEMPLATES),
