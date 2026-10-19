@@ -19,7 +19,7 @@ No vendor affiliation. Nothing for sale.
 
 ## Reality Board
 
-Last reviewed: 24 September 2026
+Last reviewed: 24 September 2026 · [Full status and notes](reality-board/status.md)
 
 | Question | Status |
 |----------|--------|
@@ -33,6 +33,10 @@ Last reviewed: 24 September 2026
 - [A physical qubit is not a computer](essays/physical-qubit-is-not-a-computer.md)
 - [What a logical qubit actually is](essays/what-a-logical-qubit-is.md)
 - [How to read a quantum claim](essays/how-to-read-a-quantum-claim.md)
+
+## Briefs
+
+- [Sample brief: logical memory with a growing code distance](briefs/2026-10-example-logical-memory-brief.md) (fictional, shows the format)
 
 ## Repository structure
 
