@@ -1,0 +1,106 @@
+# The complete allowlist this site reads from.
+#
+# Automated tools may fetch from these sources and nowhere else. Being on this
+# list is necessary but not sufficient: a candidate still has to carry a new
+# number or an inspectable result, tie to hardware or to error, and come from
+# the primary source rather than a description of it.
+
+note: >-
+  Everything published here begins at one of the sources below. If a result
+  reaches this site through a news article rather than through its primary
+  source, it does not get published, however widely it is being reported.
+
+allowed:
+  - name: Preprints
+    why: >-
+      Where results appear first, with the caveats still attached. Read the
+      abstract and the limitations section before anything written about it.
+    entries:
+      - name: arXiv, quant-ph
+        url: https://arxiv.org/list/quant-ph/recent
+        note: The primary feed. Filtered, not read in full.
+    filter: >-
+      Keyword filter applied to titles and abstracts: surface code, qLDPC,
+      logical qubit, below threshold, error correction cycle, magic state,
+      distillation, gate fidelity, coherence time, resource estimate,
+      classical simulation of, refutation of quantum advantage. Anything that
+      matches is a candidate; matching is not approval.
+
+  - name: Software repositories
+    why: >-
+      Tooling changes what practitioners can do, and repositories are the
+      primary source for it. Release notes and changelogs, not blog coverage.
+    entries:
+      - name: Qiskit
+        url: https://github.com/Qiskit/qiskit
+      - name: Cirq
+        url: https://github.com/quantumlib/Cirq
+      - name: PennyLane
+        url: https://github.com/PennyLaneAI/pennylane
+      - name: TKET
+        url: https://github.com/CQCL/tket
+      - name: CUDA-Q
+        url: https://github.com/NVIDIA/cuda-quantum
+    filter: >-
+      Releases only, and only where the change alters what a practitioner can
+      run: a new compilation pass, a change to error mitigation, a change in
+      hardware access, a deprecation that breaks existing circuits.
+
+  - name: Laboratory and vendor technical pages
+    why: >-
+      Read for technical documentation, calibration data, and papers. Not read
+      for press releases, which are excluded even when they appear on the same
+      domain.
+    entries:
+      - name: IBM Quantum
+        url: https://quantum.ibm.com/
+        note: Documentation and device calibration data.
+      - name: Google Quantum AI
+        url: https://quantumai.google/
+        note: Publications and technical write-ups.
+      - name: Quantinuum
+        url: https://www.quantinuum.com/
+        note: Hardware specifications and papers.
+      - name: IonQ research
+        url: https://ionq.com/resources/research
+        note: Research output only.
+      - name: QuEra
+        url: https://www.quera.com/
+        note: Neutral-atom hardware results.
+      - name: PsiQuantum
+        url: https://www.psiquantum.com/
+        note: Photonic architecture and resource estimates.
+    filter: >-
+      A technical page qualifies only if it contains a measurement or links to
+      a paper that does. A roadmap is not a measurement.
+
+  - name: Standards bodies
+    why: >-
+      Read narrowly, and only where a hardware result or a resource estimate
+      changes the picture.
+    entries:
+      - name: NIST Post-Quantum Cryptography
+        url: https://csrc.nist.gov/projects/post-quantum-cryptography
+        note: >-
+          Consulted only when a resource estimate or a status change is tied to
+          hardware. Migration guidance on its own is not a hardware result.
+
+excluded:
+  - name: News wires and technology press
+    why: Secondary descriptions. The primary source is available; read that.
+  - name: Press releases and partnership announcements
+    why: No measurement, and written to be quoted rather than checked.
+  - name: Stock coverage and analyst notes
+    why: Not evidence about a machine. Out of scope permanently.
+  - name: Funding rounds, contracts, and hiring
+    why: Commercially real, technically empty.
+  - name: Conference marketing and vendor benchmark claims
+    why: >-
+      Benchmarks selected by the party being benchmarked. Serious benchmark
+      papers are read as preprints instead.
+  - name: Quantum sensing, QKD, and quantum networking
+    why: >-
+      Different fields with different evidence standards. Out of scope unless
+      the operator explicitly overrides.
+  - name: Quantum plus AI claims with no specific experiment
+    why: Two subjects, no measurement.

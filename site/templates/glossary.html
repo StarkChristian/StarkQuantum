@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Glossary — {{ site.name }}{% endblock %}
+{% block description %}Working definitions for the terms that decide whether a quantum claim means anything.{% endblock %}
+
+{% block content %}
+<div class="wrap prose">
+  <h1>Glossary</h1>
+  <p class="standfirst">
+    Working definitions, written for reading announcements rather than for
+    passing an exam. Where a term is routinely used to blur a distinction, the
+    entry says so.
+  </p>
+</div>
+
+<div class="wrap band">
+  <nav class="glossary-jump" aria-label="Glossary terms">
+    {% for term in terms %}
+    <a href="#{{ term.slug }}">{{ term.term }}</a>
+    {% endfor %}
+  </nav>
+
+  <dl class="glossary">
+    {% for term in terms %}
+    <div class="glossary-entry" id="{{ term.slug }}">
+      <dt>
+        {{ term.term }}
+        {% if term.aka %}<span class="aka">{{ term.aka | join(', ') }}</span>{% endif %}
+      </dt>
+      <dd>{{ term.body_html | safe }}</dd>
+    </div>
+    {% endfor %}
+  </dl>
+</div>
+{% endblock %}

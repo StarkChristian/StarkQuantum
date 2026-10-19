@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Reality Board — {{ site.name }}{% endblock %}
+{% block description %}Four questions that decide whether quantum computing has arrived, and the honest answer to each.{% endblock %}
+
+{% block content %}
+<div class="wrap prose">
+  <h1>Reality Board</h1>
+  <p class="standfirst">
+    Four questions. Not forty. Each one is a thing that either has happened or
+    has not, and each has a stated condition for changing the answer.
+  </p>
+  <p>
+    The board exists so that a reader can check the state of the field without
+    reading a year of announcements. Most of these cells will read
+    <em>Not yet</em> for a long time. That is information, not pessimism.
+  </p>
+  <p>
+    A cell moves only when a human reviews the evidence against the condition
+    written under it. Automated tools may flag a candidate for review. They
+    cannot change a cell.
+  </p>
+</div>
+
+<div class="wrap band">
+  <ol class="board">
+    {% for cell in cells %}
+    <li class="board-cell status-{{ cell.status }}">
+      <div class="board-cell-head">
+        <span class="status-tag">{{ cell.status_label }}</span>
+        {% if cell.reviewed %}
+        <span class="board-reviewed">Reviewed {{ cell.reviewed | longdate }}</span>
+        {% endif %}
+      </div>
+      <h2>{{ cell.question }}</h2>
+      <div class="board-body">{{ cell.body_html | safe }}</div>
+      {% if cell.changes %}
+      <div class="board-change">
+        <h3>Changes to this answer</h3>
+        <ul>
+          {% for change in cell.changes %}<li><strong>{{ change.date }}</strong> — {{ change.note }}</li>{% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+      {% if cell.would_change_it %}
+      <div class="board-change">
+        <h3>What would change this answer</h3>
+        <ul>
+          {% for item in cell.would_change_it %}<li>{{ item }}</li>{% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ol>
+</div>
+
+<div class="wrap prose">
+  <h2>What is deliberately not on this board</h2>
+  <p>
+    There is no cell for cryptographic threat. The question of when a
+    cryptographically relevant quantum computer arrives is downstream of cells
+    two and four, and giving it its own row would suggest it moves on its own.
+    It does not. It moves when the hardware moves.
+  </p>
+  <p>
+    There is also no cell for funding, headcount, partnerships, or share price.
+    None of those are evidence about a machine.
+  </p>
+</div>
+{% endblock %}

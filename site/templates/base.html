@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{{ site.name }}{% endblock %}</title>
+<meta name="description" content="{% block description %}{{ site.description }}{% endblock %}">
+<meta name="author" content="{{ site.author }}">
+{% if not current.endswith(".html") %}
+<link rel="canonical" href="{{ site.base_url }}{{ current }}">
+<meta property="og:url" content="{{ site.base_url }}{{ current }}">
+{% endif %}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{{ site.name }}">
+<meta property="og:title" content="{{ self.title() }}">
+<meta property="og:description" content="{{ self.description() }}">
+<link rel="stylesheet" href="{{ asset('styles.css') }}">
+{# The body face is the one asset worth fetching early. Both files are served
+   from this site; nothing here reaches a third party. #}
+<link rel="preload" href="/static/fonts/source-serif-4-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/static/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32.png') }}">
+<link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
+<link rel="alternate" type="application/rss+xml" title="{{ site.name }}" href="/feed.xml">
+<script>
+  // Theme preference is the only thing this site stores in your browser.
+  try {
+    var t = localStorage.getItem("sq-theme");
+    if (t) { document.documentElement.setAttribute("data-theme", t); }
+  } catch (e) {}
+</script>
+{% if site.get("umami_src") %}
+<script defer src="{{ site.umami_src }}" data-website-id="{{ site.umami_website_id }}"></script>
+{% endif %}
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <div class="wrap masthead-inner">
+    {# The mark carries no information the adjacent text does not already
+       give, so it is decorative for a screen reader. #}
+    <a class="wordmark" href="/">
+      <img class="wordmark-mark" src="{{ asset('mark.png') }}" alt=""
+           width="53" height="30" decoding="async">
+      <span class="wordmark-text">
+        <span class="wordmark-name">Stark Quantum</span>
+        <span class="wordmark-note">Independent. Not a vendor.</span>
+      </span>
+    </a>
+
+    <button class="menu-toggle" id="menu-toggle" type="button"
+            aria-expanded="false" aria-controls="masthead-right">Menu</button>
+
+    <div class="masthead-right" id="masthead-right">
+      <nav class="nav" aria-label="Primary">
+        <a href="/articles/"{% if current.startswith('/articles') %} aria-current="page"{% endif %}>Essays</a>
+        <a href="/news/"{% if current.startswith('/news') %} aria-current="page"{% endif %}>Briefs</a>
+        <a href="/reality/"{% if current.startswith('/reality') %} aria-current="page"{% endif %}>Reality</a>
+        <a href="/about/"{% if current.startswith('/about') %} aria-current="page"{% endif %}>About</a>
+      </nav>
+      <div class="tools">
+        <button class="tool" id="search-open" type="button" aria-label="Search the archive">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M10.5 10.5 14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span>Search</span>
+        </button>
+        <button class="tool tool-icon" id="theme-toggle" type="button" aria-label="Switch theme">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <circle cx="8" cy="8" r="6.25" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+{% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <p class="footer-line">
+      <strong>{{ site.name }}</strong> is written by {{ site.author }}. It is an
+      independent project with no vendor affiliation, no newsroom, and nothing
+      to sell.
+    </p>
+    <p class="footer-line muted">
+      Not a hardware vendor. Not affiliated with StarkWare, the German drone
+      company Stark, Quantum Systems, or Stark Quantum Solutions.
+    </p>
+    <nav class="footer-nav" aria-label="Footer">
+      <a href="/articles/">Essays</a>
+      <a href="/news/">Briefs</a>
+      <a href="/reality/">Reality Board</a>
+      <a href="/glossary/">Glossary</a>
+      <a href="/sources/">Sources</a>
+      <a href="/impressum/">Impressum</a>
+      <a href="/privacy/">Privacy</a>
+      <a href="/disclaimer/">Disclaimer</a>
+      <a href="/feed.xml">RSS</a>
+      {# Cloudflare Email Obfuscation would replace this with a
+         JavaScript-decoded placeholder. The address must stay readable
+         without scripts, so it is excluded here and on the Impressum. #}
+      <!--email_off--><a href="mailto:{{ site.email }}">{{ site.email }}</a><!--/email_off-->
+    </nav>
+  </div>
+</footer>
+
+<div class="search-shade" id="search-shade" hidden>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the archive">
+    <input type="search" id="search-input" placeholder="Search essays, briefs, glossary" autocomplete="off">
+    <ul class="search-results" id="search-results"></ul>
+    <p class="search-hint">Esc to close.</p>
+  </div>
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "Stark Quantum",
+  "alternateName": "Stark Quantum \u2014 independent notes on quantum hardware",
+  "url": "{{ site.base_url }}/",
+  "description": "{{ site.description }}",
+  "inLanguage": "en",
+  "isAccessibleForFree": true,
+  "author": {
+    "@type": "Person",
+    "name": "Christian Stark",
+    "jobTitle": "Independent researcher",
+    "email": "mailto:info@starkquantum.com",
+    "address": {"@type": "PostalAddress", "addressLocality": "Aachen", "addressCountry": "DE"}
+  },
+  "publisher": {"@type": "Person", "name": "Christian Stark"}
+}
+</script>
+<script src="{{ asset('site.js') }}" defer></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Essays — {{ site.name }}{% endblock %}
+{% block description %}Essays on quantum hardware, error correction, tooling, and the limits of applications.{% endblock %}
+
+{% block content %}
+<div class="wrap prose">
+  <h1>Essays</h1>
+  <p class="standfirst">
+    Longer pieces. Each one ends with the same four lines: what was claimed,
+    what the evidence actually shows, what is missing, and why it matters.
+  </p>
+  <p>
+    The difficulty label says what a piece assumes, not how hard it is.
+    <strong>Intro</strong> assumes no background beyond an interest in the
+    subject. <strong>Intermediate</strong> assumes you have met qubits, gates
+    and error rates before. <strong>Advanced</strong> assumes you read papers
+    in this field and want the argument rather than the introduction.
+  </p>
+</div>
+
+<div class="wrap band">
+  {% for key, label in categories %}
+  {% set group = essays | selectattr('category', 'equalto', key) | list %}
+  {% if group %}
+  <section class="category">
+    <h2 id="{{ key }}">{{ label }}</h2>
+    <ul class="entry-list">
+      {% for essay in group %}
+      <li>
+        <div class="entry-meta">
+          <span>{{ essay.difficulty }}</span>
+          <time datetime="{{ essay.published }}">{{ essay.published | longdate }}</time>
+          {% if essay.reviewed %}<span>Reviewed {{ essay.reviewed | longdate }}</span>{% endif %}
+        </div>
+        <a class="entry-title" href="{{ essay.url }}">{{ essay.title }}</a>
+        <p>{{ essay.summary }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+  {% endfor %}
+</div>
+{% endblock %}

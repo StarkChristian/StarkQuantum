@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}{{ essay.title }} — {{ site.name }}{% endblock %}
+{% block description %}{{ essay.summary }}{% endblock %}
+
+{% block content %}
+<article class="wrap prose">
+  <p class="crumbs"><a href="/articles/">Essays</a> / {{ essay.category_label }}</p>
+  <h1>{{ essay.title }}</h1>
+  <p class="standfirst">{{ essay.summary }}</p>
+  <p class="dateline">
+    By {{ site.author }} · Published {{ essay.published | longdate }}
+    {% if essay.reviewed %} · Reviewed {{ essay.reviewed | longdate }}{% endif %}
+    · {{ essay.difficulty }}
+    {% if essay.living %} · Living essay{% endif %}
+  </p>
+
+  {{ essay.body_html | safe }}
+
+  <aside class="footer-box" aria-label="Claim, evidence, missing piece, so what">
+    <h2>The short version</h2>
+    <dl>
+      <dt>Claim</dt>
+      <dd>{{ essay.footer.claim }}</dd>
+      <dt>Evidence</dt>
+      <dd>{{ essay.footer.evidence }}</dd>
+      <dt>Missing piece</dt>
+      <dd>{{ essay.footer.missing_piece }}</dd>
+      <dt>So what</dt>
+      <dd>{{ essay.footer.so_what }}</dd>
+    </dl>
+  </aside>
+
+  {% if essay.sources %}
+  <section class="essay-sources">
+    <h2>Sources</h2>
+    <ul>
+      {% for source in essay.sources %}
+      <li>
+        {% if source.get('url') %}<a href="{{ source.get('url') }}" rel="noopener">{{ source.name }}</a>
+        {% else %}{{ source.name }}{% endif %}
+        {% if source.get('note') %} — {{ source.get('note') }}{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  {% if essay.living and essay.category == 'foundations' %}
+  <p class="living-note">
+    This is a foundation essay. It is kept current rather than frozen, so the
+    reviewed date above matters more than the publication date.
+  </p>
+  {% endif %}
+</article>
+{% endblock %}
