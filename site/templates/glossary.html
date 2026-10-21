@@ -19,16 +19,17 @@
     {% endfor %}
   </nav>
 
-  <dl class="glossary">
+  {# Headings with ids, not dt/dd, so that search can link to one entry. #}
+  <div class="glossary" data-pagefind-body data-pagefind-meta="type:Glossary">
     {% for term in terms %}
-    <div class="glossary-entry" id="{{ term.slug }}">
-      <dt>
+    <section class="glossary-entry">
+      <h2 class="glossary-term" id="{{ term.slug }}">
         {{ term.term }}
         {% if term.aka %}<span class="aka">{{ term.aka | join(', ') }}</span>{% endif %}
-      </dt>
-      <dd>{{ term.body_html | safe }}</dd>
-    </div>
+      </h2>
+      <div class="glossary-def">{{ term.body_html | safe }}</div>
+    </section>
     {% endfor %}
-  </dl>
+  </div>
 </div>
 {% endblock %}

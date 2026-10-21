@@ -3,7 +3,7 @@
 {% block description %}{{ essay.summary }}{% endblock %}
 
 {% block content %}
-<article class="wrap prose">
+<article class="wrap prose" data-pagefind-body data-pagefind-meta="type:Essay">
   <p class="crumbs"><a href="/articles/">Essays</a> / {{ essay.category_label }}</p>
   <h1>{{ essay.title }}</h1>
   <p class="standfirst">{{ essay.summary }}</p>
@@ -11,8 +11,20 @@
     By {{ site.author }} · Published {{ essay.published | longdate }}
     {% if essay.reviewed %} · Reviewed {{ essay.reviewed | longdate }}{% endif %}
     · {{ essay.difficulty }}
+    · {{ essay.minutes }} min read
     {% if essay.living %} · Living essay{% endif %}
   </p>
+
+  {% if essay.toc | length >= 3 %}
+  <nav class="toc" aria-label="In this essay" data-pagefind-ignore>
+    <p class="toc-title">In this essay</p>
+    <ol>
+      {% for entry in essay.toc %}
+      <li><a href="#{{ entry.id }}">{{ entry.name }}</a></li>
+      {% endfor %}
+    </ol>
+  </nav>
+  {% endif %}
 
   {{ essay.body_html | safe }}
 
@@ -50,6 +62,23 @@
     This is a foundation essay. It is kept current rather than frozen, so the
     reviewed date above matters more than the publication date.
   </p>
+  {% endif %}
+
+  {% if newer or older %}
+  <nav class="pager" aria-label="More essays" data-pagefind-ignore>
+    {% if older %}
+    <a class="pager-prev" href="{{ older.url }}" rel="prev">
+      <span class="pager-dir">Previous essay</span>
+      <span class="pager-title">{{ older.title }}</span>
+    </a>
+    {% endif %}
+    {% if newer %}
+    <a class="pager-next" href="{{ newer.url }}" rel="next">
+      <span class="pager-dir">Next essay</span>
+      <span class="pager-title">{{ newer.title }}</span>
+    </a>
+    {% endif %}
+  </nav>
   {% endif %}
 </article>
 {% endblock %}

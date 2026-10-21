@@ -29,6 +29,9 @@ import markdown
 import yaml
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
+from enhance import (build_term_matcher, first_sentence, protect_math,
+                     reading_minutes, restore_math, write_og_image)
+
 ROOT = Path(__file__).resolve().parent
 CONTENT = ROOT / "content"
 TEMPLATES = ROOT / "templates"
@@ -81,7 +84,8 @@ CATEGORY_LABELS = dict(ESSAY_CATEGORIES)
 DIFFICULTIES = ["Intro", "Intermediate", "Advanced"]
 
 MD = markdown.Markdown(
-    extensions=["extra", "sane_lists", "smarty"],
+    extensions=["extra", "sane_lists", "smarty", "toc"],
+    extension_configs={"toc": {"toc_depth": "2", "permalink": False}},
     output_format="html5",
 )
 
@@ -92,9 +96,17 @@ def fail(where: str, message: str) -> None:
     errors.append(f"{where}: {message}")
 
 
-def render_markdown(text: str) -> str:
+def render_markdown_toc(text: str, where: str = "") -> tuple[str, list[dict]]:
+    """Render Markdown to HTML, with formulas as MathML, plus its h2 outline."""
+    text, formulas = protect_math(text, where, fail)
     MD.reset()
-    return MD.convert(text)
+    rendered = MD.convert(text)
+    toc = [{"id": t["id"], "name": t["name"]} for t in MD.toc_tokens]
+    return restore_math(rendered, formulas), toc
+
+
+def render_markdown(text: str, where: str = "") -> str:
+    return render_markdown_toc(text, where)[0]
 
 
 def read_doc(path: Path) -> tuple[dict, str]:
@@ -192,6 +204,7 @@ def load_essays() -> list[dict]:
         if not 700 <= words <= 1400:
             fail(path.name, f"{words} words, outside the 700-1400 range")
 
+        body_html, toc = render_markdown_toc(body, path.name)
         essays.append({
             "kind": "essay",
             "slug": slug,
@@ -206,7 +219,9 @@ def load_essays() -> list[dict]:
             "living": bool(meta.get("living", True)),
             "sources": meta.get("sources") or [],
             "footer": footer,
-            "body_html": render_markdown(body),
+            "body_html": body_html,
+            "toc": toc,
+            "minutes": reading_minutes(words),
             "body_text": body,
         })
     essays.sort(key=lambda e: (e["published"] or dt.date.min), reverse=True)
@@ -245,7 +260,7 @@ def load_briefs() -> list[dict]:
             "limits": meta.get("limits") or [],
             "example": is_example,
             "corrections": meta.get("corrections") or [],
-            "body_html": render_markdown(body),
+            "body_html": render_markdown(body, path.name),
             "body_text": body,
         })
     briefs.sort(key=lambda b: (b["published"] or dt.date.min), reverse=True)
@@ -269,7 +284,8 @@ def load_glossary() -> list[dict]:
             "term": meta.get("term", path.stem),
             "aka": meta.get("aka") or [],
             "title": meta.get("term", path.stem),
-            "body_html": render_markdown(body),
+            "definition": first_sentence(body),
+            "body_html": render_markdown(body, path.name),
             "body_text": body,
         })
     terms.sort(key=lambda t: t["term"].lower())
@@ -346,8 +362,34 @@ def write(env: Environment, out_path: str, template: str, **ctx) -> None:
     else:
         target = OUTPUT / clean / "index.html"
     target.parent.mkdir(parents=True, exist_ok=True)
+    ctx.setdefault("og_image", "/og/default.png")
     html = env.get_template(template).render(site=SITE, current=out_path, **ctx)
     target.write_text(html, encoding="utf-8")
+
+
+def write_og_images(essays, briefs) -> None:
+    """One link-preview card per essay and brief, plus a default for the rest."""
+    write_og_image(OUTPUT / "og" / "default.png", SITE["description"],
+                   SITE["name"])
+    for item in essays:
+        item["og_image"] = f"/og/essay-{item['slug']}.png"
+        write_og_image(OUTPUT / item["og_image"].lstrip("/"), item["title"],
+                       f"Essay / {item['category_label']}")
+    for item in briefs:
+        item["og_image"] = f"/og/brief-{item['slug']}.png"
+        write_og_image(OUTPUT / item["og_image"].lstrip("/"), item["title"],
+                       "Brief")
+
+
+def build_pagefind() -> None:
+    """Index public/ for in-browser search. The site still works without it:
+    site.js falls back to search-index.json when /pagefind/ is missing."""
+    try:
+        subprocess.run([sys.executable, "-m", "pagefind", "--site", str(OUTPUT)],
+                       check=True, capture_output=True, text=True)
+    except (OSError, subprocess.CalledProcessError) as exc:
+        detail = getattr(exc, "stderr", "") or exc
+        print(f"warning: pagefind index not built ({detail})", file=sys.stderr)
 
 
 def build_search_index(essays, briefs, terms) -> list[dict]:
@@ -487,6 +529,14 @@ def main() -> int:
     by_slug = {e["slug"]: e for e in essays}
     start_here = [by_slug[slug] for slug in START_HERE if slug in by_slug]
 
+    # First mention of each glossary term in an essay or brief links to its
+    # definition. Glossary entries and legal pages are left alone.
+    link_terms = build_term_matcher(terms)
+    for item in essays + briefs:
+        item["body_html"] = link_terms(item["body_html"])
+
+    write_og_images(essays, briefs)
+
     write(env, "/", "home.html", essays=essays[:6], briefs=briefs[:5],
           cells=cells, start_here=start_here)
     write(env, "/about/", "page.html", page=about)
@@ -495,11 +545,16 @@ def main() -> int:
     write(env, "/disclaimer/", "page.html", page=disclaimer)
     write(env, "/articles/", "essay_index.html", essays=essays,
           categories=ESSAY_CATEGORIES)
-    for essay in essays:
-        write(env, essay["url"], "essay.html", essay=essay)
+    # essays is newest first, so the older neighbour is the next index.
+    for i, essay in enumerate(essays):
+        write(env, essay["url"], "essay.html", essay=essay,
+              og_image=essay["og_image"],
+              newer=essays[i - 1] if i > 0 else None,
+              older=essays[i + 1] if i + 1 < len(essays) else None)
     write(env, "/news/", "brief_index.html", briefs=briefs)
     for brief in briefs:
-        write(env, brief["url"], "brief.html", brief=brief)
+        write(env, brief["url"], "brief.html", brief=brief,
+              og_image=brief["og_image"])
     write(env, "/reality/", "reality.html", cells=cells)
     write(env, "/glossary/", "glossary.html", terms=terms)
     write(env, "/sources/", "sources.html", sources=sources)
@@ -598,7 +653,9 @@ def main() -> int:
         f"{sitemap}\n</urlset>\n", encoding="utf-8")
     urls = [url for url, _ in pages]
 
-    print(f"Built {len(urls)} pages: {len(essays)} essays, {len(briefs)} briefs, "
+    build_pagefind()
+
+    print(f"Built {len(urls)} pages:{len(essays)} essays, {len(briefs)} briefs, "
           f"{len(terms)} glossary terms, {len(cells)} board cells.")
 
     if args.serve:

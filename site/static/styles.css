@@ -886,28 +886,119 @@ a:hover { color: var(--accent); text-decoration-color: var(--accent); }
 
 .glossary { margin: 0; }
 .glossary-entry {
-  scroll-margin-top: 1.5rem;
   padding: 1.5rem 0;
   border-top: 1px solid var(--rule-2);
 }
 .glossary-entry:first-child { border-top: 0; padding-top: 0; }
 
-.glossary dt {
+.glossary-term {
+  scroll-margin-top: 1.5rem;
   font-family: var(--sans);
   font-weight: 600;
   font-size: 1rem;
   letter-spacing: -0.005em;
-  margin-bottom: 0.5rem;
+  line-height: 1.4;
+  margin: 0 0 0.5rem;
 }
+.glossary-term:target { color: var(--accent); }
 .glossary .aka {
   font-weight: 400;
   color: var(--ink-3);
   font-size: 0.8125rem;
   margin-left: 0.55rem;
 }
-.glossary dd { margin: 0; color: var(--ink-2); max-width: 40rem; }
-.glossary dd p { margin: 0 0 0.7rem; }
-.glossary dd p:last-child { margin-bottom: 0; }
+.glossary-def { color: var(--ink-2); max-width: 40rem; }
+.glossary-def p { margin: 0 0 0.7rem; }
+.glossary-def p:last-child { margin-bottom: 0; }
+
+/* A glossary term inside an essay: a quiet dotted underline, so a link that
+   explains does not compete with a link that cites. */
+a.term {
+  text-decoration-style: dotted;
+  text-decoration-color: var(--ink-3);
+  text-decoration-thickness: 1.5px;
+  cursor: help;
+}
+a.term:hover { text-decoration-style: solid; }
+
+/* In-essay outline and the previous/next pager. */
+.toc {
+  margin: 0 0 2.25rem;
+  padding: 1rem 1.25rem 1.1rem;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  font-family: var(--sans);
+  font-size: 0.875rem;
+}
+.toc-title {
+  margin: 0 0 0.6rem;
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.toc ol { margin: 0; padding-left: 1.2rem; }
+.toc li { margin: 0 0 0.35rem; padding-left: 0.2rem; }
+.toc li::marker { color: var(--accent); font-weight: 600; }
+.toc a { text-decoration: none; color: var(--ink-2); }
+.toc a:hover { color: var(--accent); }
+.prose h2[id] { scroll-margin-top: 1.25rem; }
+
+.pager {
+  display: grid;
+  gap: 1rem;
+  margin-top: 3.5rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--rule);
+}
+@media (min-width: 40rem) { .pager { grid-template-columns: 1fr 1fr; } }
+.pager a {
+  display: block;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--rule);
+  background: var(--paper-2);
+  text-decoration: none;
+}
+.pager a:hover { border-color: var(--accent); }
+.pager-next { text-align: right; grid-column: 2; }
+.pager-prev:only-child { grid-column: 1; }
+.pager-dir {
+  display: block;
+  font-family: var(--sans);
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 0.3rem;
+}
+.pager-title { display: block; line-height: 1.35; }
+.pager a:hover .pager-title { color: var(--accent); }
+@media (max-width: 39.99rem) { .pager-next { grid-column: 1; text-align: left; } }
+
+/* Formulas are MathML, drawn by the browser: no script, no font download. */
+math { font-size: 1.08em; }
+math[display="block"] {
+  display: block math;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+
+/* Search results from the full-text index. */
+.search-results .r-excerpt {
+  display: block;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--ink-2);
+  margin-top: 0.15rem;
+}
+.search-results mark {
+  background: var(--accent-wash);
+  color: var(--ink);
+  padding: 0 0.1em;
+  border-radius: 2px;
+}
 
 .source-group { margin-bottom: 3rem; }
 .source-group:last-child { margin-bottom: 0; }
@@ -1092,7 +1183,7 @@ a:hover { color: var(--accent); text-decoration-color: var(--accent); }
    and its URLs, and none of the site furniture. */
 @media print {
   .masthead, .footer-nav, .search-shade, .tools, .menu-toggle,
-  .glossary-jump, .crumbs { display: none !important; }
+  .glossary-jump, .crumbs, .toc, .pager { display: none !important; }
   body { background: #fff; color: #000; font-size: 11pt; }
   .wrap, .prose { max-width: none; padding: 0; }
   .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; }
