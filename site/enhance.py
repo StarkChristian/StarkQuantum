@@ -321,3 +321,20 @@ def llms_txt(site: dict, essays: list[dict], briefs: list[dict],
             f"- [Sources]({base}/sources/): the allowlist this site reads from",
             f"- [About]({base}/about/)", ""]
     return "\n".join(out)
+
+
+def bibtex(site: dict, item: dict) -> str:
+    """A BibTeX entry for citing an essay or a lesson."""
+    year = (item.get("reviewed") or item["published"]).year
+    title = item["title"].replace("&", "\\&")
+    return (
+        f"@online{{starkquantum-{item['slug']},\n"
+        f"  author = {{Stark, Christian}},\n"
+        f"  title = {{{title}}},\n"
+        f"  organization = {{{site['name']}}},\n"
+        f"  year = {{{year}}},\n"
+        f"  url = {{{site['base_url']}{item['url']}}},\n"
+        f"  note = {{Published {item['published'].isoformat()}"
+        + (f"; reviewed {item['reviewed'].isoformat()}" if item.get("reviewed") else "")
+        + "}\n}"
+    )

@@ -30,7 +30,7 @@ import yaml
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 import figures
-from enhance import (article_ld, build_term_matcher, first_sentence, llms_txt,
+from enhance import (article_ld, bibtex, build_term_matcher, first_sentence, llms_txt,
                      markdown_copy, protect_math, reading_minutes, restore_math,
                      write_og_image)
 
@@ -757,6 +757,7 @@ def main() -> int:
     for i, essay in enumerate(essays):
         write(env, essay["url"], "essay.html", essay=essay,
               og_image=essay["og_image"], ld=article_ld(SITE, essay),
+              cite=bibtex(SITE, essay),
               newer=essays[i - 1] if i > 0 else None,
               older=essays[i + 1] if i + 1 < len(essays) else None)
     write(env, "/news/", "brief_index.html", briefs=briefs)
@@ -779,6 +780,7 @@ def main() -> int:
     for i, lesson in enumerate(lessons):
         write(env, lesson["url"], "lesson.html", lesson=lesson,
               og_image=lesson["og_image"], ld=article_ld(SITE, lesson),
+              cite=bibtex(SITE, lesson),
               previous=lessons[i - 1] if i > 0 else None,
               following=lessons[i + 1] if i + 1 < len(lessons) else None)
     write(env, "/404.html", "page.html", page={

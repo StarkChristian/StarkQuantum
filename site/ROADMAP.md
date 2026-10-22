@@ -1,41 +1,71 @@
-# Roadmap
+# Roadmap, version 3
 
-What the site has, what was built in the latest round, and what is deliberately
-left for later. The doctrine (`DOCTRINE.md`, version 1.2, in the operator's
-folder) wins over this list: nothing here adds advertising, tracking,
-monetisation or futurist artwork.
+Written 22 October 2026. The aim: a publication that reads like 2026, uses the
+platform as it is today, and can show a visitor what it runs on. The doctrine
+(`DOCTRINE.md`, version 1.2, in the operator's folder) wins over this list: no
+advertising, no tracking, no monetisation, no futurist artwork, English only.
 
 ## Built
 
-- Link-preview card per page, MathML formulas, glossary autolinks, in-page outline,
-  previous/next, Pagefind search
-- Security headers with an enforced Content-Security-Policy
-- `llms.txt`, a plain Markdown copy of every page, schema.org and Scholar data
-- Cross-document view transitions, hover prefetch
-- Flat single-colour mark, with favicons drawn from the same curve
+**Reading**
+- Link-preview cards, MathML, glossary links with popover definitions, in-page
+  outline, previous/next, a scroll-driven reading bar, Pagefind search
+- OKLCH colour tokens with `light-dark()`, `text-wrap: pretty`, cross-document
+  view transitions with a fixed masthead, hover prefetch
+
+**Trust**
+- A claims register (`/claims/`): every factual or numerical claim on the Learn
+  and tool pages, its source, and what was done with the source
+- Sources on every lesson; the calculator and the threshold page cite the
+  primary papers and say which constants come from where
+- "Cite this" with BibTeX on essays and lessons
+- A build that fails on a broken link or anchor, and on any page over 150 KB
+
+**Explainers**
 - Learn: six ordered lessons with self-checks
-- Overhead calculator at `/overhead/`, with a choice of threshold
-- **The threshold, measured** at `/threshold/`: a Stim simulation of surface codes
-  of distance 3 to 9, drawn as an SVG chart at build time, with the raw numbers
-  at `/threshold.json` and the script in `tools/threshold_sim.py`
-- Surface-code figure in the error-correction lesson, with its layout checked
-  (four X checks, four Z checks, all commuting) every time the site builds
-- Reality Board history: every dated change, across all four cells
-- The build fails on a broken internal link or anchor
+- A surface-code playground (distance 3 and 5, exact matching decoder checked
+  against PyMatching on 9,000 cases) and a Bloch sphere
+- The threshold, measured with Stim, drawn as SVG at build time, with hover
+  values, raw data and the script published
+- Overhead calculator with three published or simulated models
+
+**Platform**
+- Enforced CSP, security headers, `security.txt`, web manifest
+- `llms.txt`, a Markdown copy of every page, RSS and JSON Feed, schema.org and
+  Scholar metadata
+- `/colophon/`: what the site runs on, with page weights measured by the build;
+  each page's footer shows its own weight
 
 ## Next
 
-- [ ] Rerun the threshold simulation with a second decoder (union-find) and a
-      noise model with unequal rates, and show how far the crossing moves
-- [ ] A figure for "The decoder has to keep up": syndrome rounds arriving against
-      the decoder's deadline
+**Explainers**
+- [ ] "The decoder has to keep up": syndrome rounds arriving against the
+      decoder's deadline, with a slider for latency (an interactive figure)
+- [ ] Threshold explorer: toggle distances; add a second decoder (union-find) and
+      an unequal-noise model and show how far the crossing moves
+- [ ] A lesson on reading a resource estimate
+
+**Trust**
+- [ ] Revision history on essays and lessons (a dated list in the front matter,
+      shown on the page)
+- [ ] DOIs for published versions through Zenodo's GitHub integration (needs the
+      editor's decision)
+- [ ] The editor's review of every lesson, recorded in the claims register
+
+**Platform**
+- [ ] Automated audits on every change: Lighthouse, axe (WCAG 2.2 AA) and HTML
+      validation, with the results shown on the colophon (needs GitHub Actions,
+      the editor's decision)
+- [ ] Search filter by type (essay, lesson, brief, glossary)
 - [ ] Glossary terms for what the lessons introduce: syndrome, code distance,
       Clifford gate, T gate, no-cloning
-- [ ] A lesson on reading a resource estimate, once an estimate worth teaching
-      from has been reviewed
-- [ ] Search filter by type (essay, lesson, brief, glossary)
-- [ ] Review the six lessons line by line against sources, and add a `sources`
-      list to each
+
+## Waiting on the editor
+
+- The glossary entry "Magic state" says distillation dominates the cost in most
+  resource estimates. Magic state cultivation (2024) may have changed that.
+- Whether the site should say that an AI assistant helped check sources.
+- Whether lessons carry the editor's byline until each has been reviewed.
 
 ## Not planned, by doctrine
 
@@ -54,3 +84,5 @@ monetisation or futurist artwork.
 - The CSP allows scripts from `umami.homomorphicprivacy.com` and
   `'wasm-unsafe-eval'` (Pagefind). Adding any other third-party script means
   changing it.
+- Interactive pieces are written without dependencies, run from files served by
+  this site, store nothing, and leave a static figure when script is off.
