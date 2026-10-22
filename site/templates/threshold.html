@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}The threshold, measured — {{ site.name }}{% endblock %}
+{% block description %}A simulation of surface codes of distance 3 to 9: below about {{ t.crossing }} per operation a bigger code fails less often, above it more often.{% endblock %}
+
+{% block content %}
+<article class="wrap prose">
+  <h1>The threshold, measured</h1>
+  <p class="standfirst">
+    The threshold is a sign change: below a certain physical error rate a
+    bigger code fails less often, and above it, more often. This page shows it
+    by simulation rather than by assertion.
+  </p>
+
+  <figure class="figure">
+    {{ t.svg | safe }}
+    <figcaption>
+      Surface codes of distance {{ t.distances | join(', ') }}, each run for as many rounds
+      as its distance, under uniform circuit-level noise. Lines for the larger
+      codes start lower and end higher; they cross near
+      <strong>{{ t.crossing }}</strong> per operation (dashed line, from distances
+      {{ t.crossing_pair[0] }} and {{ t.crossing_pair[1] }}).
+    </figcaption>
+  </figure>
+
+  <h2>What it shows</h2>
+  <p>
+    To the left of the crossing, every step up in distance lowers the failure
+    probability, and by a larger factor the further left you go. To the right,
+    the order reverses. That is the whole content of the word threshold. It is
+    also why the useful question about any error-correction result is whether
+    the logical error rate fell as the code grew.
+  </p>
+  <p>
+    The crossing is not one number. It moves a little with the pair of
+    distances you compare, and it depends on the noise model and the decoder.
+    Values in the literature for circuit-level noise sit around one percent or
+    below, so treat {{ t.crossing }} as the answer for this model, not for a machine.
+  </p>
+
+  <h2>The numbers behind it</h2>
+  <p>
+    The chart shows the chance that a d-round experiment fails. The calculator
+    on the <a href="/overhead/">overhead page</a> works with the rate per round,
+    so the table gives that.
+  </p>
+  <table class="calc-table">
+    <caption>Logical error rate per round, simulated</caption>
+    <thead>
+      <tr>
+        <th scope="col">Distance</th>
+        {% for r in t.table_rates %}<th scope="col">at {{ r }}</th>{% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in t.rows %}
+      <tr>
+        <th scope="row">{{ row.d }}</th>
+        {% for cell in row.cells %}<td>{{ cell }}</td>{% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p class="muted">
+    The raw numbers, with shot and failure counts for every point, are in
+    <a href="/threshold.json">threshold.json</a>.
+  </p>
+
+  <h2>What was simulated</h2>
+  <p>
+    A rotated surface code storing one logical qubit in the Z basis, measured
+    over as many rounds as the code distance. Every gate, reset, measurement and
+    idle data qubit is noisy at the same rate <em>p</em>, using depolarizing
+    noise for gates and bit flips for resets and measurements. Failures are
+    decoded by minimum-weight perfect matching.
+  </p>
+  <p>
+    {{ t.points }} points were kept, from {{ "{:,}".format(t.shots) }} simulated
+    shots in total. A point with fewer than {{ t.min_errors }} observed failures is too noisy to
+    plot, and {{ t.dropped }} {{ "was" if t.dropped == 1 else "were" }} left out.
+    The run used Stim {{ data.versions.stim }}, Sinter {{ data.versions.sinter }} and PyMatching
+    {{ data.versions.pymatching }} on {{ data.generated | longdate_iso }}.
+  </p>
+
+  <h2>What it leaves out</h2>
+  <p>
+    Real devices have leakage out of the qubit states, noise that is correlated
+    between neighbours, qubits that are worse than their neighbours, and a
+    decoder with a deadline. A uniform noise rate is a clean way to see a
+    threshold, and a poor description of any one machine. Nothing here predicts
+    when a device will cross it.
+  </p>
+
+  <h2>Run it yourself</h2>
+  <pre><code>pip install stim sinter pymatching
+python tools/threshold_sim.py</code></pre>
+  <p>
+    The script is <code>tools/threshold_sim.py</code> in the site's repository. A
+    full run takes a few minutes on a multi-core machine.
+  </p>
+</article>
+{% endblock %}

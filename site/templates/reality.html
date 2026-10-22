@@ -54,6 +54,22 @@
   </ol>
 </div>
 
+{% if history %}
+<div class="wrap prose">
+  <h2>History of the board</h2>
+  <p>Every change to any answer, newest first. A review that left a cell as it was is recorded too.</p>
+  <ol class="history">
+    {% for h in history %}
+    <li>
+      <span class="history-date">{{ h.date }}</span>
+      <span class="history-q">{{ h.question }}</span>
+      <span class="history-note">{{ h.note }}</span>
+    </li>
+    {% endfor %}
+  </ol>
+</div>
+{% endif %}
+
 <div class="wrap prose">
   <h2>What is deliberately not on this board</h2>
   <p>

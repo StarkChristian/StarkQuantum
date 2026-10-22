@@ -1310,3 +1310,56 @@ math[display="block"] {
 .further li { padding: 0.5rem 0; border-top: 1px solid var(--rule-2); }
 .further li:first-child { border-top: 0; }
 .further .muted { display: block; font-size: 0.88rem; }
+
+/* Figures drawn at build time. They take their colours from the theme. */
+.figure { margin: 2rem 0; }
+.figure svg { display: block; width: 100%; height: auto; }
+.figure figcaption {
+  margin-top: 0.75rem;
+  font-family: var(--sans);
+  font-size: var(--step--1);
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+.sc-figure { max-width: 26rem; margin: 0 auto; }
+.sc-x { fill: var(--accent-wash); stroke: var(--rule); stroke-width: 1.5; }
+.sc-z { fill: var(--flag-wash); stroke: var(--rule); stroke-width: 1.5; }
+.sc-lit { fill: var(--accent); fill-opacity: 0.38; stroke: var(--accent); stroke-width: 2.5; }
+.sc-data { fill: var(--paper); stroke: var(--ink-2); stroke-width: 2; }
+.sc-err { fill: var(--accent); stroke: var(--accent); }
+.sc-label { font: 600 13px var(--sans); fill: var(--ink-3); }
+.sc-note { font: 600 13px var(--sans); fill: var(--accent); }
+
+.chart { overflow: visible; }
+.ch-grid { stroke: var(--rule-2); stroke-width: 1; }
+.ch-axis { stroke: var(--ink-3); stroke-width: 1.2; }
+.ch-tick { font: 12px var(--sans); fill: var(--ink-3); }
+.ch-title { font: 500 13px var(--sans); fill: var(--ink-2); }
+.ch-cross { stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.ch-line { fill: none; stroke-width: 2; }
+.ch-line.ch-d0 { stroke: var(--ink-3); }
+.ch-line.ch-d1 { stroke: var(--flag); }
+.ch-line.ch-d2 { stroke: var(--accent-2); }
+.ch-line.ch-d3 { stroke: var(--accent); }
+.ch-pt.ch-d0 { fill: var(--ink-3); }
+.ch-pt.ch-d1 { fill: var(--flag); }
+.ch-pt.ch-d2 { fill: var(--accent-2); }
+.ch-pt.ch-d3 { fill: var(--accent); }
+
+.history { list-style: none; margin: 0; padding: 0; }
+.history li {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr;
+  gap: 0.15rem 1rem;
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--rule-2);
+  font-size: 0.96rem;
+}
+.history li:first-child { border-top: 0; }
+.history-date { font-family: var(--sans); font-size: var(--step--1); font-weight: 600; color: var(--accent); }
+.history-q { font-family: var(--sans); font-size: var(--step--1); color: var(--ink-3); }
+.history-note { grid-column: 2; color: var(--ink-2); }
+@media (max-width: 32rem) {
+  .history li { grid-template-columns: 1fr; }
+  .history-note { grid-column: 1; }
+}

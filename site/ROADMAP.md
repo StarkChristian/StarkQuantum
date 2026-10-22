@@ -1,44 +1,54 @@
 # Roadmap
 
-What has been built for the site's reading experience, and what has not. The
-doctrine (`DOCTRINE.md` in the operator's folder) wins over this list: nothing
-here may add advertising, tracking, monetisation or futurist artwork.
+What the site has, what was built in the latest round, and what is deliberately
+left for later. The doctrine (`DOCTRINE.md`, version 1.2, in the operator's
+folder) wins over this list: nothing here adds advertising, tracking,
+monetisation or futurist artwork.
 
-## Done
+## Built
 
-- [x] Link-preview card per essay and brief (`og:image`, `twitter:card`)
-- [x] Formulas as MathML (`$...$`, `$$...$$`), no client script
-- [x] First mention of a glossary term links to its definition
-- [x] In-essay outline, reading time, previous/next essay
-- [x] Full-text search with Pagefind; the JSON index is the fallback
-- [x] Security headers and an enforced Content-Security-Policy (checked on a
-      preview: search, theme toggle, analytics and Pagefind raised no violations)
-- [x] `llms.txt` and a plain Markdown copy of every essay and brief
-- [x] schema.org `Article` data and Google Scholar meta tags on essays
-- [x] Cross-document view transitions and hover prefetch
-- [x] Mobile layout checked at 390 px: no overflow on essay, glossary and home
-- [x] Glossary search hits show the term alone, aliases moved below the heading
-- [x] Overhead calculator at `/overhead/` (surface-code physical qubits per logical qubit)
+- Link-preview card per page, MathML formulas, glossary autolinks, in-page outline,
+  previous/next, Pagefind search
+- Security headers with an enforced Content-Security-Policy
+- `llms.txt`, a plain Markdown copy of every page, schema.org and Scholar data
+- Cross-document view transitions, hover prefetch
+- Flat single-colour mark, with favicons drawn from the same curve
+- Learn: six ordered lessons with self-checks
+- Overhead calculator at `/overhead/`, with a choice of threshold
+- **The threshold, measured** at `/threshold/`: a Stim simulation of surface codes
+  of distance 3 to 9, drawn as an SVG chart at build time, with the raw numbers
+  at `/threshold.json` and the script in `tools/threshold_sim.py`
+- Surface-code figure in the error-correction lesson, with its layout checked
+  (four X checks, four Z checks, all commuting) every time the site builds
+- Reality Board history: every dated change, across all four cells
+- The build fails on a broken internal link or anchor
 
 ## Next
 
-- [ ] A real threshold chart: logical error rate against code distance,
-      simulated with Stim and sinter at build time, seed and script in the repo.
-- [ ] Surface-code diagram for "The decoder has to keep up": a patch, one
-      error, the syndrome, the decoder's answer.
-- [ ] More lessons: quantum algorithms (what is and is not believed), and reading
-      a hardware spec sheet
-- [ ] Reality Board history: show each cell's dated changes as a timeline.
+- [ ] Rerun the threshold simulation with a second decoder (union-find) and a
+      noise model with unequal rates, and show how far the crossing moves
+- [ ] A figure for "The decoder has to keep up": syndrome rounds arriving against
+      the decoder's deadline
+- [ ] Glossary terms for what the lessons introduce: syndrome, code distance,
+      Clifford gate, T gate, no-cloning
+- [ ] A lesson on reading a resource estimate, once an estimate worth teaching
+      from has been reviewed
+- [ ] Search filter by type (essay, lesson, brief, glossary)
+- [ ] Review the six lessons line by line against sources, and add a `sources`
+      list to each
 
-## Decided in doctrine 1.2 (22 October 2026)
+## Not planned, by doctrine
 
-- [x] Flat single-colour mark in the accent colour, replacing the copper-and-neon one
-- [x] Learn: four ordered lessons with self-check questions at `/learn/`
-- Still not built: scored quizzes, capstone, certificates (doctrine section 7)
+- Scored quizzes, capstone, certificates, any account or stored progress
+- Advertising, affiliates, donations, newsletters that sell anything
+- Quantum-futurism artwork
 
 ## Notes
 
 - Build: `pip install -r requirements.txt && python build.py`, output in `public/`.
+  The build needs no simulator; `data/threshold.json` is committed.
+- To refresh the chart: `pip install stim sinter pymatching` and
+  `python tools/threshold_sim.py`, then rebuild.
 - `og/` holds the fonts used to draw link-preview cards. It is read at build
   time and is not published.
 - The CSP allows scripts from `umami.homomorphicprivacy.com` and

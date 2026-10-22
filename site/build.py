@@ -29,6 +29,7 @@ import markdown
 import yaml
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
+import figures
 from enhance import (article_ld, build_term_matcher, first_sentence, llms_txt,
                      markdown_copy, protect_math, reading_minutes, restore_math,
                      write_og_image)
@@ -293,6 +294,56 @@ def load_glossary() -> list[dict]:
     return terms
 
 
+FIGURE_MARKER = re.compile(r"<p>\[figure:([a-z0-9-]+)\]</p>")
+FIGURES = {"surface-code": figures.surface_code_figure}
+
+
+def place_figures(html: str, where: str) -> str:
+    """Swap a paragraph reading [figure:name] for the figure drawn at build time."""
+    def swap(match: re.Match) -> str:
+        name = match.group(1)
+        if name not in FIGURES:
+            fail(where, f"unknown figure '{name}'")
+            return ""
+        return FIGURES[name]()
+    return FIGURE_MARKER.sub(swap, html)
+
+
+def load_threshold() -> dict:
+    path = ROOT / "data" / "threshold.json"
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        fail("data/threshold.json", f"cannot read simulation data: {exc}")
+        return {}
+
+
+def check_internal_links() -> list[str]:
+    """Every local link and anchor in the built HTML must point at something."""
+    html_files = sorted(OUTPUT.rglob("*.html"))
+    ids = {f: set(re.findall(r'\sid="([^"]+)"', f.read_text(encoding="utf-8")))
+           for f in html_files}
+
+    def resolve(path: str) -> Path | None:
+        target = OUTPUT / path.lstrip("/")
+        if path.endswith("/"):
+            target = target / "index.html"
+        return target if target.is_file() else None
+
+    problems = []
+    for f in html_files:
+        text = f.read_text(encoding="utf-8")
+        where = "/" + str(f.relative_to(OUTPUT))
+        for m in re.finditer(r'(?:href|src)="(/[^"?#]*)(?:\?[^"#]*)?(#[^"]*)?"', text):
+            path, frag = m.group(1), m.group(2)
+            target = resolve(path)
+            if target is None:
+                problems.append(f"{where}: {path} does not exist")
+            elif frag and len(frag) > 1 and target in ids and frag[1:] not in ids[target]:
+                problems.append(f"{where}: {path}{frag} has no such anchor")
+    return problems
+
+
 def load_lessons() -> list[dict]:
     """Learn: a short ordered path. Doctrine section 7."""
     lessons = []
@@ -321,6 +372,7 @@ def load_lessons() -> list[dict]:
             fail(path.name, f"{words} words, outside the 450-900 range")
 
         body_html, toc = render_markdown_toc(body, path.name)
+        body_html = place_figures(body_html, path.name)
         lessons.append({
             "kind": "lesson",
             "slug": slug,
@@ -548,6 +600,7 @@ def main() -> int:
     briefs = load_briefs()
     terms = load_glossary()
     lessons = load_lessons()
+    threshold = load_threshold()
     cells = load_reality()
     sources = load_sources()
     about = load_page("about")
@@ -586,6 +639,7 @@ def main() -> int:
         lstrip_blocks=True,
     )
     env.filters["longdate"] = long_date
+    env.filters["longdate_iso"] = lambda v: long_date(dt.date.fromisoformat(str(v)))
     env.globals["asset"] = asset_url
 
     by_slug = {e["slug"]: e for e in essays}
@@ -617,10 +671,16 @@ def main() -> int:
     for brief in briefs:
         write(env, brief["url"], "brief.html", brief=brief,
               og_image=brief["og_image"], ld=article_ld(SITE, brief))
-    write(env, "/reality/", "reality.html", cells=cells)
+    history = sorted(
+        ({"date": str(c["date"]), "question": cell["question"], "note": c["note"]}
+         for cell in cells for c in cell["changes"]),
+        key=lambda h: h["date"], reverse=True)
+    write(env, "/reality/", "reality.html", cells=cells, history=history)
     write(env, "/glossary/", "glossary.html", terms=terms)
     write(env, "/sources/", "sources.html", sources=sources)
     write(env, "/overhead/", "overhead.html")
+    write(env, "/threshold/", "threshold.html", t=figures.threshold_view(threshold),
+          data=threshold)
     write(env, "/learn/", "learn_index.html", lessons=lessons)
     for i, lesson in enumerate(lessons):
         write(env, lesson["url"], "lesson.html", lesson=lesson,
@@ -704,6 +764,7 @@ def main() -> int:
         ("/glossary/", glossary_date),
         ("/sources/", sources_date),
         ("/overhead/", dt.date(2026, 10, 22)),
+        ("/threshold/", dt.date.fromisoformat(threshold["generated"])),
         ("/learn/", newest([l["reviewed"] or l["published"] for l in lessons])),
         ("/privacy/", privacy["updated"]),
         ("/impressum/", impressum["updated"]),
@@ -729,6 +790,15 @@ def main() -> int:
         (OUTPUT / item["url"].strip("/") / "index.md").write_text(
             markdown_copy(SITE, item), encoding="utf-8")
     (OUTPUT / "llms.txt").write_text(llms_txt(SITE, essays, briefs, lessons), encoding="utf-8")
+
+    shutil.copy2(ROOT / "data" / "threshold.json", OUTPUT / "threshold.json")
+
+    problems = check_internal_links()
+    if problems:
+        print("Build refused. Broken internal links:\n", file=sys.stderr)
+        for line in problems:
+            print(f"  - {line}", file=sys.stderr)
+        return 1
 
     build_pagefind()
 

@@ -71,7 +71,7 @@ def restore_math(rendered: str, stash: dict[str, str]) -> str:
 # ---------------------------------------------------------------------------
 
 _TAG = re.compile(r"(<[^>]+>)")
-_SKIP = {"a", "h1", "h2", "h3", "h4", "h5", "h6", "code", "pre", "math",
+_SKIP = {"svg", "a", "h1", "h2", "h3", "h4", "h5", "h6", "code", "pre", "math",
          "script", "style", "button"}
 
 

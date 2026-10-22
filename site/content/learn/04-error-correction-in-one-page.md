@@ -69,6 +69,8 @@ In every round the check qubits measure parities of their neighbours.
 The stream of results is the syndrome. A decoder, which is a classical computer,
 reads it and decides which errors most likely occurred.
 
+[figure:surface-code]
+
 The size of the grid sets the code distance $d$, the number of errors it must
 suffer before it fails to correct. A distance-$d$ code corrects up to
 $(d-1)/2$ errors. A rotated surface-code patch uses $2d^2-1$ physical qubits:
@@ -81,8 +83,10 @@ per round falls roughly as
 
 $$p_L \sim \left(\frac{p}{p_{\mathrm{th}}}\right)^{(d+1)/2}$$
 
-where $p$ is the physical error rate and $p_{\mathrm{th}}$ is the threshold, near
-one percent for the surface code under common assumptions.
+where $p$ is the physical error rate and $p_{\mathrm{th}}$ is the threshold. Its
+value depends on the noise model and the decoder; it is around one percent or a
+little below for the surface code. A simulation on the [threshold
+page](/threshold/) finds about 0.7% for one standard model.
 
 Each step up in distance multiplies the logical error rate by a constant factor
 less than one, so it falls exponentially. If $p$ is above the threshold, the same

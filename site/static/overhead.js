@@ -1,22 +1,23 @@
 /* Surface-code overhead: physical qubits per logical qubit.
  *
  * One formula, stated on the page: p_L = A (p / p_th)^((d + 1) / 2), with
- * A = 0.1 and p_th = 1%, and 2 d^2 - 1 physical qubits for a rotated patch.
+ * A = 0.1 and p_th = 1% (or 0.7%, chosen on the page), and 2 d^2 - 1 physical qubits for a rotated patch.
  * It needs no data and nothing leaves the page.
  */
 (function () {
   "use strict";
 
   var A = 0.1;
-  var P_TH = 0.01;
+  var pTh = 0.01;
   var MAX_D = 201;
 
   var pIn = document.getElementById("oh-p");
   var targetIn = document.getElementById("oh-target");
+  var thIn = document.getElementById("oh-th");
   var pOut = document.getElementById("oh-p-out");
   var result = document.getElementById("oh-result");
   var rows = document.getElementById("oh-rows");
-  if (!pIn || !targetIn || !result || !rows) { return; }
+  if (!pIn || !targetIn || !thIn || !result || !rows) { return; }
 
   var SUP = { "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴",
               "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹",
@@ -29,7 +30,7 @@
     return parts[0] + " × 10" + exp;
   }
 
-  function logicalRate(p, d) { return A * Math.pow(p / P_TH, (d + 1) / 2); }
+  function logicalRate(p, d) { return A * Math.pow(p / pTh, (d + 1) / 2); }
   function qubits(d) { return 2 * d * d - 1; }
 
   function distanceFor(p, target) {
@@ -53,12 +54,13 @@
   function update() {
     var p = Math.pow(10, parseFloat(pIn.value));
     var target = parseFloat(targetIn.value);
+    pTh = parseFloat(thIn.value);
     pOut.textContent = (p * 100).toPrecision(2) + "%";
 
     result.innerHTML = "";
     rows.innerHTML = "";
 
-    if (p >= P_TH) {
+    if (p >= pTh) {
       result.appendChild(line(
         " At or above the threshold, a larger code makes the logical error rate worse, so no distance reaches the target.",
         "Above threshold."));
@@ -92,5 +94,6 @@
 
   pIn.addEventListener("input", update);
   targetIn.addEventListener("change", update);
+  thIn.addEventListener("change", update);
   update();
 })();
