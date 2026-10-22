@@ -1195,3 +1195,10 @@ math[display="block"] {
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }
+
+/* Page-to-page navigation cross-fades instead of flashing white. Browsers
+   without cross-document view transitions simply navigate as before. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.18s; }
+}

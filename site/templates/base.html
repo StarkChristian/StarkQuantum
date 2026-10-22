@@ -27,12 +27,15 @@
 <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32.png') }}">
 <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
 <link rel="alternate" type="application/rss+xml" title="{{ site.name }}" href="/feed.xml">
-<script>
-  // Theme preference is the only thing this site stores in your browser.
-  try {
-    var t = localStorage.getItem("sq-theme");
-    if (t) { document.documentElement.setAttribute("data-theme", t); }
-  } catch (e) {}
+{% block head_extra %}{% endblock %}
+<script src="{{ asset('theme.js') }}"></script>
+{# Pages the reader is likely to open next are fetched when a link is hovered
+   or pressed. Nothing runs from a prefetch, so it adds no page views. #}
+<script type="speculationrules">
+{"prefetch": [{"where": {"and": [
+  {"href_matches": "/*"},
+  {"not": {"href_matches": ["/static/*", "/pagefind/*", "/og/*", "/feed.xml", "/*.md"]}}
+]}, "eagerness": "moderate"}]}
 </script>
 {% if site.get("umami_src") %}
 <script defer src="{{ site.umami_src }}" data-website-id="{{ site.umami_website_id }}" data-domains="{{ site.domain }}"></script>

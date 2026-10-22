@@ -29,8 +29,9 @@ import markdown
 import yaml
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
-from enhance import (build_term_matcher, first_sentence, protect_math,
-                     reading_minutes, restore_math, write_og_image)
+from enhance import (article_ld, build_term_matcher, first_sentence, llms_txt,
+                     markdown_copy, protect_math, reading_minutes, restore_math,
+                     write_og_image)
 
 ROOT = Path(__file__).resolve().parent
 CONTENT = ROOT / "content"
@@ -548,13 +549,13 @@ def main() -> int:
     # essays is newest first, so the older neighbour is the next index.
     for i, essay in enumerate(essays):
         write(env, essay["url"], "essay.html", essay=essay,
-              og_image=essay["og_image"],
+              og_image=essay["og_image"], ld=article_ld(SITE, essay),
               newer=essays[i - 1] if i > 0 else None,
               older=essays[i + 1] if i + 1 < len(essays) else None)
     write(env, "/news/", "brief_index.html", briefs=briefs)
     for brief in briefs:
         write(env, brief["url"], "brief.html", brief=brief,
-              og_image=brief["og_image"])
+              og_image=brief["og_image"], ld=article_ld(SITE, brief))
     write(env, "/reality/", "reality.html", cells=cells)
     write(env, "/glossary/", "glossary.html", terms=terms)
     write(env, "/sources/", "sources.html", sources=sources)
@@ -652,6 +653,11 @@ def main() -> int:
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         f"{sitemap}\n</urlset>\n", encoding="utf-8")
     urls = [url for url, _ in pages]
+
+    for item in essays + briefs:
+        (OUTPUT / item["url"].strip("/") / "index.md").write_text(
+            markdown_copy(SITE, item), encoding="utf-8")
+    (OUTPUT / "llms.txt").write_text(llms_txt(SITE, essays, briefs), encoding="utf-8")
 
     build_pagefind()
 

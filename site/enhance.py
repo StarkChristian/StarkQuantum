@@ -206,3 +206,98 @@ def write_og_image(path: Path, title: str, eyebrow: str) -> None:
 
     path.parent.mkdir(parents=True, exist_ok=True)
     img.save(path, optimize=True)
+
+
+# ---------------------------------------------------------------------------
+# Structured data, Markdown copies, llms.txt
+# ---------------------------------------------------------------------------
+
+def article_ld(site: dict, item: dict) -> dict:
+    """schema.org Article for an essay or a brief."""
+    url = site["base_url"] + item["url"]
+    person = {"@type": "Person", "name": site["author"]}
+    ld = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": item["title"],
+        "url": url,
+        "mainEntityOfPage": url,
+        "image": site["base_url"] + item["og_image"],
+        "datePublished": item["published"].isoformat(),
+        "dateModified": (item.get("reviewed") or item["published"]).isoformat(),
+        "inLanguage": "en",
+        "isAccessibleForFree": True,
+        "author": person,
+        "publisher": person,
+    }
+    if item["kind"] == "essay":
+        ld["description"] = item["summary"]
+        ld["articleSection"] = item["category_label"]
+        ld["timeRequired"] = f"PT{item['minutes']}M"
+        cites = [{"@type": "CreativeWork", "name": s.get("name", ""), "url": s["url"]}
+                 for s in item["sources"] if s.get("url")]
+        if cites:
+            ld["citation"] = cites
+    else:
+        ld["description"] = item["body_text"][:200]
+        if item["source_url"]:
+            ld["isBasedOn"] = {"@type": "CreativeWork", "name": item["source_name"],
+                               "url": item["source_url"]}
+    return ld
+
+
+def markdown_copy(site: dict, item: dict) -> str:
+    """The page as plain Markdown, for readers and tools that want no chrome."""
+    url = site["base_url"] + item["url"]
+    lines = [f"# {item['title']}", ""]
+    by = f"By {site['author']}. Published {item['published'].isoformat()}."
+    if item.get("reviewed"):
+        by += f" Reviewed {item['reviewed'].isoformat()}."
+    lines += [by, f"Canonical page: {url}", ""]
+    if item["kind"] == "essay":
+        lines += [f"> {' '.join(item['summary'].split())}", ""]
+    else:
+        lines += [f"Source: [{item['source_name']}]({item['source_url']})", ""]
+    lines += [item["body_text"], ""]
+    if item["kind"] == "essay":
+        f = item["footer"]
+        lines += ["## The short version", "",
+                  f"- **Claim:** {' '.join(str(f['claim']).split())}",
+                  f"- **Evidence:** {' '.join(str(f['evidence']).split())}",
+                  f"- **Missing piece:** {' '.join(str(f['missing_piece']).split())}",
+                  f"- **So what:** {' '.join(str(f['so_what']).split())}", ""]
+        if item["sources"]:
+            lines += ["## Sources", ""]
+            for s in item["sources"]:
+                text = f"[{s['name']}]({s['url']})" if s.get("url") else s["name"]
+                note = f" — {s['note']}" if s.get("note") else ""
+                lines.append(f"- {text}{note}")
+            lines.append("")
+    else:
+        if item["numbers"]:
+            lines += ["## Numbers", ""] + [f"- {n}" for n in item["numbers"]] + [""]
+        if item["limits"]:
+            lines += ["## Limits", ""] + [f"- {n}" for n in item["limits"]] + [""]
+    return "\n".join(lines)
+
+
+def llms_txt(site: dict, essays: list[dict], briefs: list[dict]) -> str:
+    """An index for language-model readers, in the llmstxt.org layout."""
+    base = site["base_url"]
+    out = [f"# {site['name']}", "", f"> {site['description']}", "",
+           "Independent, unpaid writing by one person. Every essay ends with the "
+           "claim, the evidence, the missing piece and why it matters, and cites "
+           "primary sources. Each page below has a plain Markdown copy.", "",
+           "## Essays", ""]
+    for e in essays:
+        out.append(f"- [{e['title']}]({base}{e['url']}index.md): "
+                   f"{' '.join(e['summary'].split())}")
+    out += ["", "## Briefs", ""]
+    for b in briefs:
+        out.append(f"- [{b['title']}]({base}{b['url']}index.md): {b['source_name']}")
+    out += ["", "## Reference", "",
+            f"- [Reality Board]({base}/reality/): four questions that decide whether the field has arrived",
+            f"- [Glossary]({base}/glossary/): working definitions",
+            f"- [Sources]({base}/sources/): the allowlist this site reads from",
+            f"- [About]({base}/about/)", ""]
+    return "\n".join(out)
