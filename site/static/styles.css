@@ -984,7 +984,9 @@ math { font-size: 1.08em; }
 math[display="block"] {
   display: block math;
   margin: 1.5rem 0;
+  padding: 0.4em 0;
   overflow-x: auto;
+  overflow-y: hidden;
 }
 
 /* Search results from the full-text index. */
