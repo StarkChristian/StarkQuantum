@@ -295,7 +295,11 @@ def load_glossary() -> list[dict]:
 
 
 FIGURE_MARKER = re.compile(r"<p>\[figure:([a-z0-9-]+)\]</p>")
-FIGURES = {"surface-code": figures.surface_code_figure}
+FIGURES = {
+    "surface-code": figures.surface_code_figure,
+    "playground": figures.playground_placeholder,
+    "bloch": figures.bloch_placeholder,
+}
 
 
 def place_figures(html: str, where: str) -> str:
@@ -451,6 +455,7 @@ def load_lessons() -> list[dict]:
                        "q_text": " ".join(str(c["q"]).split()),
                        "a_text": " ".join(str(c["a"]).split())} for c in check],
             "further": meta.get("further") or [],
+            "script": meta.get("script"),
             "sources": meta.get("sources") or [],
             "body_html": body_html,
             "toc": toc,

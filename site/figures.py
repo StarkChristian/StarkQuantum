@@ -111,6 +111,24 @@ def surface_code_figure() -> str:
     )
 
 
+def playground_placeholder() -> str:
+    return (
+        '<figure class="figure playground">'
+        '<div id="qec-playground"><p class="muted">The interactive version needs '
+        'JavaScript. The figure above shows one error and its syndrome.</p></div>'
+        '</figure>'
+    )
+
+
+def bloch_placeholder() -> str:
+    return (
+        '<figure class="figure playground">'
+        '<div id="bloch"><p class="muted">The interactive Bloch sphere needs '
+        'JavaScript. The text above gives the same information.</p></div>'
+        '</figure>'
+    )
+
+
 # ---------------------------------------------------------------------------
 # Threshold chart
 # ---------------------------------------------------------------------------
@@ -179,22 +197,28 @@ def threshold_view(data: dict) -> dict:
 
     shapes = ["circle", "square", "triangle", "diamond"]
 
-    def marker(shape, x, y, cls):
+    def marker(shape, x, y, cls, tip=""):
         s = 4.5
         if shape == "circle":
-            return f'<circle class="{cls}" cx="{x:.1f}" cy="{y:.1f}" r="{s}"/>'
-        if shape == "square":
-            return f'<rect class="{cls}" x="{x - s:.1f}" y="{y - s:.1f}" width="{2 * s}" height="{2 * s}"/>'
-        if shape == "triangle":
-            return f'<path class="{cls}" d="M{x:.1f} {y - s - 1:.1f} L{x + s + 1:.1f} {y + s:.1f} L{x - s - 1:.1f} {y + s:.1f} Z"/>'
-        return f'<path class="{cls}" d="M{x:.1f} {y - s - 1:.1f} L{x + s + 1:.1f} {y:.1f} L{x:.1f} {y + s + 1:.1f} L{x - s - 1:.1f} {y:.1f} Z"/>'
+            tag, body = "circle", f'cx="{x:.1f}" cy="{y:.1f}" r="{s}"'
+        elif shape == "square":
+            tag, body = "rect", f'x="{x - s:.1f}" y="{y - s:.1f}" width="{2 * s}" height="{2 * s}"'
+        elif shape == "triangle":
+            tag, body = "path", f'd="M{x:.1f} {y - s - 1:.1f} L{x + s + 1:.1f} {y + s:.1f} L{x - s - 1:.1f} {y + s:.1f} Z"'
+        else:
+            tag, body = "path", f'd="M{x:.1f} {y - s - 1:.1f} L{x + s + 1:.1f} {y:.1f} L{x:.1f} {y + s + 1:.1f} L{x - s - 1:.1f} {y:.1f} Z"'
+        # A <title> gives a native hover and screen-reader label for the point.
+        inner = f"<title>{tip}</title>" if tip else ""
+        return f'<{tag} class="{cls}" {body}>{inner}</{tag}>'
 
     for i, d in enumerate(distances):
         pts = sorted((p for p in kept if p["d"] == d), key=lambda q: q["p"])
         line = " ".join(f"{sx(p['p']):.1f},{sy(p['shot']):.1f}" for p in pts)
         out.append(f'<polyline class="ch-line ch-d{i}" points="{line}"/>')
         for p in pts:
-            out.append(marker(shapes[i % 4], sx(p["p"]), sy(p["shot"]), f"ch-pt ch-d{i}"))
+            out.append(marker(shapes[i % 4], sx(p["p"]), sy(p["shot"]), f"ch-pt ch-d{i}",
+                              f"distance {d}, {_pct(p['p'])} per operation: "
+                              f"{p['shot']:.2e} chance of failure ({p['errors']} failures in {p['shots']:,} shots)"))
         ly = mt + 14 + i * 20
         out.append(f'<line class="ch-line ch-d{i}" x1="{ml + 14}" x2="{ml + 38}" y1="{ly}" y2="{ly}"/>')
         out.append(marker(shapes[i % 4], ml + 26, ly, f"ch-pt ch-d{i}"))

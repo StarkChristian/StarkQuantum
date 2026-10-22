@@ -2,6 +2,7 @@
 title: What a qubit is
 slug: what-a-qubit-is
 order: 1
+script: bloch.js
 level: Intro
 published: 2026-10-22
 reviewed: 2026-10-22
@@ -53,6 +54,12 @@ and they satisfy $|\alpha|^2 + |\beta|^2 = 1$.
 That is the whole description. "Both 0 and 1 at once" is a loose way of
 saying that neither amplitude is zero. It does not mean the qubit holds two
 values you can read.
+
+A single qubit's state can be drawn as a point on a sphere, the Bloch sphere. The
+height of the point sets the two probabilities, and its direction around the
+sphere sets the phase. Move the sliders, or pick a named state.
+
+[figure:bloch]
 
 ## What measurement does
 

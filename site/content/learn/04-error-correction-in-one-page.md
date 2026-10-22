@@ -2,6 +2,7 @@
 title: Error correction in one page
 slug: error-correction-in-one-page
 order: 4
+script: qec.js
 level: Intermediate
 published: 2026-10-22
 reviewed: 2026-10-22
@@ -83,6 +84,12 @@ The stream of results is the syndrome. A decoder, which is a classical computer,
 reads it and decides which errors most likely occurred.
 
 [figure:surface-code]
+
+Try it yourself. Click a data qubit to flip it, and watch which checks light up and which
+qubits the decoder flips back. Add random errors until the decoder fails, then run
+many trials to see how often each size of code fails.
+
+[figure:playground]
 
 The size of the grid sets the code distance $d$: the smallest number of physical
 errors that can change the logical state without being detected. A code of odd

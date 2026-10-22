@@ -1398,3 +1398,33 @@ math[display="block"] {
   pointer-events: none;
 }
 .term-pop strong { display: block; font-size: var(--step--2); letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.25rem; }
+
+/* Interactive explainers. They work from the keyboard and need no storage. */
+.playground { margin: 2rem 0; }
+.pg-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1.25rem; margin: 0 0 1rem; font-family: var(--sans); font-size: 0.875rem; }
+.pg-field { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--ink-2); }
+.pg-field output { font-weight: 600; color: var(--accent); min-width: 2.6rem; }
+.pg-field select { font: inherit; color: var(--ink); background: var(--paper-2); border: 1px solid var(--rule); border-radius: 4px; padding: 0.3rem 0.5rem; }
+.pg-field input[type="range"] { accent-color: var(--accent); }
+.pg-svg, .bl-svg { display: block; width: 100%; height: auto; max-width: 26rem; margin: 0 auto 1rem; touch-action: manipulation; }
+.bl-svg { max-width: 21rem; }
+.pg-qubit { cursor: pointer; outline: none; }
+.pg-ring { fill: none; stroke: transparent; stroke-width: 3; }
+.pg-fix { stroke: var(--accent); stroke-dasharray: 5 3; }
+.pg-qubit:hover .sc-data { stroke: var(--accent); }
+.pg-qubit:focus-visible .pg-ring { stroke: var(--ink); stroke-dasharray: none; }
+.pg-note { font-family: var(--sans); font-size: var(--step--1); margin: 0.5rem 0 0; }
+
+.bl-sphere { fill: var(--paper-2); stroke: var(--rule); stroke-width: 1.5; }
+.bl-circle { fill: none; stroke: var(--ink-3); stroke-width: 1.2; }
+.bl-back { stroke-dasharray: 3 4; opacity: 0.55; }
+.bl-axis { stroke: var(--rule); stroke-width: 1.2; }
+.bl-label { font: 600 13px var(--sans); fill: var(--ink-2); }
+.bl-guide { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 2 3; }
+.bl-vector { stroke: var(--accent); stroke-width: 3; stroke-linecap: round; }
+.bl-tip { fill: var(--accent); stroke: var(--paper); stroke-width: 2; }
+.bl-bars { display: grid; gap: 0.5rem; margin: 1rem 0 0; font-family: var(--sans); font-size: 0.85rem; }
+.bl-bar { display: grid; grid-template-columns: 2.5rem 1fr 3.6rem; align-items: center; gap: 0.75rem; }
+.bl-track { display: block; height: 0.7rem; background: var(--rule-2); border-radius: 3px; overflow: hidden; }
+.bl-fill { display: block; height: 100%; width: 0; background: var(--accent); }
+.bl-bar output { font-variant-numeric: tabular-nums; color: var(--ink-2); text-align: right; }
