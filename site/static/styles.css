@@ -1183,6 +1183,7 @@ math[display="block"] {
 /* Overhead calculator. */
 .calc { margin: 2rem 0 1.5rem; font-family: var(--sans); }
 .calc-row {
+  flex-wrap: wrap;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -1195,6 +1196,7 @@ math[display="block"] {
 .calc output { font-weight: 600; color: var(--accent); }
 .calc input[type="range"] { width: 100%; accent-color: var(--accent); }
 .calc select {
+  max-width: 100%;
   font: inherit;
   color: var(--ink);
   background: var(--paper-2);
