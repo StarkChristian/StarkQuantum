@@ -114,3 +114,31 @@ claims:
     url: https://arxiv.org/abs/quant-ph/0004072
     status: standard
     note: The figure's layout is also checked by the site build, which verifies four X checks and four Z checks that all commute.
+
+  - claim: "For probabilistic error cancellation, the number of circuit runs needed grows exponentially with the total noise in the circuit."
+    where: [/learn/why-qubits-go-wrong/]
+    source: 'Temme, Bravyi and Gambetta, "Error mitigation for short-depth quantum circuits", Phys. Rev. Lett. 119, 180509 (2017), arXiv:1612.02058'
+    url: https://arxiv.org/abs/1612.02058
+    status: standard
+    note: The abstract names the two methods but does not state the scaling; the scaling is a well-known property of the method, cited to the full paper and not re-read on that date.
+
+  - claim: "In the surface code, Clifford gates between logical qubits can be carried out by changing which parities are measured (lattice surgery), without a magic state."
+    where: [/learn/gates-circuits-and-the-expensive-gate/]
+    source: 'Horsman, Fowler, Devitt and Van Meter, "Surface code quantum computing by lattice surgery", New J. Phys. 14, 123011 (2012), arXiv:1111.4022'
+    url: https://arxiv.org/abs/1111.4022
+    status: standard
+    note: Cited and not re-read on that date. Fowler et al., arXiv:1208.0928, show the same for braiding.
+
+  - claim: "Shor's algorithm factors integers in polynomial time, and the best known classical algorithm (the general number field sieve) is sub-exponential but not polynomial."
+    where: [/learn/what-quantum-computers-are-for/]
+    source: 'Shor, "Polynomial-time algorithms for prime factorization and discrete logarithms on a quantum computer", SIAM J. Comput. 26, 1484 (1997)'
+    url:
+    status: standard
+    note: Textbook result, cited and not re-read on that date.
+
+  - claim: "Grover's algorithm searches N unstructured items in about the square root of N steps."
+    where: [/learn/what-quantum-computers-are-for/]
+    source: "Grover, \"A fast quantum mechanical algorithm for database search\", Proceedings of STOC 1996; Nielsen and Chuang, chapter 6"
+    url:
+    status: standard
+    note: Textbook result, cited and not re-read on that date.
