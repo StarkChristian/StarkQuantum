@@ -26,13 +26,15 @@ here may add advertising, tracking, monetisation or futurist artwork.
       simulated with Stim and sinter at build time, seed and script in the repo.
 - [ ] Surface-code diagram for "The decoder has to keep up": a patch, one
       error, the syndrome, the decoder's answer.
+- [ ] More lessons: quantum algorithms (what is and is not believed), and reading
+      a hardware spec sheet
 - [ ] Reality Board history: show each cell's dated changes as a timeline.
 
-## Needs a doctrine decision
+## Decided in doctrine 1.2 (22 October 2026)
 
-- [ ] Replace the copper-and-neon mark with a plain one. Doctrine section 6
-      rules out futurist artwork.
-- [ ] Learn pages and quizzes. Doctrine section 7 defers them past Wave 1.
+- [x] Flat single-colour mark in the accent colour, replacing the copper-and-neon one
+- [x] Learn: four ordered lessons with self-check questions at `/learn/`
+- Still not built: scored quizzes, capstone, certificates (doctrine section 7)
 
 ## Notes
 

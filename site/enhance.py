@@ -230,9 +230,12 @@ def article_ld(site: dict, item: dict) -> dict:
         "author": person,
         "publisher": person,
     }
-    if item["kind"] == "essay":
+    if item["kind"] in ("essay", "lesson"):
         ld["description"] = item["summary"]
         ld["articleSection"] = item["category_label"]
+        if item["kind"] == "lesson":
+            ld["learningResourceType"] = "lesson"
+            ld["educationalLevel"] = item["level"]
         ld["timeRequired"] = f"PT{item['minutes']}M"
         cites = [{"@type": "CreativeWork", "name": s.get("name", ""), "url": s["url"]}
                  for s in item["sources"] if s.get("url")]
@@ -254,7 +257,7 @@ def markdown_copy(site: dict, item: dict) -> str:
     if item.get("reviewed"):
         by += f" Reviewed {item['reviewed'].isoformat()}."
     lines += [by, f"Canonical page: {url}", ""]
-    if item["kind"] == "essay":
+    if item["kind"] in ("essay", "lesson"):
         lines += [f"> {' '.join(item['summary'].split())}", ""]
     else:
         lines += [f"Source: [{item['source_name']}]({item['source_url']})", ""]
@@ -273,6 +276,11 @@ def markdown_copy(site: dict, item: dict) -> str:
                 note = f" — {s['note']}" if s.get("note") else ""
                 lines.append(f"- {text}{note}")
             lines.append("")
+    elif item["kind"] == "lesson":
+        lines += ["## Check yourself", ""]
+        for n, c in enumerate(item["check"], 1):
+            lines += [f"{n}. {c['q_text']}", f"   Answer: {c['a_text']}"]
+        lines.append("")
     else:
         if item["numbers"]:
             lines += ["## Numbers", ""] + [f"- {n}" for n in item["numbers"]] + [""]
@@ -281,14 +289,19 @@ def markdown_copy(site: dict, item: dict) -> str:
     return "\n".join(lines)
 
 
-def llms_txt(site: dict, essays: list[dict], briefs: list[dict]) -> str:
+def llms_txt(site: dict, essays: list[dict], briefs: list[dict],
+             lessons: list[dict]) -> str:
     """An index for language-model readers, in the llmstxt.org layout."""
     base = site["base_url"]
     out = [f"# {site['name']}", "", f"> {site['description']}", "",
            "Independent, unpaid writing by one person. Every essay ends with the "
            "claim, the evidence, the missing piece and why it matters, and cites "
            "primary sources. Each page below has a plain Markdown copy.", "",
-           "## Essays", ""]
+           "## Learn (read in order)", ""]
+    for l in lessons:
+        out.append(f"- [{l['title']}]({base}{l['url']}index.md): "
+                   f"{' '.join(l['summary'].split())}")
+    out += ["", "## Essays", ""]
     for e in essays:
         out.append(f"- [{e['title']}]({base}{e['url']}index.md): "
                    f"{' '.join(e['summary'].split())}")

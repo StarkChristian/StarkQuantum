@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}{{ lesson.title }} — Learn — {{ site.name }}{% endblock %}
+{% block description %}{{ lesson.summary }}{% endblock %}
+{% block head_extra %}
+<link rel="alternate" type="text/markdown" href="{{ lesson.url }}index.md">
+<script type="application/ld+json">{{ ld | tojson }}</script>
+{% endblock %}
+
+{% block content %}
+<article class="wrap prose" data-pagefind-body data-pagefind-meta="type:Lesson">
+  <p class="crumbs"><a href="/learn/">Learn</a> / Lesson {{ lesson.number }}</p>
+  <h1>{{ lesson.title }}</h1>
+  <p class="standfirst">{{ lesson.summary }}</p>
+  <p class="dateline">
+    By {{ site.author }} · {{ lesson.level }} · {{ lesson.minutes }} min read
+    · Published {{ lesson.published | longdate }}
+    {% if lesson.reviewed %} · Reviewed {{ lesson.reviewed | longdate }}{% endif %}
+  </p>
+
+  {{ lesson.body_html | safe }}
+
+  <section class="check" aria-labelledby="check-h">
+    <h2 id="check-h">Check yourself</h2>
+    <ol>
+      {% for item in lesson.check %}
+      <li>
+        {{ item.q_html | safe }}
+        <details>
+          <summary>Answer</summary>
+          {{ item.a_html | safe }}
+        </details>
+      </li>
+      {% endfor %}
+    </ol>
+  </section>
+
+  {% if lesson.further %}
+  <section class="further">
+    <h2>Go further</h2>
+    <ul>
+      {% for link in lesson.further %}
+      <li><a href="{{ link.url }}">{{ link.title }}</a>{% if link.get('note') %}<span class="muted">{{ link.get('note') }}</span>{% endif %}</li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  <nav class="pager" aria-label="More lessons" data-pagefind-ignore>
+    {% if previous %}
+    <a class="pager-prev" href="{{ previous.url }}" rel="prev">
+      <span class="pager-dir">Previous lesson</span>
+      <span class="pager-title">{{ previous.title }}</span>
+    </a>
+    {% endif %}
+    {% if following %}
+    <a class="pager-next" href="{{ following.url }}" rel="next">
+      <span class="pager-dir">Next lesson</span>
+      <span class="pager-title">{{ following.title }}</span>
+    </a>
+    {% else %}
+    <a class="pager-next" href="/articles/">
+      <span class="pager-dir">Finished the path</span>
+      <span class="pager-title">Read the essays</span>
+    </a>
+    {% endif %}
+  </nav>
+</article>
+{% endblock %}

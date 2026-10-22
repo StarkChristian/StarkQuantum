@@ -49,8 +49,7 @@
     {# The mark carries no information the adjacent text does not already
        give, so it is decorative for a screen reader. #}
     <a class="wordmark" href="/">
-      <img class="wordmark-mark" src="{{ asset('mark.png') }}" alt=""
-           width="53" height="30" decoding="async">
+      {% from "_mark.html" import mark %}{{ mark("wordmark-mark") }}
       <span class="wordmark-text">
         <span class="wordmark-name">Stark Quantum</span>
         <span class="wordmark-note">Independent. Not a vendor.</span>
@@ -62,6 +61,7 @@
 
     <div class="masthead-right" id="masthead-right">
       <nav class="nav" aria-label="Primary">
+        <a href="/learn/"{% if current.startswith('/learn') %} aria-current="page"{% endif %}>Learn</a>
         <a href="/articles/"{% if current.startswith('/articles') %} aria-current="page"{% endif %}>Essays</a>
         <a href="/news/"{% if current.startswith('/news') %} aria-current="page"{% endif %}>Briefs</a>
         <a href="/reality/"{% if current.startswith('/reality') %} aria-current="page"{% endif %}>Reality</a>

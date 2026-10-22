@@ -5,8 +5,7 @@
 <section class="hero">
   <div class="wrap">
     <div class="hero-inner">
-      <img class="hero-mark" src="{{ asset('mark.png') }}" alt=""
-           width="114" height="64" decoding="async">
+      {% from "_mark.html" import mark %}{{ mark("hero-mark") }}
       <p class="hero-tagline">{{ site.tagline }}</p>
       <h1>Independent notes on quantum hardware, error correction, software, and the gap between a demo and a machine.</h1>
       <p class="hero-body">
@@ -45,6 +44,20 @@
     {% endfor %}
   </ul>
 </section>
+
+{% if lessons %}
+<section class="wrap band">
+  <div class="band-head">
+    <h2>Learn</h2>
+    <a class="more" href="/learn/">The path</a>
+  </div>
+  <p class="band-note">
+    New to the subject? {{ lessons | length }} short lessons, in order: what a
+    qubit is, why it goes wrong, what the gates cost, and how error correction
+    works.
+  </p>
+</section>
+{% endif %}
 
 <section class="wrap band">
   <div class="band-head">

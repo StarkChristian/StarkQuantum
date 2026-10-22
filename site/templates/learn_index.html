@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Learn — {{ site.name }}{% endblock %}
+{% block description %}A short path from what a qubit is to why error correction decides everything, in order.{% endblock %}
+
+{% block content %}
+<div class="wrap prose">
+  <h1>Learn</h1>
+  <p class="standfirst">
+    A short path for a reader who has not met the subject. Four lessons, in
+    order, each a few minutes long. Each ends with questions you can check
+    against the answer; nothing is scored and nothing is stored.
+  </p>
+  <p>
+    The lessons teach the concepts. The <a href="/articles/">essays</a> make the
+    arguments, and the <a href="/glossary/">glossary</a> keeps the definitions.
+  </p>
+
+  <ol class="path">
+    {% for lesson in lessons %}
+    <li>
+      <div>
+        <a class="entry-title" href="{{ lesson.url }}">{{ lesson.title }}</a>
+        <p>{{ lesson.summary }}</p>
+        <div class="entry-meta">
+          <span>{{ lesson.level }}</span>
+          <span>{{ lesson.minutes }} min read</span>
+        </div>
+      </div>
+    </li>
+    {% endfor %}
+  </ol>
+</div>
+{% endblock %}

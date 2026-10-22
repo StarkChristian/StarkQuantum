@@ -233,6 +233,7 @@ a:hover { color: var(--accent); text-decoration-color: var(--accent); }
 /* Kept smaller than the wordmark: the name is the identity, the mark sits
    beside it. */
 .wordmark-mark {
+  color: var(--accent);
   height: 26px;
   width: auto;
   display: block;
@@ -353,7 +354,8 @@ a:hover { color: var(--accent); text-decoration-color: var(--accent); }
 .hero-inner { max-width: 40rem; }
 
 .hero-mark {
-  height: 64px;
+  color: var(--accent);
+  height: 40px;
   width: auto;
   display: block;
   margin: 0 0 1.9rem;
@@ -1171,7 +1173,7 @@ math[display="block"] {
 
 @media (max-width: 32rem) {
   .wordmark-mark { height: 23px; }
-  .hero-mark { height: 52px; margin-bottom: 1.5rem; }
+  .hero-mark { height: 34px; margin-bottom: 1.5rem; }
   .wrap { padding: 0 1.15rem; }
   .band { padding-left: 1.15rem; padding-right: 1.15rem; }
   .footer-box { padding: 1.25rem 1.2rem 1.35rem; }
@@ -1184,6 +1186,7 @@ math[display="block"] {
 @media print {
   .masthead, .footer-nav, .search-shade, .tools, .menu-toggle,
   .glossary-jump, .crumbs, .toc, .pager { display: none !important; }
+  .check details { display: block; }
   body { background: #fff; color: #000; font-size: 11pt; }
   .wrap, .prose { max-width: none; padding: 0; }
   .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; }
@@ -1249,3 +1252,59 @@ math[display="block"] {
   padding-bottom: 0.5rem;
 }
 .calc-table td { font-variant-numeric: tabular-nums; }
+
+/* Learn: the path index and a lesson's self-check. */
+.path { list-style: none; margin: 2rem 0 0; padding: 0; counter-reset: lesson; }
+.path li {
+  counter-increment: lesson;
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  gap: 0 0.75rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--rule-2);
+}
+.path li:first-child { border-top: 0; }
+.path li::before {
+  content: counter(lesson, decimal-leading-zero);
+  font-family: var(--sans);
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--accent);
+  padding-top: 0.45rem;
+}
+.path .entry-title { margin-bottom: 0.3rem; }
+
+.check { margin-top: 3rem; }
+.check h2, .further h2 {
+  font-family: var(--sans);
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0 0 0.9rem;
+}
+.check ol { padding-left: 1.35rem; margin: 0; }
+.check li { margin-bottom: 1.25rem; }
+.check li > p { margin: 0 0 0.5rem; }
+.check details {
+  border: 1px solid var(--rule);
+  background: var(--paper-2);
+  padding: 0.55rem 0.9rem;
+}
+.check summary {
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--accent);
+}
+.check details[open] summary { margin-bottom: 0.5rem; }
+.check details p { margin: 0 0 0.6rem; font-size: 0.98rem; }
+.check details p:last-child { margin-bottom: 0; }
+
+.further { margin-top: 2.5rem; }
+.further ul { list-style: none; padding: 0; margin: 0; font-size: 0.98rem; }
+.further li { padding: 0.5rem 0; border-top: 1px solid var(--rule-2); }
+.further li:first-child { border-top: 0; }
+.further .muted { display: block; font-size: 0.88rem; }

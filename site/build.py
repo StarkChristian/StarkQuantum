@@ -51,7 +51,7 @@ SITE = {
     "author": "Christian Stark",
     "email": "info@starkquantum.com",
     "telegram": "",
-    "doctrine_version": "1.1",
+    "doctrine_version": "1.2",
     # Visitor statistics. Self-hosted Umami; no cookies. Remove both keys to
     # drop the script from every page. The privacy notice describes it.
     "umami_src": "https://umami.homomorphicprivacy.com/script.js",
@@ -293,6 +293,62 @@ def load_glossary() -> list[dict]:
     return terms
 
 
+def load_lessons() -> list[dict]:
+    """Learn: a short ordered path. Doctrine section 7."""
+    lessons = []
+    for path in sorted((CONTENT / "learn").glob("*.md")):
+        meta, body = read_doc(path)
+        if not meta:
+            continue
+        check_language(path, body)
+        check_forbidden(path, body)
+        slug = meta.get("slug") or path.stem
+
+        for field in ("title", "summary", "order", "published"):
+            if not meta.get(field):
+                fail(path.name, f"missing required field '{field}'")
+
+        level = meta.get("level", "Intro")
+        if level not in DIFFICULTIES:
+            fail(path.name, f"unknown level '{level}'")
+
+        check = meta.get("check") or []
+        if len(check) < 2 or any(not (c.get("q") and c.get("a")) for c in check):
+            fail(path.name, "needs at least two check questions, each with q and a")
+
+        words = word_count(body)
+        if not 450 <= words <= 900:
+            fail(path.name, f"{words} words, outside the 450-900 range")
+
+        body_html, toc = render_markdown_toc(body, path.name)
+        lessons.append({
+            "kind": "lesson",
+            "slug": slug,
+            "url": f"/learn/{slug}/",
+            "order": meta.get("order", 99),
+            "title": meta.get("title", slug),
+            "summary": meta.get("summary", ""),
+            "level": level,
+            "published": as_date(meta.get("published"), path, "published"),
+            "reviewed": as_date(meta.get("reviewed"), path, "reviewed"),
+            "check": [{"q_html": render_markdown(c["q"], path.name),
+                       "a_html": render_markdown(c["a"], path.name),
+                       "q_text": " ".join(str(c["q"]).split()),
+                       "a_text": " ".join(str(c["a"]).split())} for c in check],
+            "further": meta.get("further") or [],
+            "sources": meta.get("sources") or [],
+            "body_html": body_html,
+            "toc": toc,
+            "minutes": reading_minutes(words),
+            "body_text": body,
+        })
+    lessons.sort(key=lambda l: l["order"])
+    for number, lesson in enumerate(lessons, 1):
+        lesson["number"] = number
+        lesson["category_label"] = f"Lesson {number}"
+    return lessons
+
+
 def load_reality() -> list[dict]:
     cells = []
     allowed = {"not-yet", "early", "partial", "yes"}
@@ -368,7 +424,7 @@ def write(env: Environment, out_path: str, template: str, **ctx) -> None:
     target.write_text(html, encoding="utf-8")
 
 
-def write_og_images(essays, briefs) -> None:
+def write_og_images(essays, briefs, lessons) -> None:
     """One link-preview card per essay and brief, plus a default for the rest."""
     write_og_image(OUTPUT / "og" / "default.png", SITE["description"],
                    SITE["name"])
@@ -380,6 +436,10 @@ def write_og_images(essays, briefs) -> None:
         item["og_image"] = f"/og/brief-{item['slug']}.png"
         write_og_image(OUTPUT / item["og_image"].lstrip("/"), item["title"],
                        "Brief")
+    for item in lessons:
+        item["og_image"] = f"/og/lesson-{item['slug']}.png"
+        write_og_image(OUTPUT / item["og_image"].lstrip("/"), item["title"],
+                       f"Learn / Lesson {item['number']}")
 
 
 def build_pagefind() -> None:
@@ -487,6 +547,7 @@ def main() -> int:
     essays = load_essays()
     briefs = load_briefs()
     terms = load_glossary()
+    lessons = load_lessons()
     cells = load_reality()
     sources = load_sources()
     about = load_page("about")
@@ -533,13 +594,13 @@ def main() -> int:
     # First mention of each glossary term in an essay or brief links to its
     # definition. Glossary entries and legal pages are left alone.
     link_terms = build_term_matcher(terms)
-    for item in essays + briefs:
+    for item in essays + briefs + lessons:
         item["body_html"] = link_terms(item["body_html"])
 
-    write_og_images(essays, briefs)
+    write_og_images(essays, briefs, lessons)
 
     write(env, "/", "home.html", essays=essays[:6], briefs=briefs[:5],
-          cells=cells, start_here=start_here)
+          cells=cells, start_here=start_here, lessons=lessons)
     write(env, "/about/", "page.html", page=about)
     write(env, "/privacy/", "page.html", page=privacy)
     write(env, "/impressum/", "page.html", page=impressum)
@@ -560,6 +621,12 @@ def main() -> int:
     write(env, "/glossary/", "glossary.html", terms=terms)
     write(env, "/sources/", "sources.html", sources=sources)
     write(env, "/overhead/", "overhead.html")
+    write(env, "/learn/", "learn_index.html", lessons=lessons)
+    for i, lesson in enumerate(lessons):
+        write(env, lesson["url"], "lesson.html", lesson=lesson,
+              og_image=lesson["og_image"], ld=article_ld(SITE, lesson),
+              previous=lessons[i - 1] if i > 0 else None,
+              following=lessons[i + 1] if i + 1 < len(lessons) else None)
     write(env, "/404.html", "page.html", page={
         "title": "Not here",
         "summary": "",
@@ -637,12 +704,14 @@ def main() -> int:
         ("/glossary/", glossary_date),
         ("/sources/", sources_date),
         ("/overhead/", dt.date(2026, 10, 22)),
+        ("/learn/", newest([l["reviewed"] or l["published"] for l in lessons])),
         ("/privacy/", privacy["updated"]),
         ("/impressum/", impressum["updated"]),
         ("/disclaimer/", disclaimer["updated"]),
     ]
     pages += [(e["url"], e["reviewed"] or e["published"]) for e in essays]
     pages += [(b["url"], b["published"]) for b in briefs]
+    pages += [(l["url"], l["reviewed"] or l["published"]) for l in lessons]
     pages.insert(0, ("/", newest([d for _, d in pages])))
 
     sitemap = "\n".join(
@@ -656,10 +725,10 @@ def main() -> int:
         f"{sitemap}\n</urlset>\n", encoding="utf-8")
     urls = [url for url, _ in pages]
 
-    for item in essays + briefs:
+    for item in essays + briefs + lessons:
         (OUTPUT / item["url"].strip("/") / "index.md").write_text(
             markdown_copy(SITE, item), encoding="utf-8")
-    (OUTPUT / "llms.txt").write_text(llms_txt(SITE, essays, briefs), encoding="utf-8")
+    (OUTPUT / "llms.txt").write_text(llms_txt(SITE, essays, briefs, lessons), encoding="utf-8")
 
     build_pagefind()
 
