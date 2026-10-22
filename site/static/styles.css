@@ -62,13 +62,13 @@
   --footer-bg: light-dark(oklch(94.3% 0.018 89), oklch(18.5% 0.006 56));
   --ink: light-dark(oklch(22.8% 0.010 81), oklch(92.4% 0.019 83));
   --ink-2: light-dark(oklch(41.3% 0.019 77), oklch(74.4% 0.025 82));
-  --ink-3: light-dark(oklch(60.7% 0.023 79), oklch(59.0% 0.025 81));
+  --ink-3: light-dark(oklch(49.8% 0.019 83), oklch(65.0% 0.021 80));
   --rule: light-dark(oklch(87.5% 0.022 83), oklch(31.2% 0.013 72));
   --rule-2: light-dark(oklch(92.3% 0.017 85), oklch(26.3% 0.009 67));
   --accent: light-dark(oklch(45.6% 0.118 37), oklch(71.4% 0.112 44));
   --accent-2: light-dark(oklch(52.7% 0.132 37), oklch(77.7% 0.100 42));
   --accent-wash: light-dark(oklch(92.9% 0.017 56), oklch(26.0% 0.022 48));
-  --flag: light-dark(oklch(52.8% 0.099 85), oklch(74.6% 0.100 83));
+  --flag: light-dark(oklch(51.0% 0.095 85), oklch(74.6% 0.100 83));
   --flag-wash: light-dark(oklch(93.2% 0.029 90), oklch(26.4% 0.021 82));
   /* --flag, the ochre, is used only to flag a board cell as "early". */
   --shadow: 0 1px 2px color-mix(in oklch, var(--ink) 6%, transparent),
