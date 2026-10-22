@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}How this site is built — {{ site.name }}{% endblock %}
+{% block description %}The technology this site runs on, and what each page weighs, measured on every build.{% endblock %}
+
+{% block content %}
+<article class="wrap prose">
+  <h1>How this site is built</h1>
+  <p class="standfirst">
+    The site is built to be read. This page lists what it runs on, and the
+    weight of its pages as measured by the build that produced it.
+  </p>
+
+  <h2>Measured on this build</h2>
+  <p>
+    Transfer size is what a first visit downloads: the page, its stylesheet, its
+    scripts and its fonts, with text compressed. The build refuses to publish any
+    page over {{ budget }} KB. {{ pages }} pages were measured.
+  </p>
+  <table class="calc-table">
+    <caption>First-visit transfer size</caption>
+    <thead>
+      <tr><th scope="col">Page</th><th scope="col">Transferred</th><th scope="col">Scripts</th><th scope="col">Of them, from another host</th></tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+      <tr>
+        <th scope="row"><a href="{{ r.path }}">{{ r.name }}</a></th>
+        <td>{{ kb(r.bytes) }}</td>
+        <td>{{ r.scripts }}</td>
+        <td>{{ r.remote }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p class="muted">
+    The one script from another host counts visits, sets no cookie and is run by
+    the author; see the <a href="/privacy/">privacy notice</a>. Search files are
+    fetched only when you search.
+  </p>
+
+  <h2>What it uses</h2>
+  <ul>
+    <li><strong>Static pages.</strong> Every page is generated at build time from Markdown, with Python and Jinja2. No server code runs when you read a page.</li>
+    <li><strong>Hosting.</strong> Cloudflare Pages, built from a public GitHub repository.</li>
+    <li><strong>Type.</strong> Source Serif 4 and Inter, as self-hosted variable fonts. Nothing is fetched from a font service.</li>
+    <li><strong>Modern CSS.</strong> OKLCH colours, <code>light-dark()</code>, <code>color-mix()</code>, <code>text-wrap: pretty</code>, scroll-driven animation for the reading bar, and cross-document view transitions. Each one is optional: a browser that lacks it shows the page without it.</li>
+    <li><strong>Mathematics.</strong> MathML, drawn by the browser. There is no maths script.</li>
+    <li><strong>Charts and figures.</strong> SVG generated at build time from data, such as the <a href="/threshold/">threshold simulation</a> run with Stim, Sinter and PyMatching. The data and the script are published.</li>
+    <li><strong>Search.</strong> Pagefind, an index stored as static files and searched inside your browser. Your queries are not sent anywhere.</li>
+    <li><strong>Definitions on hover.</strong> The Popover API shows a glossary entry when you point at a term.</li>
+    <li><strong>Prefetching.</strong> Speculation rules fetch a page you are about to open.</li>
+    <li><strong>Security.</strong> HTTPS only, a Content-Security-Policy that allows scripts only from this site and the statistics host, and a restrictive Permissions-Policy.</li>
+    <li><strong>For machines.</strong> A plain Markdown copy of every page, an <a href="/llms.txt">llms.txt</a> index, RSS and JSON feeds, schema.org data, and citation meta tags on essays.</li>
+    <li><strong>Reading.</strong> Semantic HTML, a skip link, keyboard-operable controls, reduced-motion support and a print stylesheet.</li>
+  </ul>
+
+  <h2>What it does not use</h2>
+  <p>
+    No advertising, no third-party trackers, no cookies, no client-side
+    framework, and no font or script from a content network. The one script that
+    is not served from this site is the visit counter described above.
+  </p>
+
+  <h2>Claims about the technology</h2>
+  <p>
+    The sizes above are computed by the build and change with the pages. The
+    list is of what the site does today; it is not a claim of conformance to any
+    accessibility standard, which would need an audit. Numbers and sources for
+    the content itself are on the <a href="/claims/">claims register</a>.
+  </p>
+</article>
+{% endblock %}

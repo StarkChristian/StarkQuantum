@@ -361,6 +361,52 @@ def check_internal_links() -> list[str]:
     return problems
 
 
+PAGE_WEIGHT_MARK = "<!--PAGE_WEIGHT-->"
+BUDGET_KB = 150  # compressed transfer per page, fonts included
+
+
+def compute_weights() -> dict:
+    """Compressed transfer size of each page and the local files it loads.
+
+    HTML, CSS and scripts are measured gzip-compressed; fonts and images as
+    they are. Search files are loaded only when someone searches, and are left
+    out. Remote scripts are counted, not measured.
+    """
+    import zlib
+
+    def gz(data: bytes) -> int:
+        return len(zlib.compress(data, 9))
+
+    cache: dict[str, int] = {}
+
+    def asset(path: str) -> int:
+        if path not in cache:
+            f = OUTPUT / path.split("?")[0].lstrip("/")
+            data = f.read_bytes() if f.is_file() else b""
+            cache[path] = len(data) if f.suffix in (".woff2", ".png", ".jpg") else gz(data)
+        return cache[path]
+
+    weights = {}
+    for f in sorted(OUTPUT.rglob("*.html")):
+        text = f.read_text(encoding="utf-8")
+        refs = set(re.findall(r'<link rel="stylesheet" href="(/[^"]+)"', text))
+        refs |= set(re.findall(r'<link rel="preload" href="(/[^"]+)"', text))
+        refs |= set(re.findall(r'<script src="(/[^"]+)"', text))
+        local_scripts = len(re.findall(r'<script src="/', text))
+        remote = len(re.findall(r'<script[^>]*\ssrc="https?://', text))
+        weights["/" + str(f.relative_to(OUTPUT))] = {
+            "bytes": gz(text.encode("utf-8")) + sum(asset(r) for r in refs),
+            "html": gz(text.encode("utf-8")),
+            "scripts": local_scripts + remote,
+            "remote": remote,
+        }
+    return weights
+
+
+def kb(n: int) -> str:
+    return f"{n / 1024:.0f} KB" if n >= 10240 else f"{n / 1024:.1f} KB"
+
+
 def load_lessons() -> list[dict]:
     """Learn: a short ordered path. Doctrine section 7."""
     lessons = []
@@ -558,8 +604,8 @@ def escape(text: str) -> str:
             .replace(">", "&gt;"))
 
 
-def build_feed(essays, briefs) -> str:
-    entries = sorted(essays + briefs,
+def build_feed(essays, briefs, lessons=()) -> str:
+    entries = sorted(list(essays) + list(briefs) + list(lessons),
                      key=lambda e: (e["published"] or dt.date.min),
                      reverse=True)[:40]
     items = []
@@ -587,6 +633,29 @@ def build_feed(essays, briefs) -> str:
         + "\n".join(items)
         + "\n  </channel>\n</rss>\n"
     )
+
+
+def build_json_feed(essays, briefs, lessons) -> str:
+    """JSON Feed 1.1, with the same entries as the RSS feed."""
+    entries = sorted(list(essays) + list(briefs) + list(lessons),
+                     key=lambda e: (e["published"] or dt.date.min), reverse=True)[:40]
+    items = []
+    for e in entries:
+        url = SITE["base_url"] + e["url"]
+        pub = (e["published"] or dt.date.today()).isoformat() + "T00:00:00Z"
+        item = {"id": url, "url": url, "title": e["title"],
+                "summary": e.get("summary") or e["body_text"][:280],
+                "content_text": e["body_text"], "date_published": pub,
+                "tags": [e["kind"]]}
+        if e.get("reviewed"):
+            item["date_modified"] = e["reviewed"].isoformat() + "T00:00:00Z"
+        items.append(item)
+    return json.dumps({
+        "version": "https://jsonfeed.org/version/1.1",
+        "title": SITE["name"], "home_page_url": SITE["base_url"] + "/",
+        "feed_url": SITE["base_url"] + "/feed.json",
+        "description": SITE["description"], "language": "en",
+        "authors": [{"name": SITE["author"]}], "items": items}, indent=1) + "\n"
 
 
 def asset_url(name: str) -> str:
@@ -718,7 +787,23 @@ def main() -> int:
 
     (OUTPUT / "search-index.json").write_text(
         json.dumps(build_search_index(essays, briefs, terms)), encoding="utf-8")
-    (OUTPUT / "feed.xml").write_text(build_feed(essays, briefs), encoding="utf-8")
+    (OUTPUT / "feed.xml").write_text(build_feed(essays, briefs, lessons), encoding="utf-8")
+    (OUTPUT / "feed.json").write_text(build_json_feed(essays, briefs, lessons), encoding="utf-8")
+    well_known = OUTPUT / ".well-known"
+    well_known.mkdir(exist_ok=True)
+    expires = (dt.date.today() + dt.timedelta(days=300)).isoformat()
+    (well_known / "security.txt").write_text(
+        f"Contact: mailto:{SITE['email']}\n"
+        f"Expires: {expires}T00:00:00Z\n"
+        "Preferred-Languages: en\n"
+        f"Canonical: {SITE['base_url']}/.well-known/security.txt\n", encoding="utf-8")
+    (OUTPUT / "manifest.webmanifest").write_text(json.dumps({
+        "name": SITE["name"], "short_name": "Stark Quantum",
+        "description": SITE["description"], "start_url": "/", "display": "browser",
+        "background_color": "#f6f2e8", "theme_color": "#8c3a22",
+        "icons": [{"src": "/static/icon-192.png", "sizes": "192x192", "type": "image/png"},
+                  {"src": "/static/icon-512.png", "sizes": "512x512", "type": "image/png"}]},
+        indent=1) + "\n", encoding="utf-8")
     (OUTPUT / "robots.txt").write_text(
         f"User-agent: *\nAllow: /\nSitemap: {SITE['base_url']}/sitemap.xml\n",
         encoding="utf-8")
@@ -786,6 +871,7 @@ def main() -> int:
         ("/overhead/", dt.date(2026, 10, 22)),
         ("/threshold/", dt.date.fromisoformat(threshold["generated"])),
         ("/claims/", claims["checked_on"]),
+        ("/colophon/", dt.date(2026, 10, 22)),
         ("/learn/", newest([l["reviewed"] or l["published"] for l in lessons])),
         ("/privacy/", privacy["updated"]),
         ("/impressum/", impressum["updated"]),
@@ -813,6 +899,30 @@ def main() -> int:
     (OUTPUT / "llms.txt").write_text(llms_txt(SITE, essays, briefs, lessons), encoding="utf-8")
 
     shutil.copy2(ROOT / "data" / "threshold.json", OUTPUT / "threshold.json")
+
+    weights = compute_weights()
+    samples = [("Home", "/index.html"), ("An essay", essays[0]["url"] + "index.html"),
+               ("A lesson", lessons[0]["url"] + "index.html"),
+               ("The threshold chart", "/threshold/index.html"),
+               ("The overhead calculator", "/overhead/index.html")]
+    sample_rows = [{"name": n, "path": p.replace("index.html", ""), **weights[p]}
+                   for n, p in samples if p in weights]
+    write(env, "/colophon/", "colophon.html", rows=sample_rows, kb=kb,
+          budget=BUDGET_KB, pages=len(weights))
+    weights = compute_weights()
+    over = [f"{u}: {kb(w['bytes'])}" for u, w in weights.items() if w["bytes"] > BUDGET_KB * 1024]
+    if over:
+        print("Build refused. Pages over the transfer budget:\n", file=sys.stderr)
+        for line in over:
+            print(f"  - {line}", file=sys.stderr)
+        return 1
+    for f in OUTPUT.rglob("*.html"):
+        text = f.read_text(encoding="utf-8")
+        if PAGE_WEIGHT_MARK in text:
+            w = weights["/" + str(f.relative_to(OUTPUT))]
+            f.write_text(text.replace(
+                PAGE_WEIGHT_MARK,
+                f"This page: {kb(w['bytes'])} transferred, compressed."), encoding="utf-8")
 
     problems = check_internal_links()
     if problems:

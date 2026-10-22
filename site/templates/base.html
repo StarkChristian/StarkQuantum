@@ -6,6 +6,9 @@
 <title>{% block title %}{{ site.name }}{% endblock %}</title>
 <meta name="description" content="{% block description %}{{ site.description }}{% endblock %}">
 <meta name="author" content="{{ site.author }}">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f6f2e8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#191613" media="(prefers-color-scheme: dark)">
 {% if not current.endswith(".html") %}
 <link rel="canonical" href="{{ site.base_url }}{{ current }}">
 <meta property="og:url" content="{{ site.base_url }}{{ current }}">
@@ -27,6 +30,8 @@
 <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32.png') }}">
 <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
 <link rel="alternate" type="application/rss+xml" title="{{ site.name }}" href="/feed.xml">
+<link rel="alternate" type="application/feed+json" title="{{ site.name }} (JSON Feed)" href="/feed.json">
+<link rel="manifest" href="/manifest.webmanifest">
 {% block head_extra %}{% endblock %}
 <script src="{{ asset('theme.js') }}"></script>
 {# Pages the reader is likely to open next are fetched when a link is hovered
@@ -101,6 +106,7 @@
       Not a hardware vendor. Not affiliated with StarkWare, the German drone
       company Stark, Quantum Systems, or Stark Quantum Solutions.
     </p>
+    <p class="footer-line muted footer-weight"><!--PAGE_WEIGHT--> No cookies, no advertising. <a href="/colophon/">How this site is built</a>.</p>
     <nav class="footer-nav" aria-label="Footer">
       <a href="/articles/">Essays</a>
       <a href="/news/">Briefs</a>
@@ -113,6 +119,7 @@
       <a href="/privacy/">Privacy</a>
       <a href="/disclaimer/">Disclaimer</a>
       <a href="/feed.xml">RSS</a>
+      <a href="/feed.json">JSON Feed</a>
       {# Cloudflare Email Obfuscation would replace this with a
          JavaScript-decoded placeholder. The address must stay readable
          without scripts, so it is excluded here and on the Impressum. #}

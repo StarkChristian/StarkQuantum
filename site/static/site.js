@@ -1,4 +1,4 @@
-/* Three small things: a mobile menu, a theme toggle, and an archive search.
+/* A mobile menu, a theme toggle, glossary popovers, and an archive search.
    Nothing is tracked. The only stored value is the theme preference. */
 
 (function () {
@@ -40,6 +40,52 @@
         else { localStorage.setItem("sq-theme", next); }
       } catch (e) {}
     });
+  }
+
+  // Glossary terms: the definition appears in a popover on hover or focus.
+  // Without the Popover API, or without script, the link keeps its title.
+  var termLinks = document.querySelectorAll("a.term");
+  if (termLinks.length && typeof HTMLElement.prototype.showPopover === "function") {
+    var pop = document.createElement("div");
+    pop.className = "term-pop";
+    pop.id = "term-pop";
+    pop.setAttribute("popover", "manual");
+    pop.setAttribute("role", "tooltip");
+    document.body.appendChild(pop);
+
+    var hidePop = function () {
+      if (pop.matches(":popover-open")) { pop.hidePopover(); }
+      for (var j = 0; j < termLinks.length; j++) { termLinks[j].removeAttribute("aria-describedby"); }
+    };
+
+    var showPop = function (link) {
+      pop.textContent = "";
+      var label = document.createElement("strong");
+      label.textContent = link.textContent;
+      pop.appendChild(label);
+      pop.appendChild(document.createTextNode(link.getAttribute("data-def")));
+      link.setAttribute("aria-describedby", "term-pop");
+      if (!pop.matches(":popover-open")) { pop.showPopover(); }
+      var r = link.getBoundingClientRect();
+      var left = Math.min(Math.max(8, r.left), window.innerWidth - pop.offsetWidth - 8);
+      var below = r.bottom + 8;
+      var top = below + pop.offsetHeight > window.innerHeight ? r.top - pop.offsetHeight - 8 : below;
+      pop.style.left = left + "px";
+      pop.style.top = Math.max(8, top) + "px";
+    };
+
+    Array.prototype.forEach.call(termLinks, function (link) {
+      link.setAttribute("data-def", link.getAttribute("title") || "");
+      link.removeAttribute("title");
+      link.addEventListener("pointerenter", function (e) {
+        if (e.pointerType === "mouse") { showPop(link); }
+      });
+      link.addEventListener("pointerleave", hidePop);
+      link.addEventListener("focus", function () { showPop(link); });
+      link.addEventListener("blur", hidePop);
+    });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") { hidePop(); } });
+    window.addEventListener("scroll", hidePop, { passive: true });
   }
 
   // Archive search over a small JSON index built at compile time.
