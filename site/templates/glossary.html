@@ -23,10 +23,8 @@
   <div class="glossary" data-pagefind-body data-pagefind-meta="type:Glossary">
     {% for term in terms %}
     <section class="glossary-entry">
-      <h2 class="glossary-term" id="{{ term.slug }}">
-        {{ term.term }}
-        {% if term.aka %}<span class="aka">{{ term.aka | join(', ') }}</span>{% endif %}
-      </h2>
+      <h2 class="glossary-term" id="{{ term.slug }}">{{ term.term }}</h2>
+      {% if term.aka %}<p class="aka">Also: {{ term.aka | join(', ') }}</p>{% endif %}
       <div class="glossary-def">{{ term.body_html | safe }}</div>
     </section>
     {% endfor %}

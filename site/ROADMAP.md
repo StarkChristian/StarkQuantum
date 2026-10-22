@@ -16,15 +16,14 @@ here may add advertising, tracking, monetisation or futurist artwork.
 - [x] `llms.txt` and a plain Markdown copy of every essay and brief
 - [x] schema.org `Article` data and Google Scholar meta tags on essays
 - [x] Cross-document view transitions and hover prefetch
+- [x] Mobile layout checked at 390 px: no overflow on essay, glossary and home
+- [x] Glossary search hits show the term alone, aliases moved below the heading
+- [x] Overhead calculator at `/overhead/` (surface-code physical qubits per logical qubit)
 
 ## Next
 
-- [ ] Glossary exclusion list, for common words such as "threshold" that are
-      sometimes used in their ordinary sense.
 - [ ] A real threshold chart: logical error rate against code distance,
       simulated with Stim and sinter at build time, seed and script in the repo.
-- [ ] Overhead calculator: physical error rate and distance in, physical qubits
-      per logical qubit out. One small script, no dependencies.
 - [ ] Surface-code diagram for "The decoder has to keep up": a patch, one
       error, the syndrome, the decoder's answer.
 - [ ] Reality Board history: show each cell's dated changes as a timeline.

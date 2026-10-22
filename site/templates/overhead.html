@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Overhead calculator — {{ site.name }}{% endblock %}
+{% block description %}How many physical qubits one surface-code logical qubit needs, for a given physical error rate and target.{% endblock %}
+
+{% block content %}
+<article class="wrap prose">
+  <h1>Overhead calculator</h1>
+  <p class="standfirst">
+    How many physical qubits does one logical qubit cost? Set the physical
+    error rate and the logical error rate you need. The answer is a floor, not
+    a plan.
+  </p>
+
+  <div class="calc" role="group" aria-label="Inputs">
+    <div class="calc-row">
+      <label for="oh-p">Physical error rate per operation</label>
+      <output id="oh-p-out" for="oh-p">0.10%</output>
+    </div>
+    <input id="oh-p" type="range" min="-4" max="-1.7" step="0.05" value="-3">
+    <p class="calc-scale"><span>0.01%</span><span>2% (logarithmic scale; threshold at 1%)</span></p>
+
+    <div class="calc-row">
+      <label for="oh-target">Logical error rate needed, per round</label>
+      <select id="oh-target">
+        <option value="1e-6">1 in a million</option>
+        <option value="1e-9">1 in a billion</option>
+        <option value="1e-12" selected>1 in a trillion</option>
+        <option value="1e-15">1 in a quadrillion</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="calc-result" id="oh-result" aria-live="polite">
+    <noscript>This calculator needs JavaScript. The formula is below.</noscript>
+  </div>
+
+  <table class="calc-table">
+    <caption>The same physical error rate at other code distances</caption>
+    <thead>
+      <tr><th scope="col">Distance</th><th scope="col">Physical qubits</th><th scope="col">Logical error per round</th></tr>
+    </thead>
+    <tbody id="oh-rows"></tbody>
+  </table>
+
+  <h2>What this assumes</h2>
+  <p>
+    The logical error rate per round is taken as
+    <math display="inline"><mrow><msub><mi>p</mi><mi>L</mi></msub><mo>=</mo><mn>0.1</mn><msup><mrow><mo>(</mo><mrow><mi>p</mi><mo>/</mo><msub><mi>p</mi><mi mathvariant="normal">th</mi></msub></mrow><mo>)</mo></mrow><mrow><mo>(</mo><mi>d</mi><mo>+</mo><mn>1</mn><mo>)</mo><mo>/</mo><mn>2</mn></mrow></msup></mrow></math>,
+    with the threshold <math display="inline"><mrow><msub><mi>p</mi><mi mathvariant="normal">th</mi></msub><mo>=</mo><mn>1</mn><mo>%</mo></mrow></math>
+    and code distance <math display="inline"><mi>d</mi></math>. One rotated
+    surface-code patch uses <math display="inline"><mrow><mn>2</mn><msup><mi>d</mi><mn>2</mn></msup><mo>&#x2212;</mo><mn>1</mn></mrow></math>
+    physical qubits. The form follows Fowler et al., <em>Surface codes: towards
+    practical large-scale quantum computation</em>
+    (<a href="https://arxiv.org/abs/1208.0928" rel="noopener">arXiv:1208.0928</a>).
+  </p>
+  <p>
+    It leaves out everything that makes a machine expensive: noise that is not
+    uniform, a decoder that must keep up with the measurement cycle, routing
+    between patches, and the factories that supply magic states. Real
+    estimates run well above this number. Treat the result as the cheapest
+    case, and see <a href="/glossary/#resource-estimate">resource estimate</a>
+    for how the published ones are built.
+  </p>
+</article>
+<script src="{{ asset('overhead.js') }}" defer></script>
+{% endblock %}

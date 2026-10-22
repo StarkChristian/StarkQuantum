@@ -559,6 +559,7 @@ def main() -> int:
     write(env, "/reality/", "reality.html", cells=cells)
     write(env, "/glossary/", "glossary.html", terms=terms)
     write(env, "/sources/", "sources.html", sources=sources)
+    write(env, "/overhead/", "overhead.html")
     write(env, "/404.html", "page.html", page={
         "title": "Not here",
         "summary": "",
@@ -635,6 +636,7 @@ def main() -> int:
         ("/reality/", newest(cell_dates)),
         ("/glossary/", glossary_date),
         ("/sources/", sources_date),
+        ("/overhead/", dt.date(2026, 10, 22)),
         ("/privacy/", privacy["updated"]),
         ("/impressum/", impressum["updated"]),
         ("/disclaimer/", disclaimer["updated"]),
