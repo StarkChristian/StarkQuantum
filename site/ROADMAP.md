@@ -11,17 +11,14 @@ here may add advertising, tracking, monetisation or futurist artwork.
 - [x] First mention of a glossary term links to its definition
 - [x] In-essay outline, reading time, previous/next essay
 - [x] Full-text search with Pagefind; the JSON index is the fallback
-- [x] Security headers; Content-Security-Policy in report-only mode
+- [x] Security headers and an enforced Content-Security-Policy (checked on a
+      preview: search, theme toggle, analytics and Pagefind raised no violations)
 - [x] `llms.txt` and a plain Markdown copy of every essay and brief
 - [x] schema.org `Article` data and Google Scholar meta tags on essays
 - [x] Cross-document view transitions and hover prefetch
 
 ## Next
 
-- [ ] **Enforce the CSP.** Load a preview, open the console, confirm there are
-      no violations (search, theme toggle, analytics, MathML), then rename
-      `Content-Security-Policy-Report-Only` to `Content-Security-Policy` in
-      `pages-config/_headers`.
 - [ ] Glossary exclusion list, for common words such as "threshold" that are
       sometimes used in their ordinary sense.
 - [ ] A real threshold chart: logical error rate against code distance,
