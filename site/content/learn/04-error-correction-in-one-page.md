@@ -26,6 +26,18 @@ check:
     a: >-
       It gets worse. Above threshold, more qubits add more places for errors than
       the code can repair.
+sources:
+  - name: 'Nielsen and Chuang, Quantum Computation and Quantum Information (Cambridge University Press, 2010)'
+    note: Chapter 10 for the three-qubit code and for stabilizer codes.
+  - name: 'Gottesman, "An Introduction to Quantum Error Correction", arXiv:quant-ph/0004072'
+    url: https://arxiv.org/abs/quant-ph/0004072
+    note: How an error is measured without measuring the data.
+  - name: 'Fowler, Mariantoni, Martinis and Cleland, "Surface codes: Towards practical large-scale quantum computation", arXiv:1208.0928'
+    url: https://arxiv.org/abs/1208.0928
+    note: The empirical fit for the logical error rate (equation 11) and a circuit-level threshold of 0.57%.
+  - name: 'Wang, Fowler, Stephens and Hollenberg, "Threshold error rates for the toric and surface codes", arXiv:0905.0531'
+    url: https://arxiv.org/abs/0905.0531
+    note: About 0.78% with imperfect syndrome extraction, for matching-based decoding.
 further:
   - title: Overhead calculator
     url: /overhead/
@@ -40,8 +52,8 @@ further:
 ---
 
 Classical error correction copies a bit and takes a vote. Quantum information
-cannot be copied, and reading a qubit destroys it. Error correction still works,
-by measuring something other than the data.
+cannot be copied, and reading a qubit collapses its state. Error correction still
+works, by measuring something other than the data.
 
 ## A three-qubit example
 
@@ -57,7 +69,8 @@ The pair of answers is the syndrome. If only the first check reports a
 disagreement, qubit 1 flipped. If only the second does, qubit 3 flipped. If both
 do, qubit 2 did. If neither does, nothing is assumed to have happened. The
 correction is then a flip of the guilty qubit, and the superposition is
-untouched.
+untouched. The code assumes that at most one qubit flipped. If two flipped, the
+syndrome points at the wrong qubit and the correction makes the state wrong.
 
 This code handles flips only. Qubits also suffer phase errors, which need a
 second set of checks in a different basis. A full code protects against both.
@@ -71,22 +84,24 @@ reads it and decides which errors most likely occurred.
 
 [figure:surface-code]
 
-The size of the grid sets the code distance $d$, the number of errors it must
-suffer before it fails to correct. A distance-$d$ code corrects up to
-$(d-1)/2$ errors. A rotated surface-code patch uses $2d^2-1$ physical qubits:
+The size of the grid sets the code distance $d$: the smallest number of physical
+errors that can change the logical state without being detected. A code of odd
+distance $d$ is guaranteed to correct any $(d-1)/2$ errors or fewer. A rotated surface-code patch uses $2d^2-1$ physical qubits:
 $d^2$ for data and $d^2-1$ for checks.
 
 ## The threshold
 
 Below a threshold error rate, a bigger code is better. The logical error rate
-per round falls roughly as
+per round is well described by
 
-$$p_L \sim \left(\frac{p}{p_{\mathrm{th}}}\right)^{(d+1)/2}$$
+$$p_L \approx A \left(\frac{p}{p_{\mathrm{th}}}\right)^{(d+1)/2}$$
 
-where $p$ is the physical error rate and $p_{\mathrm{th}}$ is the threshold. Its
-value depends on the noise model and the decoder; it is around one percent or a
-little below for the surface code. A simulation on the [threshold
-page](/threshold/) finds about 0.7% for one standard model.
+where $p$ is the physical error rate, $p_{\mathrm{th}}$ is the threshold and $A$ is
+a constant found by fitting simulations. Fowler and colleagues fitted
+$A \approx 0.03$ with a threshold of 0.57% for their circuit model. The
+threshold depends on the noise model and the decoder. The simulation on the
+[threshold page](/threshold/) finds about 0.7% for a different noise model, and a
+earlier study of matching-based decoding found about 0.78%.
 
 Each step up in distance multiplies the logical error rate by a constant factor
 less than one, so it falls exponentially. If $p$ is above the threshold, the same
@@ -96,9 +111,9 @@ step makes it worse. The threshold is a sign change.
 
 The closer $p$ is to the threshold, the larger $d$ must be to reach a given
 target, so the overhead is steep. For a target many orders of magnitude below the
-physical rate, the number of physical qubits per logical qubit runs into
-the hundreds or thousands. The [overhead calculator](/overhead/) shows how
-quickly it climbs.
+physical rate, the number of physical qubits per logical qubit is of order
+a thousand. The [overhead calculator](/overhead/) shows how quickly it climbs
+under three published or simulated assumptions.
 
 Two further costs are absent from that formula. The decoder must finish each
 round before the next arrives, or the backlog grows. And operations beyond the

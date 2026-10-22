@@ -226,7 +226,19 @@ def threshold_view(data: dict) -> dict:
                 cells.append("too few failures")
         rows.append({"d": d, "cells": cells})
 
+    # Prefactor for p_L = A (p / p_th)^((d + 1) / 2), fitted at the simulated
+    # crossing, using points well below it.
+    p_th = round(cross, 4) if cross else 0.007
+    resid = [math.log(p["per_round"]) - (p["d"] + 1) / 2 * math.log(p["p"] / p_th)
+             for p in points
+             if p["errors"] >= MIN_ERRORS and p["p"] <= 0.005 and p["per_round"] > 0]
+    fit_a = math.exp(sum(resid) / len(resid))
+    fit_spread = math.exp(math.sqrt(sum((r - math.log(fit_a)) ** 2 for r in resid) / len(resid)))
+
     return {
+        "fit_a": f"{fit_a:.3f}",
+        "fit_spread": f"{fit_spread:.1f}",
+        "fit_pth": p_th,
         "svg": svg,
         "distances": distances,
         "table_rates": [_pct(r) for r in table_rates],

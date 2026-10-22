@@ -27,6 +27,11 @@ check:
     a: >-
       The no-cloning theorem forbids it. This is the reason quantum error
       correction cannot work like classical redundancy, where you copy the bit.
+sources:
+  - name: 'Nielsen and Chuang, Quantum Computation and Quantum Information (Cambridge University Press, 2010)'
+    note: Chapter 1 and section 2.2 for the state, measurement and entanglement.
+  - name: 'Wootters and Zurek, "A single quantum cannot be cloned", Nature 299, 802 (1982)'
+    note: The no-cloning theorem.
 further:
   - title: A physical qubit is not a computer
     url: /articles/physical-qubit-is-not-a-computer/
@@ -72,9 +77,10 @@ the right one is left standing. A bad one just produces random bits.
 
 ## Many qubits
 
-Describing $n$ qubits takes $2^n$ amplitudes. That growth is why simulating a
-large quantum computer on a classical one is hard, and it is the source of most
-of the excitement.
+In general, describing $n$ qubits takes $2^n$ amplitudes. That growth is why
+simulating a large quantum computer on a classical one is hard in general, and it
+is the source of most of the excitement. Many particular states have a short
+description, and those can be simulated cheaply.
 
 It is also the source of the most common misunderstanding. A quantum computer
 does not try every answer in parallel and report the best one. It holds a large
@@ -89,11 +95,11 @@ light.
 
 ## What a qubit is made of
 
-Anything with two controllable states can serve. The main platforms are
-superconducting circuits, trapped ions, neutral atoms held by light, photons,
-and spins in semiconductors. They differ in speed, in how well they hold a
-state, and in how easily one qubit can be made to interact with another. None of
-them is a settled winner.
+Any system with two states that can be prepared, controlled and measured can
+serve. The main platforms are superconducting circuits, trapped ions, neutral
+atoms held by light, photons, and spins in semiconductors. They differ in
+speed, in how well they hold a state, and in how easily one qubit can be made to
+interact with another. The field has not settled on one of them.
 
 ## One rule that matters later
 

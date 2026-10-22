@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Claims register — {{ site.name }}{% endblock %}
+{% block description %}Every factual or numerical claim on the Learn and tool pages, with its source and what was done with the source.{% endblock %}
+
+{% block content %}
+<article class="wrap prose">
+  <h1>Claims register</h1>
+  <p class="standfirst">
+    Each factual or numerical claim on the Learn and tool pages, the page that
+    uses it, its source, and what was done with the source. It exists so that a
+    reader can check a number without hunting for it.
+  </p>
+
+  <h2>What the status means</h2>
+  <dl class="claims-key">
+    <dt>Checked</dt>
+    <dd>The source was read for that claim on {{ checked_on | longdate }}.</dd>
+    <dt>Vendor-reported</dt>
+    <dd>The figure comes from the company that built the device and has not been independently verified.</dd>
+    <dt>Derived here</dt>
+    <dd>Computed from data published on this site.</dd>
+    <dt>Standard result</dt>
+    <dd>Textbook material, cited to its source and not re-derived or re-read on that date.</dd>
+  </dl>
+  <p>
+    A claim marked <em>checked</em> shows that the source says what the page says
+    it says. It does not mean the source is right, and a preprint has not been
+    peer reviewed. If you find an error, write to the address in the footer.
+  </p>
+
+  <h2>{{ claims | length }} claims</h2>
+  <ol class="claims-list">
+    {% for c in claims %}
+    <li id="claim-{{ loop.index }}" class="claim claim-{{ c.status }}">
+      <p class="claim-text">{{ c.claim }}</p>
+      <p class="claim-meta">
+        <span class="claim-status">{{ {"checked": "Checked", "vendor": "Vendor-reported", "derived": "Derived here", "standard": "Standard result"}[c.status] }}</span>
+        · Used on
+        {% for w in c.where %}<a href="{{ w }}">{{ w }}</a>{% if not loop.last %}, {% endif %}{% endfor %}
+      </p>
+      <p class="claim-source">
+        {% if c.get('url') %}<a href="{{ c.url }}"{% if c.url.startswith('http') %} rel="noopener"{% endif %}>{{ c.source }}</a>{% else %}{{ c.source }}{% endif %}
+      </p>
+      <p class="claim-note">{{ c.note }}</p>
+    </li>
+    {% endfor %}
+  </ol>
+</article>
+{% endblock %}

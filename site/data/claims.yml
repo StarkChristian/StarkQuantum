@@ -1,0 +1,116 @@
+# The register of factual and numerical claims on the learning and tool pages.
+# Each entry names the claim, where it is used, the source, and what was done
+# with the source. Statuses: checked, vendor, derived, standard.
+checked_on: 2026-10-22
+claims:
+  - claim: "A 2048-bit RSA number can be factored with fewer than one million noisy qubits in less than a week, under the hardware assumptions in the paper."
+    where: [/learn/what-quantum-computers-are-for/]
+    source: 'Gidney, "How to factor 2048 bit RSA integers with less than a million noisy qubits", arXiv:2505.15917, 21 May 2025'
+    url: https://arxiv.org/abs/2505.15917
+    status: checked
+    note: Title and abstract read.
+
+  - claim: "For the surface code, the logical error rate per cycle is fitted by P_L = 0.03 (p / p_th)^((d + 1) / 2) with a per-step threshold of 0.57%."
+    where: [/overhead/, /learn/error-correction-in-one-page/]
+    source: 'Fowler, Mariantoni, Martinis and Cleland, "Surface codes: Towards practical large-scale quantum computation", arXiv:1208.0928'
+    url: https://arxiv.org/abs/1208.0928
+    status: checked
+    note: Equation 11 and the threshold stated with Fig. 4 read in the full text. The threshold depends on the implementation.
+
+  - claim: "Matching-based decoding gives a threshold of about 0.78% with imperfect syndrome extraction (toric code), and the surface code is close to the toric code."
+    where: [/threshold/, /learn/error-correction-in-one-page/]
+    source: 'Wang, Fowler, Stephens and Hollenberg, "Threshold error rates for the toric and surface codes", arXiv:0905.0531'
+    url: https://arxiv.org/abs/0905.0531
+    status: checked
+    note: Abstract read.
+
+  - claim: "The simulated curves for surface codes of distance 5 and 9 cross at about 0.73% physical error rate per operation."
+    where: [/threshold/, /overhead/, /learn/error-correction-in-one-page/]
+    source: "The simulation on this site: data at /threshold.json, script tools/threshold_sim.py"
+    url: /threshold.json
+    status: derived
+    note: One noise model, one decoder. The crossing moves with the pair of distances compared.
+
+  - claim: "A fit of the logical error rate with threshold 0.73% gives a prefactor of about 0.008, within a factor of about 1.4 of the points used."
+    where: [/overhead/]
+    source: "The simulation on this site"
+    url: /threshold.json
+    status: derived
+    note: The best-fit prefactor falls as the distance grows.
+
+  - claim: "A trapped-ion two-qubit gate error of 8.4(7) x 10^-5 was estimated on a laboratory prototype, without ground-state cooling."
+    where: [/learn/why-qubits-go-wrong/]
+    source: 'IonQ, "Trapped-ion two-qubit gates with >99.99% fidelity without ground-state cooling", arXiv:2510.17286'
+    url: https://arxiv.org/abs/2510.17286
+    status: vendor
+    note: Abstract read. The figure is the vendor's estimate and has not been independently verified. The abstract does not say whether it was measured on an isolated pair or in a full device.
+
+  - claim: "A 105-qubit superconducting processor had a mean T1 of 68 microseconds, a T2 (CPMG) of 89 microseconds and a controlled-Z gate duration of 42 nanoseconds."
+    where: [/learn/reading-a-hardware-spec-sheet/]
+    source: 'Google Quantum AI, "Quantum error correction below the surface code threshold", arXiv:2408.13687 (Nature 638, 920, 2025)'
+    url: https://arxiv.org/abs/2408.13687
+    status: checked
+    note: Values read in the text of the paper.
+
+  - claim: "Magic state cultivation reports about an order of magnitude fewer qubit-rounds than prior approaches for the same logical error rate."
+    where: [/learn/gates-circuits-and-the-expensive-gate/]
+    source: 'Gidney, Shutty and Jones, "Magic state cultivation: growing T states as cheap as CNOT gates", arXiv:2409.17595'
+    url: https://arxiv.org/abs/2409.17595
+    status: checked
+    note: Abstract read. The comparison is the authors' own.
+
+  - claim: "The cost of the best known classical simulation of Clifford+T circuits grows exponentially with the number of T gates."
+    where: [/learn/gates-circuits-and-the-expensive-gate/]
+    source: 'Bravyi and Gosset, "Improved classical simulation of quantum circuits dominated by Clifford gates", Phys. Rev. Lett. 116, 250501 (2016), arXiv:1601.07601'
+    url: https://arxiv.org/abs/1601.07601
+    status: checked
+    note: Abstract read. Methods improve, so "best known" is as of that paper.
+
+  - claim: "Small quadratic speedups are unlikely to give a practical advantage on early fault-tolerant machines, because of error-correction overhead."
+    where: [/learn/what-quantum-computers-are-for/]
+    source: 'Babbush, McClean, Newman, Gidney, Boixo and Neven, "Focus beyond quadratic speedups for error-corrected quantum advantage", arXiv:2011.04149'
+    url: https://arxiv.org/abs/2011.04149
+    status: checked
+    note: Abstract read. This is the authors' estimate.
+
+  - claim: "A classical algorithm matched a quantum recommendation algorithm and removed its claimed exponential speedup."
+    where: [/learn/what-quantum-computers-are-for/]
+    source: 'Tang, "A quantum-inspired classical algorithm for recommendation systems", arXiv:1807.04271'
+    url: https://arxiv.org/abs/1807.04271
+    status: checked
+    note: Abstract read.
+
+  - claim: "In July 2026, IBM and collaborators reported a 64-qubit depth-73 circuit with 314 T gates, encoded in 76 physical qubits, with a certified fidelity lower bound of 0.349 at 95% confidence, and claim results beyond the classical methods they tried."
+    where: [/learn/what-quantum-computers-are-for/]
+    source: 'Martiel et al., "Sampling hard circuits with verifiably high fidelity", arXiv:2607.25941 (28 July 2026, version 3 of 2 September 2026)'
+    url: https://arxiv.org/abs/2607.25941
+    status: checked
+    note: Abstract read. A preprint. The claim is the authors' and is limited to the classical methods they tried.
+
+  - claim: "Clifford circuits with stabilizer inputs and Pauli measurements can be simulated efficiently on a classical computer (the Gottesman-Knill theorem)."
+    where: [/learn/gates-circuits-and-the-expensive-gate/]
+    source: 'Gottesman, "The Heisenberg Representation of Quantum Computers", arXiv:quant-ph/9807006; Nielsen and Chuang, section 10.5.4'
+    url: https://arxiv.org/abs/quant-ph/9807006
+    status: standard
+    note: Textbook result, cited and not re-derived.
+
+  - claim: "An unknown quantum state cannot be copied (no-cloning)."
+    where: [/learn/what-a-qubit-is/]
+    source: 'Wootters and Zurek, "A single quantum cannot be cloned", Nature 299, 802 (1982)'
+    url:
+    status: standard
+    note: Textbook result, cited and not re-derived.
+
+  - claim: "T2 cannot exceed 2 T1."
+    where: [/learn/why-qubits-go-wrong/]
+    source: "Nielsen and Chuang, chapter 8"
+    url:
+    status: standard
+    note: Textbook result, cited and not re-derived.
+
+  - claim: "A rotated surface-code patch of distance d uses d^2 data qubits and d^2 - 1 check qubits, and a code of odd distance d corrects any (d - 1) / 2 errors or fewer."
+    where: [/overhead/, /learn/error-correction-in-one-page/]
+    source: "Fowler et al., arXiv:1208.0928; Gottesman, arXiv:quant-ph/0004072"
+    url: https://arxiv.org/abs/quant-ph/0004072
+    status: standard
+    note: The figure's layout is also checked by the site build, which verifies four X checks and four Z checks that all commute.

@@ -281,6 +281,13 @@ def markdown_copy(site: dict, item: dict) -> str:
         for n, c in enumerate(item["check"], 1):
             lines += [f"{n}. {c['q_text']}", f"   Answer: {c['a_text']}"]
         lines.append("")
+        if item["sources"]:
+            lines += ["## Sources", ""]
+            for s in item["sources"]:
+                text = f"[{s['name']}]({s['url']})" if s.get("url") else s["name"]
+                note = f" \u2014 {s['note']}" if s.get("note") else ""
+                lines.append(f"- {text}{note}")
+            lines.append("")
     else:
         if item["numbers"]:
             lines += ["## Numbers", ""] + [f"- {n}" for n in item["numbers"]] + [""]

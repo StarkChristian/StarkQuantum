@@ -27,6 +27,15 @@ check:
       result more accurately. It needs no extra qubits and does not protect any
       single run. Correction protects the computation itself, and costs many
       physical qubits per logical qubit.
+sources:
+  - name: 'Nielsen and Chuang, Quantum Computation and Quantum Information (Cambridge University Press, 2010)'
+    note: Chapter 8 for decoherence, and for the definitions of T1 and T2.
+  - name: 'Temme, Bravyi and Gambetta, "Error mitigation for short-depth quantum circuits", arXiv:1612.02058'
+    url: https://arxiv.org/abs/1612.02058
+    note: Zero-noise extrapolation and probabilistic error cancellation, two forms of error mitigation.
+  - name: 'IonQ, "Trapped-ion two-qubit gates with >99.99% fidelity without ground-state cooling", arXiv:2510.17286'
+    url: https://arxiv.org/abs/2510.17286
+    note: A vendor-reported two-qubit gate error of 8.4(7)e-5 on a laboratory prototype, October 2025. Not independently verified.
 further:
   - title: When a tooling release is actually news
     url: /articles/when-a-release-is-actually-news/
@@ -43,11 +52,11 @@ changes the state that was meant to carry information.
 ## Where errors come from
 
 **Decoherence.** The qubit interacts with its surroundings and loses its
-quantum character. It happens in two ways. Energy leaks out, so an excited state
-decays; the time scale is $T_1$. Or the phase between the two components
-drifts, which erases interference without changing which state is more likely;
-the time scale is $T_2$. A qubit is useful only for a time comparable to or
-shorter than these.
+quantum character. This happens in two ways. Energy leaks out, so an excited
+state decays; the time scale is $T_1$. Or the phase between the two components
+drifts, which erases interference without changing which outcome is more likely;
+the time scale is $T_2$. A qubit holds its state usefully only for times that are
+short compared with $T_1$ and $T_2$.
 
 **Imperfect gates.** A gate is a control pulse of a particular shape and length.
 The pulse is never exact, so every gate leaves a small error. Gates that act on
@@ -60,41 +69,46 @@ a device.
 
 ## The size of the numbers
 
-The error per two-qubit gate on current devices is typically somewhere between
-a tenth of a percent and a few percent. The best results on small systems are
-lower. These figures differ by platform, by device and by date, so a number
-quoted without those three is not comparable with anything.
+Reported error rates for a two-qubit gate differ by platform, by device and by
+day, so a number quoted without those three is not comparable with anything. At
+the good end, one vendor reported an error of $8.4 \times 10^{-5}$ for a
+trapped-ion gate on a laboratory prototype in October 2025. That is the vendor's
+own estimate for one gate, not a figure for a commercial machine. For a
+commercial device, read the vendor's current calibration data.
 
-Fidelity is the usual way to quote it. A two-qubit gate fidelity of 99.9% is an
-error of $10^{-3}$.
+Fidelity is the usual way to quote an error. A two-qubit gate fidelity of 99.9%
+is usually written as an error of $10^{-3}$, although the exact definition of
+fidelity differs between groups. The worked examples in this lesson use
+$10^{-3}$ as an illustration. It is not a statement about any particular device.
 
 ## Why small errors are not small
 
-Errors multiply. If every operation fails with probability $\epsilon$, a circuit
-of $N$ operations runs without any failure with probability about
-$(1-\epsilon)^N$.
+Errors multiply. If every operation fails with probability $\epsilon$,
+independently, a circuit of $N$ operations runs without any failure with
+probability about $(1-\epsilon)^N$.
 
 At $\epsilon = 10^{-3}$ and $N = 1{,}000$ that is about 37%. At $N = 10{,}000$
-it is about $0.005\%$. The algorithms that matter for chemistry or cryptography
-need numbers of operations in the millions to the trillions, and the error rate
-would have to be many orders of magnitude lower than any physical qubit
-achieves.
+it is about $0.005\%$. Algorithms for chemistry or cryptography need numbers of
+operations in the millions to the trillions. To run them without error, the error
+per operation would have to be about one in $N$ or lower, which no physical
+qubit achieves.
 
-Better hardware lowers $\epsilon$. It does not come close to what a long
-computation requires.
+Better hardware lowers $\epsilon$. Even the best reported rates are far from what
+a computation of millions to trillions of operations would need without error
+correction.
 
 ## Two ways to respond
 
 **Error mitigation** runs the circuit many times, perhaps with deliberately
 altered noise, and combines the results to estimate what a noiseless run would
-have given. It needs no extra qubits. It works for averages, such as an energy,
-and its cost grows quickly with circuit size. It does not make any single run
-correct.
+have given. It needs no extra qubits. It works for averages, such as an energy.
+For several well-known methods the number of runs needed grows exponentially with
+the amount of noise in the circuit. It does not make any single run correct.
 
 **Error correction** encodes each logical qubit across many physical ones and
 detects and repairs errors while the computation runs. It does protect the
-computation, and it costs a large overhead. The next lesson sets out how it
-works.
+computation, and it costs a large overhead. The lesson on error correction sets
+out how it works.
 
 ## What to take from this
 

@@ -30,6 +30,13 @@ check:
       Two-qubit gates act only between adjacent qubits, so distant interactions
       need swaps. Each swap is several more two-qubit gates, each carrying error,
       so the same circuit is less accurate than on a fully connected device.
+sources:
+  - name: 'Google Quantum AI, "Quantum error correction below the surface code threshold", Nature 638, 920 (2025), arXiv:2408.13687'
+    url: https://arxiv.org/abs/2408.13687
+    note: Reports a mean T1 of 68 microseconds, T2 (CPMG) of 89 microseconds and a CZ gate duration of 42 nanoseconds for its 105-qubit processor.
+  - name: 'IBM Quantum documentation, "Processor types"'
+    url: https://quantum.cloud.ibm.com/docs/guides/processor-types
+    note: Describes IBM's processor families; current error rates are in the backend calibration data.
 further:
   - title: How to read a quantum claim
     url: /articles/how-to-read-a-quantum-claim/
@@ -53,35 +60,42 @@ are not logical qubits.
 
 ## Connectivity
 
-Which pairs of qubits can interact directly? A grid of neighbours is common on
-superconducting chips. Trapped-ion and neutral-atom devices can often connect
-more qubits to each other. Limited connectivity means swap gates, and swaps cost
-accuracy, as the previous lessons explained.
+Which pairs of qubits can interact directly? Superconducting chips usually connect each qubit only to its
+neighbours on a grid. Some trapped-ion devices let any pair in a chain interact,
+and neutral-atom arrays can move atoms to bring a pair together. Limited
+connectivity means swap gates, and swaps cost accuracy, as the previous lessons
+explained.
 
 ## Gate error rates
 
 Look for the single-qubit and two-qubit figures separately, because the two-qubit
 number is the one that limits you. Then check:
 
-- **Which statistic?** Best pair, median, mean, or worst. A best-pair figure on a
-  large device can be several times better than the typical one.
+- **Which statistic?** Best pair, median, mean, or worst. A best-pair figure and a median
+  figure for the same device can differ, so ask which one is quoted.
 - **How measured?** One gate alone, or all gates at once. Gates run together
-  disturb each other, and the isolated number flatters.
-- **Which circuits?** Randomized benchmarking and a full application circuit do
-  not give the same answer.
+  disturb each other, so the two figures can differ.
+- **Which circuits?** Randomized benchmarking and a full application circuit can
+  give different answers.
 
 ## Coherence against gate time
 
 $T_1$ and $T_2$ are meaningful only relative to how fast the gates are. The
-useful number is roughly $T_2$ divided by the two-qubit gate time: how many
-operations fit before the state is gone. Platforms differ by orders of magnitude
-in both quantities, so neither one compares across platforms by itself.
+useful number is roughly $T_2$ divided by the two-qubit gate time: about how many
+operations fit before the state is gone. For example, a 2024 paper from Google
+Quantum AI reports a mean $T_2$ of 89 microseconds and a controlled-Z gate
+duration of 42 nanoseconds on its 105-qubit processor, a ratio of about 2,000.
+That is a ratio of two averages, not a count of gates you can run. Platforms
+differ by orders of magnitude in both quantities, so neither one compares across
+platforms by itself.
 
 ## Readout and reset
 
 How often is a measurement wrong, and how long does it take? Error correction
 needs fast, accurate readout in the middle of a circuit, and a fast reset. A
-device that can only measure at the end cannot run an error-correcting code.
+device that can only measure at the end of a circuit cannot run an
+error-correcting code, because the code has to be measured during the
+computation.
 
 ## Benchmarks that summarise the device
 

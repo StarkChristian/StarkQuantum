@@ -1363,3 +1363,18 @@ math[display="block"] {
   .history li { grid-template-columns: 1fr; }
   .history-note { grid-column: 1; }
 }
+
+/* Claims register. */
+.claims-key { margin: 0 0 1.5rem; display: grid; grid-template-columns: max-content 1fr; gap: 0.35rem 1.25rem; font-size: 0.96rem; }
+.claims-key dt { font-family: var(--sans); font-size: var(--step--1); font-weight: 600; color: var(--accent); padding-top: 0.15rem; }
+.claims-key dd { margin: 0; color: var(--ink-2); }
+.claims-list { list-style: none; margin: 0; padding: 0; }
+.claim { padding: 1.25rem 0; border-top: 1px solid var(--rule-2); scroll-margin-top: 1rem; }
+.claim:first-child { border-top: 0; }
+.claim p { margin: 0 0 0.4rem; }
+.claim-text { font-size: 1.02rem; }
+.claim-meta, .claim-source, .claim-note { font-family: var(--sans); font-size: var(--step--1); color: var(--ink-3); line-height: 1.5; }
+.claim-status { font-weight: 600; color: var(--ink-2); }
+.claim-vendor .claim-status, .claim-derived .claim-status { color: var(--flag); }
+.claim-source a { color: var(--ink-2); }
+.claim:target { background: var(--accent-wash); padding-left: 0.75rem; padding-right: 0.75rem; }

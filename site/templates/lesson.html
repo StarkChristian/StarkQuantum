@@ -34,6 +34,21 @@
     </ol>
   </section>
 
+  {% if lesson.sources %}
+  <section class="essay-sources">
+    <h2>Sources</h2>
+    <ul>
+      {% for source in lesson.sources %}
+      <li>
+        {% if source.get('url') %}<a href="{{ source.get('url') }}" rel="noopener">{{ source.name }}</a>
+        {% else %}{{ source.name }}{% endif %}
+        {% if source.get('note') %} — {{ source.get('note') }}{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
   {% if lesson.further %}
   <section class="further">
     <h2>Go further</h2>

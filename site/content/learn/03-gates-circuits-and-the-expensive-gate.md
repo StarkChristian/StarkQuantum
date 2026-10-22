@@ -29,6 +29,18 @@ check:
     a: >-
       A non-Clifford gate, such as the T gate. It is usually supplied by
       consuming magic states, which are produced by distillation.
+sources:
+  - name: 'Nielsen and Chuang, Quantum Computation and Quantum Information (Cambridge University Press, 2010)'
+    note: Chapter 4 for the gate set and universality, chapter 10 for fault tolerance.
+  - name: 'Gottesman, "The Heisenberg Representation of Quantum Computers", arXiv:quant-ph/9807006'
+    url: https://arxiv.org/abs/quant-ph/9807006
+    note: The stabilizer formalism behind the Gottesman-Knill theorem.
+  - name: 'Bravyi and Gosset, "Improved classical simulation of quantum circuits dominated by Clifford gates", Phys. Rev. Lett. 116, 250501 (2016)'
+    url: https://arxiv.org/abs/1601.07601
+    note: Classical simulation cost grows exponentially with the number of T gates.
+  - name: 'Gidney, Shutty and Jones, "Magic state cultivation: growing T states as cheap as CNOT gates", arXiv:2409.17595'
+    url: https://arxiv.org/abs/2409.17595
+    note: A 2024 method that reports about an order of magnitude fewer qubit-rounds than distillation for the same quality.
 further:
   - title: When a tooling release is actually news
     url: /articles/when-a-release-is-actually-news/
@@ -75,29 +87,35 @@ useful property: a circuit built only from Clifford gates, starting from simple
 states and ending in simple measurements, can be simulated efficiently on an
 ordinary computer. This is the Gottesman-Knill theorem.
 
-The consequence is blunt. A machine that can only run Clifford gates cannot beat
-a laptop, however many qubits it has.
+The consequence is blunt. A machine restricted to these operations cannot show a
+computational advantage over a classical computer, however many qubits it has.
 
 ## The gate that makes it universal
 
-Adding one more gate, such as T, makes the set universal. Any quantum
-computation can then be built to any accuracy. It also removes the shortcut: a
-circuit with many T gates is hard to simulate, and that is the regime in which
-quantum computing might offer something.
+Adding one more gate, such as T, makes the set universal: with enough gates, any
+quantum computation can be approximated to any accuracy. It also removes the
+shortcut. The cost of the best known classical simulation methods grows
+exponentially with the number of T gates, so circuits with many T gates are
+hard to simulate, and that is the regime in which quantum computing might offer
+something.
 
 ## Why the T gate is expensive
 
-In an error-corrected machine, Clifford gates can often be carried out by
-rearranging how the code is measured, which is cheap. The T gate has no such
-shortcut.
+In an error-corrected machine using the surface code, Clifford gates can be
+carried out by changing which parities are measured, which needs no special
+resource. The T gate has no such shortcut.
 
 The usual method is to prepare a special resource, a magic state, and consume it
 to apply the gate. A single good magic state is made by distillation: many
 noisy copies go in, one cleaner copy comes out, and the process can be repeated.
 
-In many published resource estimates, the distillation factories take up more of
-the machine, in qubits and in time, than the computation itself. When a result
-reports logical qubits doing Clifford operations, it has done the cheap part.
+In resource estimates made before 2024, distillation factories took up much of
+the machine, in qubits and in time. A 2024 method called magic state
+cultivation reports about an order of magnitude fewer qubit-rounds for the same
+quality, so recent estimates give the factories a smaller share. The T gate is
+still the costly operation, and the cost depends on the method assumed. When a
+result reports logical qubits doing Clifford operations, it has done the cheap
+part.
 
 ## What to look for
 

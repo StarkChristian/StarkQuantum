@@ -33,8 +33,10 @@
   <p>
     The crossing is not one number. It moves a little with the pair of
     distances you compare, and it depends on the noise model and the decoder.
-    Values in the literature for circuit-level noise sit around one percent or
-    below, so treat {{ t.crossing }} as the answer for this model, not for a machine.
+    Published values differ for that reason: Fowler and colleagues found 0.57% for
+    their circuit-level model, and Wang and colleagues found about 0.78% for
+    matching-based decoding with imperfect syndrome extraction. Treat
+    {{ t.crossing }} as the answer for this model, not for a machine.
   </p>
 
   <h2>The numbers behind it</h2>
@@ -68,9 +70,9 @@
   <h2>What was simulated</h2>
   <p>
     A rotated surface code storing one logical qubit in the Z basis, measured
-    over as many rounds as the code distance. Every gate, reset, measurement and
-    idle data qubit is noisy at the same rate <em>p</em>, using depolarizing
-    noise for gates and bit flips for resets and measurements. Failures are
+    over as many rounds as the code distance. Every noise source has the same rate <em>p</em>:
+    depolarizing noise after each gate, depolarizing noise on every data qubit
+    before each round, bit flips after resets, and bit flips before measurements. Failures are
     decoded by minimum-weight perfect matching.
   </p>
   <p>
@@ -89,6 +91,15 @@
     threshold, and a poor description of any one machine. Nothing here predicts
     when a device will cross it.
   </p>
+
+  <h2>Sources</h2>
+  <ul>
+    <li>Fowler, Mariantoni, Martinis and Cleland, <em>Surface codes: Towards practical large-scale quantum computation</em>,
+      <a href="https://arxiv.org/abs/1208.0928" rel="noopener">arXiv:1208.0928</a>. A threshold of 0.57% per step for their circuit model.</li>
+    <li>Wang, Fowler, Stephens and Hollenberg, <em>Threshold error rates for the toric and surface codes</em>,
+      <a href="https://arxiv.org/abs/0905.0531" rel="noopener">arXiv:0905.0531</a>. About 0.78% with imperfect syndrome extraction.</li>
+    <li>Stim, Sinter and PyMatching, the simulator, the sampling harness and the decoder used here.</li>
+  </ul>
 
   <h2>Run it yourself</h2>
   <pre><code>pip install stim sinter pymatching

@@ -1,14 +1,15 @@
 /* Surface-code overhead: physical qubits per logical qubit.
  *
- * One formula, stated on the page: p_L = A (p / p_th)^((d + 1) / 2), with
- * A = 0.1 and p_th = 1% (or 0.7%, chosen on the page), and 2 d^2 - 1 physical qubits for a rotated patch.
- * It needs no data and nothing leaves the page.
+ * One formula, stated on the page: p_L = A (p / p_th)^((d + 1) / 2), with the
+ * constants A and p_th taken from the model chosen on the page, and 2 d^2 - 1
+ * physical qubits for a rotated patch. It needs no data and nothing leaves
+ * the page.
  */
 (function () {
   "use strict";
 
-  var A = 0.1;
-  var pTh = 0.01;
+  var A = 0.03;
+  var pTh = 0.0057;
   var MAX_D = 201;
 
   var pIn = document.getElementById("oh-p");
@@ -54,7 +55,9 @@
   function update() {
     var p = Math.pow(10, parseFloat(pIn.value));
     var target = parseFloat(targetIn.value);
-    pTh = parseFloat(thIn.value);
+    var model = thIn.options[thIn.selectedIndex];
+    A = parseFloat(model.getAttribute("data-a"));
+    pTh = parseFloat(model.getAttribute("data-pth"));
     pOut.textContent = (p * 100).toPrecision(2) + "%";
 
     result.innerHTML = "";

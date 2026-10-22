@@ -309,6 +309,23 @@ def place_figures(html: str, where: str) -> str:
     return FIGURE_MARKER.sub(swap, html)
 
 
+def load_claims() -> dict:
+    path = ROOT / "data" / "claims.yml"
+    try:
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    except (OSError, yaml.YAMLError) as exc:
+        fail("data/claims.yml", f"cannot read: {exc}")
+        return {"claims": [], "checked_on": dt.date.today()}
+    allowed = {"checked", "vendor", "derived", "standard"}
+    for i, c in enumerate(data.get("claims", []), 1):
+        for field in ("claim", "where", "source", "status", "note"):
+            if not c.get(field):
+                fail("data/claims.yml", f"claim {i} is missing '{field}'")
+        if c.get("status") not in allowed:
+            fail("data/claims.yml", f"claim {i} has unknown status '{c.get('status')}'")
+    return data
+
+
 def load_threshold() -> dict:
     path = ROOT / "data" / "threshold.json"
     try:
@@ -601,6 +618,7 @@ def main() -> int:
     terms = load_glossary()
     lessons = load_lessons()
     threshold = load_threshold()
+    claims = load_claims()
     cells = load_reality()
     sources = load_sources()
     about = load_page("about")
@@ -678,9 +696,11 @@ def main() -> int:
     write(env, "/reality/", "reality.html", cells=cells, history=history)
     write(env, "/glossary/", "glossary.html", terms=terms)
     write(env, "/sources/", "sources.html", sources=sources)
-    write(env, "/overhead/", "overhead.html")
-    write(env, "/threshold/", "threshold.html", t=figures.threshold_view(threshold),
-          data=threshold)
+    tview = figures.threshold_view(threshold)
+    write(env, "/overhead/", "overhead.html", t=tview)
+    write(env, "/threshold/", "threshold.html", t=tview, data=threshold)
+    write(env, "/claims/", "claims.html", claims=claims["claims"],
+          checked_on=claims["checked_on"])
     write(env, "/learn/", "learn_index.html", lessons=lessons)
     for i, lesson in enumerate(lessons):
         write(env, lesson["url"], "lesson.html", lesson=lesson,
@@ -765,6 +785,7 @@ def main() -> int:
         ("/sources/", sources_date),
         ("/overhead/", dt.date(2026, 10, 22)),
         ("/threshold/", dt.date.fromisoformat(threshold["generated"])),
+        ("/claims/", claims["checked_on"]),
         ("/learn/", newest([l["reviewed"] or l["published"] for l in lessons])),
         ("/privacy/", privacy["updated"]),
         ("/impressum/", impressum["updated"]),

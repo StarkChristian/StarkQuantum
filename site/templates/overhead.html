@@ -20,10 +20,11 @@
     <p class="calc-scale"><span>0.01%</span><span>2% (logarithmic scale)</span></p>
 
     <div class="calc-row">
-      <label for="oh-th">Threshold to assume</label>
+      <label for="oh-th">Model for the logical error rate</label>
       <select id="oh-th">
-        <option value="0.01" selected>1% (the common textbook value)</option>
-        <option value="0.007">0.7% (simulated on this site)</option>
+        <option value="fowler" data-a="0.03" data-pth="0.0057" selected>Fowler et al. 2012: A = 0.03, threshold 0.57%</option>
+        <option value="sim" data-a="{{ t.fit_a }}" data-pth="{{ t.fit_pth }}">This site's simulation: A = {{ t.fit_a }}, threshold {{ (t.fit_pth * 100) | round(2) }}%</option>
+        <option value="thumb" data-a="0.1" data-pth="0.01">Rule of thumb: A = 0.1, threshold 1%</option>
       </select>
     </div>
 
@@ -52,25 +53,50 @@
 
   <h2>What this assumes</h2>
   <p>
-    The logical error rate per round is taken as
-    <math display="inline"><mrow><msub><mi>p</mi><mi>L</mi></msub><mo>=</mo><mn>0.1</mn><msup><mrow><mo>(</mo><mrow><mi>p</mi><mo>/</mo><msub><mi>p</mi><mi mathvariant="normal">th</mi></msub></mrow><mo>)</mo></mrow><mrow><mo>(</mo><mi>d</mi><mo>+</mo><mn>1</mn><mo>)</mo><mo>/</mo><mn>2</mn></mrow></msup></mrow></math>,
-    with the threshold <math display="inline"><msub><mi>p</mi><mi mathvariant="normal">th</mi></msub></math>
-    set above (1% by default) and code distance <math display="inline"><mi>d</mi></math>. One rotated
-    surface-code patch uses <math display="inline"><mrow><mn>2</mn><msup><mi>d</mi><mn>2</mn></msup><mo>&#x2212;</mo><mn>1</mn></mrow></math>
-    physical qubits. The form follows Fowler et al., <em>Surface codes: towards
-    practical large-scale quantum computation</em>
-    (<a href="https://arxiv.org/abs/1208.0928" rel="noopener">arXiv:1208.0928</a>).
-    The 0.7% option comes from a <a href="/threshold/">simulation run for this
-    site</a>; the threshold depends on the noise model and the decoder, so
-    neither value is a property of a machine.
+    For an odd code distance <math display="inline"><mi>d</mi></math>, the
+    logical error rate per round is taken as
+    <math display="inline"><mrow><msub><mi>p</mi><mi>L</mi></msub><mo>=</mo><mi>A</mi><msup><mrow><mo>(</mo><mrow><mi>p</mi><mo>/</mo><msub><mi>p</mi><mi mathvariant="normal">th</mi></msub></mrow><mo>)</mo></mrow><mrow><mo>(</mo><mi>d</mi><mo>+</mo><mn>1</mn><mo>)</mo><mo>/</mo><mn>2</mn></mrow></msup></mrow></math>,
+    where <math display="inline"><mi>p</mi></math> is the physical error rate
+    and <math display="inline"><mi>A</mi></math> and
+    <math display="inline"><msub><mi>p</mi><mi mathvariant="normal">th</mi></msub></math>
+    are constants fitted to simulations. One rotated surface-code patch uses
+    <math display="inline"><mrow><mn>2</mn><msup><mi>d</mi><mn>2</mn></msup><mo>&#x2212;</mo><mn>1</mn></mrow></math>
+    physical qubits: <math display="inline"><msup><mi>d</mi><mn>2</mn></msup></math> for data and
+    <math display="inline"><mrow><msup><mi>d</mi><mn>2</mn></msup><mo>&#x2212;</mo><mn>1</mn></mrow></math> for checks.
+  </p>
+  <p>Three sets of constants are offered.</p>
+  <ul>
+    <li>
+      <strong>Fowler et al. 2012.</strong> <em>A</em> = 0.03 and a threshold of
+      0.57%, equation 11 and the threshold in
+      <a href="https://arxiv.org/abs/1208.0928" rel="noopener">arXiv:1208.0928</a>,
+      fitted to their circuit-level simulations.
+    </li>
+    <li>
+      <strong>This site's simulation.</strong> <em>A</em> = {{ t.fit_a }} and a
+      threshold of {{ (t.fit_pth * 100) | round(2) }}%, from the
+      <a href="/threshold/">simulation on the threshold page</a>. The fit
+      reproduces the points used to within a factor of about {{ t.fit_spread }},
+      and the best-fit <em>A</em> falls as the distance grows, so treat it as a
+      rough guide.
+    </li>
+    <li>
+      <strong>Rule of thumb.</strong> <em>A</em> = 0.1 and a threshold of 1%.
+      It is common in back-of-envelope estimates and has no single published
+      derivation, so it is a round-number assumption.
+    </li>
+  </ul>
+  <p>
+    These are empirical fits to specific noise models, not laws, and none is a
+    property of a machine.
   </p>
   <p>
-    It leaves out everything that makes a machine expensive: noise that is not
-    uniform, a decoder that must keep up with the measurement cycle, routing
-    between patches, and the factories that supply magic states. Real
-    estimates run well above this number. Treat the result as the cheapest
-    case, and see <a href="/glossary/#resource-estimate">resource estimate</a>
-    for how the published ones are built.
+    The estimate leaves out everything that makes a machine expensive: noise that
+    is not uniform, a decoder that must keep up with the measurement cycle,
+    routing between patches, and the factories that supply magic states. Real
+    estimates run well above this number. Treat the result as the cheapest case,
+    and see <a href="/glossary/#resource-estimate">resource estimate</a> for how
+    the published ones are built.
   </p>
 </article>
 <script src="{{ asset('overhead.js') }}" defer></script>
