@@ -1321,14 +1321,14 @@ math[display="block"] {
   line-height: 1.5;
   color: var(--ink-3);
 }
-.sc-figure { max-width: 26rem; margin: 0 auto; }
-.sc-x { fill: var(--accent-wash); stroke: var(--rule); stroke-width: 1.5; }
-.sc-z { fill: var(--flag-wash); stroke: var(--rule); stroke-width: 1.5; }
-.sc-lit { fill: var(--accent); fill-opacity: 0.38; stroke: var(--accent); stroke-width: 2.5; }
+.sc-figure { max-width: 21rem; margin: 0 auto; }
+.sc-x { fill: var(--accent); fill-opacity: 0.14; stroke: var(--ink-3); stroke-width: 1.5; }
+.sc-z { fill: var(--flag); fill-opacity: 0.22; stroke: var(--ink-3); stroke-width: 1.5; }
+.sc-lit { fill: var(--accent); fill-opacity: 0.45; stroke: var(--accent); stroke-width: 2.5; }
 .sc-data { fill: var(--paper); stroke: var(--ink-2); stroke-width: 2; }
 .sc-err { fill: var(--accent); stroke: var(--accent); }
-.sc-label { font: 600 13px var(--sans); fill: var(--ink-3); }
-.sc-note { font: 600 13px var(--sans); fill: var(--accent); }
+.sc-label { font: 600 14px var(--sans); fill: var(--ink-2); }
+.sc-note { font: 600 13px var(--sans); fill: var(--accent); paint-order: stroke; stroke: var(--paper); stroke-width: 4px; stroke-linejoin: round; }
 
 .chart { overflow: visible; }
 .ch-grid { stroke: var(--rule-2); stroke-width: 1; }

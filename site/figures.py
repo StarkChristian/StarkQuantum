@@ -54,7 +54,7 @@ def surface_code_figure() -> str:
     # An X error on a data qubit flips the Z checks that contain it.
     flagged = [k for k in checks if k["kind"] == "Z" and error in k["qubits"]]
 
-    parts = []
+    parts, labels = [], []
     for k in checks:
         lit = k in flagged
         cls = f"sc-{k['kind'].lower()}" + (" sc-lit" if lit else "")
@@ -66,7 +66,7 @@ def surface_code_figure() -> str:
         else:
             (ax, ay), (bx, by) = pts
             half = step / 2
-            # Bulge away from the patch.
+            # A bump on the outside edge of the patch.
             if k["r"] == -1:
                 nx, ny = 0, -1
             elif k["r"] == 2:
@@ -75,12 +75,14 @@ def surface_code_figure() -> str:
                 nx, ny = -1, 0
             else:
                 nx, ny = 1, 0
-            sweep = 0 if (nx, ny) in ((0, -1), (-1, 0)) else 1
-            path = f"M{ax} {ay} L{bx} {by} A{half} {half} 0 0 {sweep} {ax} {ay} Z"
-            label = ((ax + bx) / 2 + nx * half * 0.45, (ay + by) / 2 + ny * half * 0.45)
+            lift = half * 1.33
+            path = (f"M{ax} {ay} L{bx} {by} "
+                    f"C{bx + nx * lift:.1f} {by + ny * lift:.1f} "
+                    f"{ax + nx * lift:.1f} {ay + ny * lift:.1f} {ax} {ay} Z")
+            label = ((ax + bx) / 2 + nx * half * 0.5, (ay + by) / 2 + ny * half * 0.5)
         parts.append(f'<path class="{cls}" d="{path}"/>')
-        parts.append(f'<text class="sc-label" x="{label[0]:.0f}" y="{label[1] + 4:.0f}" '
-                     f'text-anchor="middle">{k["kind"]}</text>')
+        labels.append(f'<text class="sc-label" x="{label[0]:.0f}" y="{label[1] + 5:.0f}" '
+                      f'text-anchor="middle">{k["kind"]}</text>')
 
     for r, c in data:
         x, y = pos(r, c)
@@ -88,18 +90,18 @@ def surface_code_figure() -> str:
         parts.append(f'<circle class="{cls}" cx="{x}" cy="{y}" r="9"/>')
 
     ex, ey = pos(*error)
-    parts.append(f'<text class="sc-note" x="{ex + 16}" y="{ey + 4}">error</text>')
+    parts.append(f'<text class="sc-note" x="{ex}" y="{ey - 15}" text-anchor="middle">X error</text>')
 
     desc = ("A three-by-three grid of data qubits with eight check regions. "
             "One data qubit in the centre has an X error. The two Z checks that "
             "contain it are highlighted: they are the syndrome.")
     return (
         '<figure class="figure">'
-        '<svg class="sc-figure" viewBox="0 0 360 310" role="img" '
+        '<svg class="sc-figure" viewBox="45 25 230 230" role="img" '
         'aria-labelledby="sc-t sc-d" xmlns="http://www.w3.org/2000/svg">'
         '<title id="sc-t">A distance-3 surface code patch with one error</title>'
         f'<desc id="sc-d">{desc}</desc>'
-        + "".join(parts) +
+        + "".join(parts) + "".join(labels) +
         '</svg>'
         '<figcaption>A distance-3 patch: nine data qubits (circles) and eight '
         'checks. X checks and Z checks are labelled. The central qubit has an '
