@@ -120,6 +120,15 @@ def playground_placeholder() -> str:
     )
 
 
+def bell_placeholder() -> str:
+    return (
+        '<figure class="figure playground">'
+        '<div id="bell"><p class="muted">The interactive Bell pair needs '
+        'JavaScript. The text describes the same numbers.</p></div>'
+        '</figure>'
+    )
+
+
 def bloch_placeholder() -> str:
     return (
         '<figure class="figure playground">'

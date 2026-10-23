@@ -156,3 +156,17 @@ claims:
     url:
     status: derived
     note: Automated rules only. Not a statement of conformance to WCAG, which needs manual and assistive-technology testing.
+
+  - claim: "Experiments with entangled photons established the violation of Bell inequalities; the 2022 Nobel Prize in Physics went to Aspect, Clauser and Zeilinger for them."
+    where: [/learn/entanglement/]
+    source: "The Nobel Prize in Physics 2022, nobelprize.org"
+    url: https://www.nobelprize.org/prizes/physics/2022/summary/
+    status: standard
+    note: Cited and not re-read on that date; the prize page could not be fetched by the build's checker.
+
+  - claim: "A theory in which each particle carries pre-set answers cannot give a CHSH value above 2; quantum mechanics predicts up to 2 times the square root of 2 (about 2.83); for a Bell pair measured in one plane the results agree with probability cos^2(theta/2)."
+    where: [/learn/entanglement/]
+    source: 'Clauser, Horne, Shimony and Holt, Phys. Rev. Lett. 23, 880 (1969); Nielsen and Chuang, section 2.6'
+    url:
+    status: standard
+    note: Textbook results, cited and not re-derived. The simulation on the page samples from the quantum prediction and does not test it.

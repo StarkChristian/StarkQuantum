@@ -300,6 +300,7 @@ FIGURES = {
     "surface-code": figures.surface_code_figure,
     "playground": figures.playground_placeholder,
     "bloch": figures.bloch_placeholder,
+    "bell": figures.bell_placeholder,
 }
 
 
