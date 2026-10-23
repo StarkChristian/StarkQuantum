@@ -1440,8 +1440,10 @@ math[display="block"] {
 .dr-svg { display: block; width: 100%; height: auto; max-width: 36rem; margin: 0 auto 1rem; }
 .dr-line { stroke: var(--ink-3); stroke-width: 3; }
 .dr-late { stroke: var(--accent); }
-.dr-controls { align-items: flex-start; flex-direction: column; gap: 0.7rem; }
-.dr-controls .pg-field { width: 100%; max-width: 30rem; justify-content: space-between; }
+.dr-controls { align-items: stretch; flex-direction: column; gap: 0.7rem; }
+.dr-controls .pg-field { display: grid; grid-template-columns: 11.5rem 4.2rem 1fr; align-items: center; width: 100%; max-width: 34rem; }
+.dr-controls .pg-field input[type="range"] { width: 100%; }
+@media (max-width: 34rem) { .dr-controls .pg-field { grid-template-columns: 1fr 4.2rem; } .dr-controls .pg-field input[type="range"] { grid-column: 1 / -1; } }
 
 .revisions { margin: 0.75rem 0 0; padding-left: 1.2rem; font-size: 0.88rem; color: var(--ink-2); }
 .revisions li { margin-bottom: 0.5rem; }
