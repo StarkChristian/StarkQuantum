@@ -9,7 +9,8 @@ advertising, no tracking, no monetisation, no futurist artwork, English only.
 
 **Reading**
 - Link-preview cards, MathML, glossary links with popover definitions, in-page
-  outline, previous/next, a scroll-driven reading bar, Pagefind search
+  outline, previous/next, a scroll-driven reading bar, Pagefind search that can
+  be limited to lessons, essays, briefs or glossary
 - OKLCH colour tokens with `light-dark()`, `text-wrap: pretty`, cross-document
   view transitions with a fixed masthead, hover prefetch
 
@@ -22,7 +23,10 @@ advertising, no tracking, no monetisation, no futurist artwork, English only.
 - A build that fails on a broken link or anchor, and on any page over 150 KB
 
 **Explainers**
-- Learn: six ordered lessons with self-checks
+- Learn: six ordered lessons with self-checks, each with sources and a dated
+  revision history
+- A decoder deadline model (`/decoder/`): cycle time against decoder time and
+  parallel decoders, scaled to the latency Google reported for a distance-5 run
 - A surface-code playground (distance 3 and 5, exact matching decoder checked
   against PyMatching on 9,000 cases) and a Bloch sphere
 - The threshold, measured with Stim, drawn as SVG at build time, with hover
@@ -39,26 +43,21 @@ advertising, no tracking, no monetisation, no futurist artwork, English only.
 ## Next
 
 **Explainers**
-- [ ] "The decoder has to keep up": syndrome rounds arriving against the
-      decoder's deadline, with a slider for latency (an interactive figure)
 - [ ] Threshold explorer: toggle distances; add a second decoder (union-find) and
       an unequal-noise model and show how far the crossing moves
 - [ ] A lesson on reading a resource estimate
 
 **Trust**
-- [ ] Revision history on essays and lessons (a dated list in the front matter,
-      shown on the page)
 - [ ] DOIs for published versions through Zenodo's GitHub integration (needs the
       editor's decision)
 - [ ] The editor's review of every lesson, recorded in the claims register
 
 **Platform**
 - [ ] Automated audits on every change: Lighthouse, axe (WCAG 2.2 AA) and HTML
-      validation, with the results shown on the colophon (needs GitHub Actions,
-      the editor's decision)
-- [ ] Search filter by type (essay, lesson, brief, glossary)
-- [ ] Glossary terms for what the lessons introduce: syndrome, code distance,
-      Clifford gate, T gate, no-cloning
+      validation (needs GitHub Actions, the editor's decision). A one-off axe
+      audit on 23 October 2026 found and fixed one real fault and is recorded on
+      the colophon.
+- [ ] A manual accessibility pass with a keyboard and a screen reader
 
 ## Waiting on the editor
 
