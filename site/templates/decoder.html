@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}The decoder's deadline — {{ site.name }}{% endblock %}
+{% block description %}Error-correction rounds arrive on a fixed clock. A decoder slower than the clock falls further behind with every round.{% endblock %}
+
+{% block content %}
+<article class="wrap prose">
+  <h1>The decoder's deadline</h1>
+  <p class="standfirst">
+    A quantum error-correcting code produces a new batch of check results every
+    cycle. A classical decoder has to turn each batch into a decision, on time,
+    for as long as the computation runs. This page lets you set the clock and
+    the decoder and see what happens.
+  </p>
+
+  <figure class="figure playground">
+    <div id="decoder-race"><p class="muted">The interactive version needs JavaScript. The text below describes the same model.</p></div>
+  </figure>
+
+  <h2>What the model does</h2>
+  <p>
+    One round of check results arrives every <em>cycle time</em>. Each decoder
+    needs a fixed time to process one round, and several decoders can work on
+    different rounds at once. If the decoders' combined capacity is at least the
+    rate at which rounds arrive, the queue stays empty. If it is lower, the queue
+    grows by the same amount every round and never recovers. Nothing is hidden in
+    that: it is arithmetic, and it is why a decoder is judged by whether it keeps
+    up with the clock and not only by how accurate it is.
+  </p>
+  <p>
+    Latency and throughput are different. Latency is the time from a round
+    arriving to its answer. A decoder can have a latency of many cycles and still
+    keep up, because it works on later rounds while earlier ones finish. Latency
+    matters for how long a logical operation has to wait. Throughput decides
+    whether the queue grows.
+  </p>
+
+  <h2>A real device, for scale</h2>
+  <p>
+    Google Quantum AI reported a distance-5 surface code run with a real-time
+    decoder at an average latency of 63 microseconds, for up to a million cycles,
+    with a cycle time of 1.1 microseconds. The latency is about 57 cycles, and the
+    run kept up, so the decoder was evidently working on several rounds at once.
+    The set-up above shows how the two numbers fit together.
+  </p>
+
+  <h2>What this leaves out</h2>
+  <p>
+    Real decoders split the data into windows that overlap, handle bursts of
+    errors unevenly, and run on specialised hardware. The queue here is the
+    simplest one: a constant arrival rate and a constant service time. It shows
+    the deadline, not the engineering of any one decoder.
+  </p>
+
+  <h2>Sources</h2>
+  <ul>
+    <li>Google Quantum AI, <em>Quantum error correction below the surface code threshold</em>,
+      <a href="https://arxiv.org/abs/2408.13687" rel="noopener">arXiv:2408.13687</a>
+      (Nature 638, 920, 2025). The latency, cycle time and number of cycles.</li>
+  </ul>
+  <p>
+    See also the essay <a href="/articles/the-decoder-has-to-keep-up/">The decoder has to keep up</a>
+    and the lesson on <a href="/learn/error-correction-in-one-page/">error correction</a>.
+  </p>
+</article>
+<script src="{{ asset('decoder.js') }}" defer></script>
+{% endblock %}

@@ -5,6 +5,11 @@ order: 2
 level: Intro
 published: 2026-10-22
 reviewed: 2026-10-22
+revisions:
+  - date: 2026-10-22
+    note: Published.
+  - date: 2026-10-22
+    note: "Replaced a range of gate errors given from memory with one sourced figure and an explicit illustration; fixed the wording on coherence times."
 summary: >-
   Every operation on a qubit has a small chance of failing, and a useful
   computation has an enormous number of operations. That arithmetic is the whole

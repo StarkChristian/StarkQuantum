@@ -6,6 +6,11 @@ script: qec.js
 level: Intermediate
 published: 2026-10-22
 reviewed: 2026-10-22
+revisions:
+  - date: 2026-10-22
+    note: Published.
+  - date: 2026-10-22
+    note: "Corrected the definition of code distance; replaced the threshold range with the values in Fowler et al. and Wang et al.; added the playground and the single-flip assumption of the three-qubit code."
 summary: >-
   Quantum error correction measures a pattern of agreements between qubits, not
   the qubits themselves. If the hardware is good enough, adding more qubits makes

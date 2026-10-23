@@ -20,7 +20,7 @@
   </nav>
 
   {# Headings with ids, not dt/dd, so that search can link to one entry. #}
-  <div class="glossary" data-pagefind-body data-pagefind-meta="type:Glossary">
+  <div class="glossary" data-pagefind-body data-pagefind-meta="type:Glossary" data-pagefind-filter="type:Glossary">
     {% for term in terms %}
     <section class="glossary-entry">
       <h2 class="glossary-term" id="{{ term.slug }}">{{ term.term }}</h2>

@@ -6,6 +6,11 @@ script: bloch.js
 level: Intro
 published: 2026-10-22
 reviewed: 2026-10-22
+revisions:
+  - date: 2026-10-22
+    note: Published.
+  - date: 2026-10-22
+    note: "Added sources and the Bloch sphere; stated that the 2^n growth holds in general."
 summary: >-
   A qubit is not a bit that is both 0 and 1. It is a state with two amplitudes,
   and the only thing you ever get out of it is one ordinary bit.

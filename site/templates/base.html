@@ -114,6 +114,7 @@
       <a href="/glossary/">Glossary</a>
       <a href="/sources/">Sources</a>
       <a href="/overhead/">Overhead calculator</a>
+      <a href="/decoder/">Decoder deadline</a>
       <a href="/claims/">Claims</a>
       <a href="/impressum/">Impressum</a>
       <a href="/privacy/">Privacy</a>
@@ -130,7 +131,14 @@
 
 <div class="search-shade" id="search-shade" hidden>
   <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the archive">
-    <input type="search" id="search-input" placeholder="Search essays, briefs, glossary" autocomplete="off">
+    <input type="search" id="search-input" placeholder="Search lessons, essays, briefs, glossary" autocomplete="off">
+    <div class="search-filters" role="group" aria-label="Filter by type">
+      <button type="button" class="chip" data-type="" aria-pressed="true">All</button>
+      <button type="button" class="chip" data-type="Lesson" aria-pressed="false">Lessons</button>
+      <button type="button" class="chip" data-type="Essay" aria-pressed="false">Essays</button>
+      <button type="button" class="chip" data-type="Brief" aria-pressed="false">Briefs</button>
+      <button type="button" class="chip" data-type="Glossary" aria-pressed="false">Glossary</button>
+    </div>
     <ul class="search-results" id="search-results"></ul>
     <p class="search-hint">Esc to close.</p>
   </div>

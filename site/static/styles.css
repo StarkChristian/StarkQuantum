@@ -1436,3 +1436,28 @@ math[display="block"] {
 .cite pre { margin: 0.75rem 0; padding: 0.9rem 1rem; background: var(--paper-2); border: 1px solid var(--rule); overflow-x: auto; font-size: 0.82rem; line-height: 1.5; }
 .cite pre code { background: none; padding: 0; font-family: var(--mono); }
 @media print { .cite { display: none; } }
+
+.dr-svg { display: block; width: 100%; height: auto; max-width: 36rem; margin: 0 auto 1rem; }
+.dr-line { stroke: var(--ink-3); stroke-width: 3; }
+.dr-late { stroke: var(--accent); }
+.dr-controls { align-items: flex-start; flex-direction: column; gap: 0.7rem; }
+.dr-controls .pg-field { width: 100%; max-width: 30rem; justify-content: space-between; }
+
+.revisions { margin: 0.75rem 0 0; padding-left: 1.2rem; font-size: 0.88rem; color: var(--ink-2); }
+.revisions li { margin-bottom: 0.5rem; }
+.revisions time { font-weight: 600; margin-right: 0.4rem; }
+.cite + .cite { margin-top: 1rem; }
+
+.search-filters { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.6rem 0 0; }
+.chip {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  color: var(--ink-2);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+  cursor: pointer;
+}
+.chip:hover { border-color: var(--accent); color: var(--accent); }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--paper); }

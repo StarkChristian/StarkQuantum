@@ -220,6 +220,7 @@ def load_essays() -> list[dict]:
             "reviewed": as_date(meta.get("reviewed"), path, "reviewed"),
             "living": bool(meta.get("living", True)),
             "sources": meta.get("sources") or [],
+            "revisions": meta.get("revisions") or [],
             "footer": footer,
             "body_html": body_html,
             "toc": toc,
@@ -456,6 +457,7 @@ def load_lessons() -> list[dict]:
                        "a_text": " ".join(str(c["a"]).split())} for c in check],
             "further": meta.get("further") or [],
             "script": meta.get("script"),
+            "revisions": meta.get("revisions") or [],
             "sources": meta.get("sources") or [],
             "body_html": body_html,
             "toc": toc,
@@ -573,8 +575,16 @@ def build_pagefind() -> None:
         print(f"warning: pagefind index not built ({detail})", file=sys.stderr)
 
 
-def build_search_index(essays, briefs, terms) -> list[dict]:
+def build_search_index(essays, briefs, terms, lessons=()) -> list[dict]:
     index = []
+    for item in lessons:
+        index.append({
+            "title": item["title"],
+            "url": item["url"],
+            "type": "Lesson",
+            "meta": item["level"],
+            "text": item["summary"],
+        })
     for item in essays:
         index.append({
             "title": item["title"],
@@ -774,6 +784,7 @@ def main() -> int:
     tview = figures.threshold_view(threshold)
     write(env, "/overhead/", "overhead.html", t=tview)
     write(env, "/threshold/", "threshold.html", t=tview, data=threshold)
+    write(env, "/decoder/", "decoder.html")
     write(env, "/claims/", "claims.html", claims=claims["claims"],
           checked_on=claims["checked_on"])
     write(env, "/learn/", "learn_index.html", lessons=lessons)
@@ -793,7 +804,7 @@ def main() -> int:
     })
 
     (OUTPUT / "search-index.json").write_text(
-        json.dumps(build_search_index(essays, briefs, terms)), encoding="utf-8")
+        json.dumps(build_search_index(essays, briefs, terms, lessons)), encoding="utf-8")
     (OUTPUT / "feed.xml").write_text(build_feed(essays, briefs, lessons), encoding="utf-8")
     (OUTPUT / "feed.json").write_text(build_json_feed(essays, briefs, lessons), encoding="utf-8")
     well_known = OUTPUT / ".well-known"
@@ -878,6 +889,7 @@ def main() -> int:
         ("/overhead/", dt.date(2026, 10, 22)),
         ("/threshold/", dt.date.fromisoformat(threshold["generated"])),
         ("/claims/", claims["checked_on"]),
+        ("/decoder/", dt.date(2026, 10, 22)),
         ("/colophon/", dt.date(2026, 10, 22)),
         ("/learn/", newest([l["reviewed"] or l["published"] for l in lessons])),
         ("/privacy/", privacy["updated"]),

@@ -13,7 +13,7 @@
 
 {% block content %}
 <div class="progress" aria-hidden="true"></div>
-<article class="wrap prose" data-pagefind-body data-pagefind-meta="type:Essay">
+<article class="wrap prose" data-pagefind-body data-pagefind-meta="type:Essay" data-pagefind-filter="type:Essay">
   <p class="crumbs"><a href="/articles/">Essays</a> / {{ essay.category_label }}</p>
   <h1>{{ essay.title }}</h1>
   <p class="standfirst">{{ essay.summary }}</p>
@@ -74,6 +74,18 @@
   </p>
   {% endif %}
 
+
+
+  {% if essay.revisions %}
+  <details class="cite" data-pagefind-ignore>
+    <summary>Revision history</summary>
+    <ol class="revisions">
+      {% for r in essay.revisions %}
+      <li><time datetime="{{ r.date }}">{{ r.date }}</time> {{ r.note }}</li>
+      {% endfor %}
+    </ol>
+  </details>
+  {% endif %}
 
   <details class="cite" data-pagefind-ignore>
     <summary>Cite this</summary>

@@ -5,6 +5,11 @@ order: 5
 level: Intermediate
 published: 2026-10-22
 reviewed: 2026-10-22
+revisions:
+  - date: 2026-10-22
+    note: Published.
+  - date: 2026-10-22
+    note: "Removed an unsourced comparison of best-pair and typical gate errors; added a worked example with sources."
 summary: >-
   A spec sheet is a list of numbers that look comparable and mostly are not.
   Each one needs a second question about what it was measured on.

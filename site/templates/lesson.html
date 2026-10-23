@@ -8,7 +8,7 @@
 
 {% block content %}
 <div class="progress" aria-hidden="true"></div>
-<article class="wrap prose" data-pagefind-body data-pagefind-meta="type:Lesson">
+<article class="wrap prose" data-pagefind-body data-pagefind-meta="type:Lesson" data-pagefind-filter="type:Lesson">
   <p class="crumbs"><a href="/learn/">Learn</a> / Lesson {{ lesson.number }}</p>
   <h1>{{ lesson.title }}</h1>
   <p class="standfirst">{{ lesson.summary }}</p>
@@ -61,6 +61,18 @@
   </section>
   {% endif %}
 
+
+
+  {% if lesson.revisions %}
+  <details class="cite" data-pagefind-ignore>
+    <summary>Revision history</summary>
+    <ol class="revisions">
+      {% for r in lesson.revisions %}
+      <li><time datetime="{{ r.date }}">{{ r.date }}</time> {{ r.note }}</li>
+      {% endfor %}
+    </ol>
+  </details>
+  {% endif %}
 
   <details class="cite" data-pagefind-ignore>
     <summary>Cite this</summary>

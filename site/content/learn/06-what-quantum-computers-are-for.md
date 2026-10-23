@@ -5,6 +5,11 @@ order: 6
 level: Intermediate
 published: 2026-10-22
 reviewed: 2026-10-22
+revisions:
+  - date: 2026-10-22
+    note: Published.
+  - date: 2026-10-22
+    note: "Rewrote the sections on factoring, searching and advantage claims against their sources, added the July 2026 preprints, and removed a timeline statement."
 summary: >-
   A short list of tasks with a real argument for a quantum speedup, and a longer
   list of claims without one. The word to hold on to is believed.

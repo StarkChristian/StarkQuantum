@@ -101,6 +101,7 @@
   var pagefind = null;
   var pagefindState = "idle"; // idle, loading, ready, failed
   var latest = 0;
+  var typeFilter = "";
 
   function loadPagefind() {
     if (pagefindState !== "idle") { return; }
@@ -120,7 +121,7 @@
     var q = query.trim();
     var mine = ++latest;
     if (!q) { results.innerHTML = ""; return; }
-    pagefind.debouncedSearch(q, {}, 120).then(function (found) {
+    pagefind.debouncedSearch(q, typeFilter ? { filters: { type: typeFilter } } : {}, 120).then(function (found) {
       if (!found || mine !== latest) { return; }
       return Promise.all(found.results.slice(0, 8).map(function (r) { return r.data(); }))
         .then(function (items) { if (mine === latest) { renderFound(items); } });
@@ -208,6 +209,7 @@
 
     var hits = [];
     for (var i = 0; i < index.length; i++) {
+      if (typeFilter && index[i].type !== typeFilter) { continue; }
       var s = score(index[i], terms);
       if (s > 0) { hits.push({ entry: index[i], score: s }); }
     }
@@ -239,6 +241,17 @@
   }
 
   input.addEventListener("input", function () { run(input.value); });
+
+  Array.prototype.forEach.call(document.querySelectorAll(".search-filters .chip"), function (chip) {
+    chip.addEventListener("click", function () {
+      typeFilter = chip.getAttribute("data-type");
+      Array.prototype.forEach.call(document.querySelectorAll(".search-filters .chip"), function (c) {
+        c.setAttribute("aria-pressed", c === chip ? "true" : "false");
+      });
+      run(input.value);
+      input.focus();
+    });
+  });
 
   if (opener) {
     opener.addEventListener("click", function (e) { e.preventDefault(); open(); });

@@ -5,6 +5,11 @@ order: 3
 level: Intro
 published: 2026-10-22
 reviewed: 2026-10-22
+revisions:
+  - date: 2026-10-22
+    note: Published.
+  - date: 2026-10-22
+    note: "Added sources; reflected magic state cultivation; tightened the statements about Clifford circuits and T gates."
 summary: >-
   A quantum program is a circuit of gates. Most gates are cheap to run and cheap
   to simulate. The one you need to go beyond that is the one that costs the

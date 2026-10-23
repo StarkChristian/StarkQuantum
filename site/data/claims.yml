@@ -142,3 +142,10 @@ claims:
     url:
     status: standard
     note: Textbook result, cited and not re-read on that date.
+
+  - claim: "A distance-5 surface code ran with a real-time decoder at an average latency of 63 microseconds, for up to a million cycles, with a cycle time of 1.1 microseconds."
+    where: [/decoder/]
+    source: 'Google Quantum AI, "Quantum error correction below the surface code threshold", arXiv:2408.13687 (Nature 638, 920, 2025)'
+    url: https://arxiv.org/abs/2408.13687
+    status: checked
+    note: Abstract read. The paper's own figures; the text on the page that the decoder "must have processed rounds in parallel or in a pipeline" is an inference from them, not a statement in the abstract.
