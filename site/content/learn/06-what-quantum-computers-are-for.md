@@ -4,12 +4,14 @@ slug: what-quantum-computers-are-for
 order: 6
 level: Intermediate
 published: 2026-10-22
-reviewed: 2026-10-22
+reviewed: 2026-10-23
 revisions:
   - date: 2026-10-22
     note: Published.
   - date: 2026-10-22
     note: "Rewrote the sections on factoring, searching and advantage claims against their sources, added the July 2026 preprints, and removed a timeline statement."
+  - date: 2026-10-23
+    note: "Added the March 2026 estimate for Shor's algorithm on neutral atoms, which a check of new papers found, and changed the statement that estimates are far above what machines have."
 summary: >-
   A short list of tasks with a real argument for a quantum speedup, and a longer
   list of claims without one. The word to hold on to is believed.
@@ -38,6 +40,9 @@ sources:
   - name: 'Gidney, "How to factor 2048 bit RSA integers with less than a million noisy qubits", arXiv:2505.15917 (21 May 2025)'
     url: https://arxiv.org/abs/2505.15917
     note: Under one million noisy qubits and under a week, for the hardware assumptions stated in the paper.
+  - name: 'Cain, Xu, King, Picard, Levine, Endres, Preskill, Huang and Bluvstein, "Shor''s algorithm is possible with as few as 10,000 reconfigurable atomic qubits", arXiv:2603.28627 (30 March 2026)'
+    url: https://arxiv.org/abs/2603.28627
+    note: A theoretical estimate for a neutral-atom architecture. The runtime for RSA-2048 is one to two orders of magnitude longer than for P-256, and the authors say substantial engineering challenges remain.
   - name: 'Babbush, McClean, Newman, Gidney, Boixo and Neven, "Focus beyond quadratic speedups for error-corrected quantum advantage", PRX Quantum (2021), arXiv:2011.04149'
     url: https://arxiv.org/abs/2011.04149
     note: Estimates that small quadratic speedups are unlikely to give a practical advantage on early fault-tolerant machines.
@@ -82,11 +87,17 @@ elliptic curves.
 
 Two things keep this in proportion. First, the speedup is believed, not proved:
 no one has shown that a fast classical factoring algorithm cannot exist. Second,
-running it at cryptographic sizes needs error correction at scale. A 2025
-estimate by Craig Gidney put factoring a 2048-bit RSA number at fewer than one
-million noisy physical qubits and less than a week of running, under the hardware
-assumptions in that paper. That is far below earlier estimates, and far above any
-machine that exists.
+running it at cryptographic sizes needs error correction at scale, and the
+estimates of that scale keep falling. A 2025 estimate by Craig Gidney put
+factoring a 2048-bit RSA number at fewer than one million noisy physical qubits
+and less than a week of running, under the hardware assumptions in that paper. A
+March 2026 preprint by Cain and colleagues, for an architecture built from
+reconfigurable neutral atoms, estimated that Shor's algorithm could run with as
+few as 10,000 physical qubits: a few days for discrete logarithms on the P-256
+elliptic curve with 26,000 qubits, and one to two orders of magnitude longer for
+RSA-2048, again under stated assumptions. Both are theoretical estimates. The
+second paper's authors say substantial engineering challenges remain, and no
+machine has yet run an error-corrected computation of that size.
 
 ## Searching
 

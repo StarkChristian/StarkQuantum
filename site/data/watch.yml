@@ -1,0 +1,37 @@
+# What the freshness agent watches on arXiv. Each query lists the pages whose
+# statements a new paper might change. A match is a prompt for a person to read,
+# never a reason to edit anything.
+queries:
+  - id: rsa-resource
+    why: Resource estimates for breaking RSA, which the lessons quote.
+    query: 'abs:"RSA-2048" AND abs:"qubits"'
+    affects: [/learn/what-quantum-computers-are-for/, /claims/]
+  - id: magic-state
+    why: Magic state cultivation and distillation costs.
+    query: 'ti:"magic state"'
+    affects: [/learn/gates-circuits-and-the-expensive-gate/, /glossary/]
+  - id: surface-threshold
+    why: Surface-code thresholds and below-threshold experiments.
+    query: 'abs:"surface code" AND abs:"threshold"'
+    affects: [/threshold/, /overhead/, /learn/error-correction-in-one-page/]
+  - id: realtime-decoding
+    why: Real-time decoders and their latency.
+    query: 'abs:"real-time decoding" OR abs:"real-time decoder"'
+    affects: [/decoder/]
+  - id: qldpc
+    why: qLDPC codes, which the site follows.
+    query: 'abs:"quantum LDPC" OR abs:"qLDPC"'
+    affects: [/glossary/, /reality/]
+  - id: advantage-claims
+    why: Claims of quantum advantage and the classical responses.
+    query: '(abs:"quantum advantage" OR abs:"quantum supremacy") AND abs:"classical simulation"'
+    affects: [/learn/what-quantum-computers-are-for/, /reality/]
+  - id: gate-fidelity
+    why: Record two-qubit gate fidelities.
+    query: 'abs:"two-qubit gate" AND abs:"fidelity"'
+    affects: [/learn/why-qubits-go-wrong/, /learn/reading-a-hardware-spec-sheet/]
+limits:
+  max_per_query: 8
+  claim_stale_days: 90
+  lesson_stale_days: 180
+  reality_stale_days: 45

@@ -1,7 +1,7 @@
 # The register of factual and numerical claims on the learning and tool pages.
 # Each entry names the claim, where it is used, the source, and what was done
 # with the source. Statuses: checked, vendor, derived, standard.
-checked_on: 2026-10-22
+checked_on: 2026-10-23
 claims:
   - claim: "A 2048-bit RSA number can be factored with fewer than one million noisy qubits in less than a week, under the hardware assumptions in the paper."
     where: [/learn/what-quantum-computers-are-for/]
@@ -170,3 +170,10 @@ claims:
     url:
     status: standard
     note: Textbook results, cited and not re-derived. The simulation on the page samples from the quantum prediction and does not test it.
+
+  - claim: "A March 2026 preprint estimates that Shor's algorithm could run with as few as 10,000 reconfigurable neutral-atom qubits: a few days for discrete logarithms on the P-256 curve with 26,000 qubits, and one to two orders of magnitude longer for RSA-2048, under stated assumptions."
+    where: [/learn/what-quantum-computers-are-for/]
+    source: 'Cain, Xu, King, Picard, Levine, Endres, Preskill, Huang and Bluvstein, "Shor''s algorithm is possible with as few as 10,000 reconfigurable atomic qubits", arXiv:2603.28627 (30 March 2026)'
+    url: https://arxiv.org/abs/2603.28627
+    status: checked
+    note: Abstract read on 23 October 2026. A theoretical estimate and a preprint. The authors state that substantial engineering challenges remain.

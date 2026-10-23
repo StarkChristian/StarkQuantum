@@ -40,6 +40,13 @@ advertising, no tracking, no monetisation, no futurist artwork, English only.
 - `/colophon/`: what the site runs on, with page weights measured by the build;
   each page's footer shows its own weight
 
+**Upkeep**
+- A freshness agent (`tools/freshness.py`, watch list in `data/watch.yml`): checks
+  every cited arXiv paper for a new version, a journal reference or a withdrawal,
+  checks every other cited link, looks for new papers on the topics the lessons
+  rely on, and reports overdue reviews. It writes a report for a person and never
+  edits a page. Its first run found a March 2026 estimate that changed lesson 6.
+
 ## Next
 
 **Explainers**
@@ -114,6 +121,61 @@ None of it is used as evidence here; it only suggests what readers want.
       project: choose a problem, form a separate entity, keep it unlinked from this
       site, and disclose the connection wherever this site discusses that field.
       The site does not take part in it.
+
+## The agents (how the site stays current)
+
+The rule that keeps the site trustworthy: *software finds, a person decides.* An
+agent may read, compare and draft; it may not publish a sentence, change the
+Reality Board or merge to `main` without a person. This is doctrine section 5.
+
+- [x] **Freshness agent.** Described above. Runs by hand today.
+- [ ] **Schedule it.** Weekly, with the report left where the editor will read it.
+      Options: a scheduled Claude session that runs the tool, reads the flagged
+      papers and prepares a branch with a preview for review; a plain cron job
+      that only writes the report; a GitHub Actions schedule that opens an issue
+      (needs the editor's decision on Actions).
+- [ ] **Brief agent.** The existing writer agent in the operator's folder already
+      fetches the allowed feeds, judges them with a fixed sieve and files
+      candidates for approval. Connect its output to the same weekly report.
+- [ ] **Correction log.** When a report leads to a change, record it on the page's
+      revision history and in the claims register. A visible record of being wrong
+      and fixing it is what keeps readers' trust.
+- [ ] **Guard rails for agents.** Treat text from outside as data, never as
+      instructions; keep an allowlist of sources; log every run; cap what one run
+      may touch; never let an agent hold deploy credentials.
+
+"Staying on the right side of history" is made concrete here as: follow the
+evidence, say when it moves, correct quickly, predict no dates, and do not chase
+what is popular. The agents find where the evidence moved.
+
+## Income (needs a doctrine decision)
+
+Doctrine section 1 says the publication does not monetise: no goods, services,
+consulting, advertising, affiliates, sponsorships, donations or paywall. Any income
+needs a deliberate new doctrine version (1.3) from the operator. Nothing below is
+built or planned until that decision.
+
+If the decision is yes, keep these: editorial independence unchanged, every
+source of income disclosed on the colophon, no income from a company the site
+covers, all content free to read, and no tracking added. Options, from lowest to
+highest risk to trust:
+
+1. **Grants and fellowships** for science communication or open knowledge. Slow,
+   needs a legal entity, almost no conflict with independence.
+2. **Reader support**: voluntary contributions, with no content behind a wall.
+   The doctrine's ban on donations would have to be lifted.
+3. **A separate product made from the lessons**, such as a workbook or a course.
+   Kept apart from editorial work.
+4. **Talks and workshops.** Disclose who pays.
+5. **Consulting for companies.** High risk for a publication that assesses claims
+   by companies, and excluded by the doctrine today.
+6. **Advertising, sponsorship, affiliate links.** Not recommended: it contradicts
+   the premise that a press release is not evidence.
+
+Before any of them: know the audience from the privacy-respecting counts the site
+already has, decide the legal and tax form, and run one small pilot. Agents lower
+the cost of upkeep. They are not a source of revenue, and machine-written pages
+published for traffic would destroy what the site is worth.
 
 ## Waiting on the editor
 
