@@ -149,3 +149,10 @@ claims:
     url: https://arxiv.org/abs/2408.13687
     status: checked
     note: Abstract read. The paper's own figures; the text on the page that the decoder "must have processed rounds in parallel or in a pipeline" is an inference from them, not a statement in the abstract.
+
+  - claim: "Sixteen pages pass axe-core 4.10.2's WCAG 2.0, 2.1 and 2.2 level A and AA rules and its best-practice rules in a light and a dark theme."
+    where: [/colophon/]
+    source: "An audit run on 23 October 2026 on a preview build; the build changed secondary-text colours as a result"
+    url:
+    status: derived
+    note: Automated rules only. Not a statement of conformance to WCAG, which needs manual and assistive-technology testing.
