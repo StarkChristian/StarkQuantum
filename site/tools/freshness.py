@@ -9,6 +9,8 @@ decides, and commits.
     python tools/freshness.py                  write a report, print where
     python tools/freshness.py --offline        local checks only (ages)
     python tools/freshness.py --no-watch       skip the arXiv watch queries
+    python tools/freshness.py --monthly        wider watch, a table of every claim,
+                                               and a trial build of the site
 
 State (what was seen last time) is kept outside the repository, in
 ~/work/sq-freshness/, so a run does not dirty the working tree.
@@ -30,6 +32,7 @@ import argparse
 import datetime as dt
 import json
 import re
+import subprocess
 import sys
 import time
 import urllib.error
@@ -206,9 +209,12 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--offline", action="store_true")
     ap.add_argument("--no-watch", action="store_true")
+    ap.add_argument("--monthly", action="store_true")
     args = ap.parse_args()
 
     cfg = yaml.safe_load((ROOT / "data" / "watch.yml").read_text(encoding="utf-8"))
+    if args.monthly:
+        cfg["limits"]["max_per_query"] = 25
     STATE_DIR.mkdir(parents=True, exist_ok=True)
     state = load_state()
     first = state.get("first_run", True)
@@ -232,13 +238,29 @@ def main() -> int:
     lines += watch_lines or ["Nothing new."]
     lines += ["", "## Reviews that are overdue", ""]
     lines += age_notes or ["Nothing overdue."]
+    if args.monthly:
+        lines += ["", "## Every claim on the register", ""]
+        claims = yaml.safe_load((ROOT / "data" / "claims.yml").read_text(encoding="utf-8"))
+        for c in claims["claims"]:
+            lines.append(f"- [{c['status']}] {c['claim'][:110]} ({', '.join(c['where'])})")
+        lines += ["", "## Trial build", ""]
+        try:
+            res = subprocess.run([sys.executable, "build.py"], cwd=ROOT, capture_output=True,
+                                 text=True, timeout=600)
+            tail = (res.stdout + res.stderr).strip().splitlines()[-6:]
+            lines += [("The site builds." if res.returncode == 0 else "**The build was refused or failed.**")] + [f"    {t}" for t in tail]
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            lines += [f"The trial build could not run: {exc}"]
     lines += ["", "## What to do with this", "",
               "A person reads it. Nothing here has been changed on the site. If a paper or a "
               "changed source alters a statement, edit the page on a branch, update the claim in "
               "`data/claims.yml` and its `checked_on` date, and publish through the usual preview.", ""]
     report = "\n".join(lines)
-    out = STATE_DIR / f"report-{today.isoformat()}.md"
+    kind = "monthly" if args.monthly else "weekly"
+    out = STATE_DIR / f"report-{today.isoformat()}-{kind}.md"
     out.write_text(report, encoding="utf-8")
+    latest = STATE_DIR / "latest.md"
+    latest.write_text(report, encoding="utf-8")
     print(report)
     print(f"\nWritten to {out}")
     return 0

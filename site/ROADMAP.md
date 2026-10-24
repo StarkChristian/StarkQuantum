@@ -128,12 +128,14 @@ The rule that keeps the site trustworthy: *software finds, a person decides.* An
 agent may read, compare and draft; it may not publish a sentence, change the
 Reality Board or merge to `main` without a person. This is doctrine section 5.
 
-- [x] **Freshness agent.** Described above. Runs by hand today.
-- [ ] **Schedule it.** Weekly, with the report left where the editor will read it.
-      Options: a scheduled Claude session that runs the tool, reads the flagged
-      papers and prepares a branch with a preview for review; a plain cron job
-      that only writes the report; a GitHub Actions schedule that opens an issue
-      (needs the editor's decision on Actions).
+- [x] **Freshness agent.** Described above.
+- [x] **Schedule it.** A timer on the server runs the tool every Saturday at 18:00
+      and, with a wider watch, a trial build and a table of every claim, on the
+      first of each month at 18:00 (Berlin time, daylight saving included). Each run
+      reads a fresh clone of `main` and writes `~/work/sq-freshness/latest.md`; it
+      cannot change the site. Turning a report into edits is a person's job, or a
+      Claude session's job started by the editor: the app's Routines can run one on
+      a schedule, and the prompt for it is in `tools/FRESHNESS-ROUTINE.md`.
 - [ ] **Brief agent.** The existing writer agent in the operator's folder already
       fetches the allowed feeds, judges them with a fixed sieve and files
       candidates for approval. Connect its output to the same weekly report.
