@@ -6,6 +6,11 @@ difficulty: Intro
 published: 2026-09-08
 reviewed: 2026-09-08
 living: true
+revisions:
+  - date: 2026-09-08
+    note: Published.
+  - date: 2026-11-07
+    note: "Replaced a source link that no longer answered with the author's own copy of the article, which the author lists as a draft. The text of the essay is unchanged."
 summary: >-
   A procedure for taking any quantum announcement apart: find the number, find
   the comparison, find the conditions, and find out who checked. Most claims
@@ -29,9 +34,9 @@ sources:
   - name: arXiv, quant-ph
     url: https://arxiv.org/list/quant-ph/recent
     note: Where the primary sources appear, usually weeks before the coverage.
-  - name: Aaronson, "The Limits of Quantum Computers"
-    url: https://www.scottaaronson.com/papers/sciam.pdf
-    note: On what these machines are and are not expected to be good at.
+  - name: Aaronson, "The Limits of Quantum Computers" (author's draft, 2008)
+    url: https://www.scottaaronson.com/writings/limitsqc-draft.pdf
+    note: On what these machines are and are not expected to be good at. The author lists this file as a draft.
 ---
 
 You do not need to understand the physics to evaluate most quantum

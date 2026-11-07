@@ -508,6 +508,33 @@ def load_reality() -> list[dict]:
     return cells
 
 
+def collect_corrections(essays, briefs, lessons, cells) -> list[dict]:
+    """Every dated change after publication, newest first.
+
+    Entries whose note only records first publication are left out. Each source
+    keeps its own record in its front matter; this page only gathers them.
+    """
+    def entry(date, kind, title, url, note):
+        return {"date": as_date(date, Path(url), "date") if not isinstance(date, dt.date) else date,
+                "kind": kind, "title": title, "url": url, "note": " ".join(str(note).split())}
+
+    out = []
+    for kind, items in (("Essay", essays), ("Lesson", lessons)):
+        for it in items:
+            for r in it["revisions"]:
+                if str(r.get("note", "")).strip().rstrip(".").lower() == "published":
+                    continue
+                out.append(entry(r["date"], kind, it["title"], it["url"], r["note"]))
+    for b in briefs:
+        for c in b["corrections"]:
+            out.append(entry(c["date"], "Brief correction", b["title"], b["url"], c["note"]))
+    for cell in cells:
+        for c in cell["changes"]:
+            out.append(entry(c["date"], "Reality Board", cell["question"], "/reality/", c["note"]))
+    out.sort(key=lambda e: (e["date"], e["title"]), reverse=True)
+    return out
+
+
 def load_page(name: str) -> dict:
     path = CONTENT / "pages" / f"{name}.md"
     meta, body = read_doc(path)
@@ -710,6 +737,7 @@ def main() -> int:
     privacy = load_page("privacy")
     impressum = load_page("impressum")
     disclaimer = load_page("disclaimer")
+    methodology = load_page("methodology")
 
     if errors:
         print("Build refused. Fix these first:\n", file=sys.stderr)
@@ -780,6 +808,9 @@ def main() -> int:
          for cell in cells for c in cell["changes"]),
         key=lambda h: h["date"], reverse=True)
     write(env, "/reality/", "reality.html", cells=cells, history=history)
+    write(env, "/methodology/", "page.html", page=methodology)
+    write(env, "/corrections/", "corrections.html",
+          entries=collect_corrections(essays, briefs, lessons, cells))
     write(env, "/glossary/", "glossary.html", terms=terms)
     write(env, "/sources/", "sources.html", sources=sources)
     tview = figures.threshold_view(threshold)
@@ -882,6 +913,8 @@ def main() -> int:
 
     pages = [
         ("/about/", about["updated"]),
+        ("/methodology/", methodology["updated"]),
+        ("/corrections/", newest([e["date"] for e in collect_corrections(essays, briefs, lessons, cells)])),
         ("/articles/", newest(essay_dates)),
         ("/news/", newest(brief_dates)),
         ("/reality/", newest(cell_dates)),

@@ -319,6 +319,8 @@ def llms_txt(site: dict, essays: list[dict], briefs: list[dict],
             f"- [Reality Board]({base}/reality/): four questions that decide whether the field has arrived",
             f"- [Glossary]({base}/glossary/): working definitions",
             f"- [Sources]({base}/sources/): the allowlist this site reads from",
+            f"- [Methodology]({base}/methodology/): how claims are checked and what the method does not guarantee",
+            f"- [Corrections and changes]({base}/corrections/): every dated change after publication",
             f"- [About]({base}/about/)", ""]
     return "\n".join(out)
 

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Corrections and changes — {{ site.name }}{% endblock %}
+{% block description %}Every dated change to a published page after it went out, with the reason, newest first.{% endblock %}
+
+{% block content %}
+<article class="wrap prose">
+  <h1>Corrections and changes</h1>
+  <p class="standfirst">
+    Every dated change recorded on a published page, and why. A silent
+    edit is not allowed: a change that is not on this page, or on the page it
+    changed, did not happen.
+  </p>
+
+  <h2>How changes are recorded</h2>
+  <ul>
+    <li><strong>Briefs</strong> are frozen once published. A correction is a dated note at the top of the brief; the original text stays.</li>
+    <li><strong>Essays and lessons</strong> carry a revision history at the bottom of the page.</li>
+    <li><strong>The Reality Board</strong> keeps a dated log of every review, including reviews that left the answer unchanged.</li>
+  </ul>
+  <p>
+    Entries that only record first publication are left out. See the
+    <a href="/methodology/">methodology</a> for how claims are checked, and write to
+    the address in the footer if you find an error.
+  </p>
+
+  <h2>{{ entries | length }} {{ "entry" if entries | length == 1 else "entries" }}</h2>
+  {% if entries %}
+  <ol class="revisions corrections-list">
+    {% for e in entries %}
+    <li>
+      <time datetime="{{ e.date }}">{{ e.date | longdate_iso }}</time>
+      <strong>{{ e.kind }}</strong> ·
+      <a href="{{ e.url }}">{{ e.title }}</a>.
+      {{ e.note }}
+    </li>
+    {% endfor %}
+  </ol>
+  {% else %}
+  <p>No page has been changed since it was published.</p>
+  {% endif %}
+</article>
+{% endblock %}
