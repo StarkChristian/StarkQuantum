@@ -215,7 +215,7 @@ published for traffic would destroy what the site is worth.
   `python tools/threshold_sim.py`, then rebuild.
 - `og/` holds the fonts used to draw link-preview cards. It is read at build
   time and is not published.
-- The CSP allows scripts from `umami.homomorphicprivacy.com` and
+- The CSP allows scripts from `umami.christianstark.net` and
   `'wasm-unsafe-eval'` (Pagefind). Adding any other third-party script means
   changing it.
 - Interactive pieces are written without dependencies, run from files served by

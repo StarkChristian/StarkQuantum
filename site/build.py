@@ -55,7 +55,7 @@ SITE = {
     "doctrine_version": "1.2",
     # Visitor statistics. Self-hosted Umami; no cookies. Remove both keys to
     # drop the script from every page. The privacy notice describes it.
-    "umami_src": "https://umami.homomorphicprivacy.com/script.js",
+    "umami_src": "https://umami.christianstark.net/script.js",
     "umami_website_id": "7f739503-4725-4be1-ac3c-37e1fdfe0c6f",
 }
 
