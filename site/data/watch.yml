@@ -5,7 +5,7 @@ queries:
   - id: rsa-resource
     why: Resource estimates for breaking RSA, which the lessons quote.
     query: 'abs:"RSA-2048" AND abs:"qubits"'
-    affects: [/learn/what-quantum-computers-are-for/, /claims/]
+    affects: [/learn/what-quantum-computers-are-for/, /pqc/what-a-quantum-computer-breaks/, /claims/]
   - id: magic-state
     why: Magic state cultivation and distillation costs.
     query: 'ti:"magic state"'

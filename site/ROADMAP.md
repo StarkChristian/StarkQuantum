@@ -54,6 +54,21 @@ advertising, no tracking, no monetisation, no futurist artwork, English only.
       an unequal-noise model and show how far the crossing moves
 - [ ] A lesson on reading a resource estimate
 
+**Post-quantum section (`/pqc/`, merged 8 November 2026)**
+- [x] Four lessons, ten glossary entries and a reading list, re-checked against
+      NIST IR 8547 (final, October 2026), the NIST PQC pages, the Apple and
+      Mozilla release notes and the arXiv papers
+- [ ] Lessons the standalone site only sketched: KEMs and ML-KEM (FIPS 203), why
+      lattices, ML-DSA and SLH-DSA (FIPS 204, 205), hybrid key exchange, an
+      inventory and crypto-agility lesson. Each is written from the NIST text and
+      added to the claims register
+- [ ] A browser ML-KEM demonstration. It needs a vendored library, which the site
+      has so far avoided, so it is a separate decision
+- [ ] Watch queries for FIPS 206 (FN-DSA), the HQC draft and the IETF hybrid-key-exchange
+      draft in `data/watch.yml`
+- [ ] A Cloudflare redirect rule from pqc.starkquantum.com to /pqc/ (the editor's
+      Cloudflare account; the old server is left running as it was)
+
 **Trust**
 - [ ] DOIs for published versions through Zenodo's GitHub integration (needs the
       editor's decision)

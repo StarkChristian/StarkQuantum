@@ -110,11 +110,11 @@ def collect_citations() -> dict[str, list[str]]:
     claims = yaml.safe_load((ROOT / "data" / "claims.yml").read_text(encoding="utf-8"))
     for c in claims["claims"]:
         add(c.get("url"), "/claims/ (" + ", ".join(c["where"]) + ")")
-    for folder in ("learn", "essays"):
+    for folder in ("learn", "pqc", "essays"):
         for path in sorted((ROOT / "content" / folder).glob("*.md")):
             raw = path.read_text(encoding="utf-8")
             front = yaml.safe_load(raw.split("---", 2)[1]) or {}
-            for s in front.get("sources") or []:
+            for s in (front.get("sources") or []) + (front.get("resources") or []) + (front.get("status") or []):
                 add(s.get("url"), f"content/{folder}/{path.name}")
     return cites
 
@@ -192,7 +192,7 @@ def ages(cfg: dict) -> list[str]:
     age = (today - checked).days
     if age > lim["claim_stale_days"]:
         notes.append(f"- The claims register was last checked on {checked} ({age} days ago). Limit is {lim['claim_stale_days']}.")
-    for path in sorted((ROOT / "content" / "learn").glob("*.md")):
+    for path in sorted(list((ROOT / "content" / "learn").glob("*.md")) + list((ROOT / "content" / "pqc").glob("*.md"))):
         front = yaml.safe_load(path.read_text(encoding="utf-8").split("---", 2)[1])
         reviewed = front.get("reviewed")
         if reviewed and (today - reviewed).days > lim["lesson_stale_days"]:
