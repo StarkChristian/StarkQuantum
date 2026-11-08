@@ -501,6 +501,9 @@ a:hover { color: var(--accent); text-decoration-color: var(--accent); }
 .prose hr { border: 0; border-top: 1px solid var(--rule); margin: 3rem 0; }
 
 .prose table { border-collapse: collapse; width: 100%; font-size: 0.94rem; }
+/* Tables written in Markdown scroll inside their own box on a narrow screen
+   instead of widening the page. */
+.prose table:not(.calc-table) { display: block; max-width: 100%; overflow-x: auto; font-variant-numeric: tabular-nums; }
 .prose th, .prose td {
   text-align: left;
   padding: 0.6rem 0.85rem 0.6rem 0;
