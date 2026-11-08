@@ -270,3 +270,75 @@ claims:
     status: standard
     checked_on: 2026-11-08
     note: Abstract read. The three-quantity inequality is the commonly cited form of the framework and was not re-read in the full paper. The paper also gives a probability estimate for the hardware, which this site does not repeat.
+
+  - claim: "ML-KEM is specified in FIPS 203, published 13 August 2024, with three parameter sets ML-KEM-512, ML-KEM-768 and ML-KEM-1024 at security categories 1, 3 and 5. The standard says its security is related to Module Learning With Errors and that it is believed secure against adversaries with a quantum computer."
+    where: [/pqc/key-encapsulation-and-ml-kem/]
+    source: 'NIST, FIPS 203, "Module-Lattice-Based Key-Encapsulation Mechanism Standard" (13 August 2024)'
+    url: https://doi.org/10.6028/NIST.FIPS.203
+    status: checked
+    checked_on: 2026-11-08
+    note: The standard was read, including the abstract, the list of parameter sets and the security categories.
+
+  - claim: "ML-KEM key and ciphertext sizes in bytes: encapsulation key 800, 1184 and 1568; ciphertext 768, 1088 and 1568; shared secret 32, for ML-KEM-512, -768 and -1024. Decapsulation failure rates are 2^-138.8, 2^-164.8 and 2^-174.8."
+    where: [/pqc/key-encapsulation-and-ml-kem/]
+    source: 'NIST, FIPS 203, Tables 1 to 3'
+    url: https://doi.org/10.6028/NIST.FIPS.203
+    status: checked
+    checked_on: 2026-11-08
+    note: Read in the standard's text. The failure rates hold for well-formed inputs and successful randomness generation, as the standard states.
+
+  - claim: "An X25519 public value is 32 bytes, so an ML-KEM-768 encapsulation key of 1184 bytes is about 37 times larger and its 1088-byte ciphertext about 34 times larger."
+    where: [/pqc/key-encapsulation-and-ml-kem/]
+    source: 'RFC 7748 for the 32 bytes; ratios computed from the FIPS 203 sizes'
+    url: https://www.rfc-editor.org/rfc/rfc7748
+    status: derived
+    checked_on: 2026-11-08
+    note: The 32-byte statement was read in RFC 7748. The ratios, 1184/32 and 1088/32, are computed here.
+
+  - claim: "ML-DSA is specified in FIPS 204 with parameter sets ML-DSA-44, -65 and -87 at categories 2, 3 and 5; public keys are 1312, 1952 and 2592 bytes and signatures 2420, 3309 and 4627 bytes. The standard says it is believed secure against an adversary with a large-scale quantum computer, and that default signing is hedged with fresh randomness to help against side-channel and fault attacks."
+    where: [/pqc/signatures-ml-dsa-and-slh-dsa/]
+    source: 'NIST, FIPS 204, "Module-Lattice-Based Digital Signature Standard" (13 August 2024)'
+    url: https://doi.org/10.6028/NIST.FIPS.204
+    status: checked
+    checked_on: 2026-11-08
+    note: The standard was read, including the abstract, Table 1, the size table and the passage on hedged signing.
+
+  - claim: "SLH-DSA is specified in FIPS 205, is stateless and hash-based and is based on SPHINCS+. It has twelve parameter sets, with public keys of 32, 48 and 64 bytes and signatures from 7,856 to 49,856 bytes, at categories 1, 3 and 5."
+    where: [/pqc/signatures-ml-dsa-and-slh-dsa/]
+    source: 'NIST, FIPS 205, "Stateless Hash-Based Digital Signature Standard" (13 August 2024)'
+    url: https://doi.org/10.6028/NIST.FIPS.205
+    status: checked
+    checked_on: 2026-11-08
+    note: The standard was read, including the abstract and Table 2. The statement that its security rests on hash functions alone is the standard design property of hash-based signatures and was not quoted from the text.
+
+  - claim: "An Ed25519 public key is 32 bytes and its signature 64 bytes, so an ML-DSA-65 signature of 3309 bytes is about 52 times larger and its public key of 1952 bytes about 61 times larger."
+    where: [/pqc/signatures-ml-dsa-and-slh-dsa/]
+    source: 'RFC 8032 for the 32 and 64 bytes; ratios computed from the FIPS 204 sizes'
+    url: https://www.rfc-editor.org/rfc/rfc8032
+    status: derived
+    checked_on: 2026-11-08
+    note: The sizes were read in RFC 8032. The ratios, 3309/64 and 1952/32, are computed here.
+
+  - claim: "NIST IR 8547 says hybrid solutions are typically designed to stay secure if at least one component is secure, are often a hedge against a flaw in a component, add complexity that can raise risk and cost, and are typically expected to be temporary measures leading to a second transition to post-quantum algorithms alone."
+    where: [/pqc/hybrid-key-exchange-and-where-to-start/]
+    source: 'NIST IR 8547, October 2026, section 3.2'
+    url: https://doi.org/10.6028/NIST.IR.8547
+    status: checked
+    checked_on: 2026-11-08
+    note: Section read.
+
+  - claim: "NIST IR 8547 says NIST currently allows a generic composite key-establishment technique from SP 800-56C that concatenates two shared secrets, intends to update it so that the first may come from FIPS 203, allows it even if the second comes from an unapproved source, and will accommodate hybrid key establishment and dual signatures in FIPS 140 validation."
+    where: [/pqc/hybrid-key-exchange-and-where-to-start/]
+    source: 'NIST IR 8547, October 2026, sections 3.2 and 3.2.1'
+    url: https://doi.org/10.6028/NIST.IR.8547
+    status: checked
+    checked_on: 2026-11-08
+    note: Sections read. SP 800-56C itself was not read.
+
+  - claim: "NIST IR 8547 says organisations should treat migration as a current operational priority, beginning with cryptographic inventories, migration planning and early deployments, and should build long-term cryptographic agility into their infrastructure."
+    where: [/pqc/hybrid-key-exchange-and-where-to-start/]
+    source: 'NIST IR 8547, October 2026, introduction'
+    url: https://doi.org/10.6028/NIST.IR.8547
+    status: checked
+    checked_on: 2026-11-08
+    note: Passages read.

@@ -58,10 +58,11 @@ advertising, no tracking, no monetisation, no futurist artwork, English only.
 - [x] Four lessons, ten glossary entries and a reading list, re-checked against
       NIST IR 8547 (final, October 2026), the NIST PQC pages, the Apple and
       Mozilla release notes and the arXiv papers
-- [ ] Lessons the standalone site only sketched: KEMs and ML-KEM (FIPS 203), why
-      lattices, ML-DSA and SLH-DSA (FIPS 204, 205), hybrid key exchange, an
-      inventory and crypto-agility lesson. Each is written from the NIST text and
-      added to the claims register
+- [x] Lessons on KEMs and ML-KEM (FIPS 203), ML-DSA and SLH-DSA (FIPS 204, 205)
+      and hybrid key exchange with where to start, each written from the NIST text
+      and added to the claims register (8 November 2026)
+- [ ] A lesson on why lattices, and a longer one on running a cryptographic
+      inventory and building crypto-agility
 - [ ] A browser ML-KEM demonstration. It needs a vendored library, which the site
       has so far avoided, so it is a separate decision
 - [ ] Watch queries for FIPS 206 (FN-DSA), the HQC draft and the IETF hybrid-key-exchange
