@@ -3,7 +3,10 @@ order: 3
 question: Advantage on a scientific or industrial problem someone actually has
 status: not-yet
 status_label: Not yet
-reviewed: 2026-09-08
+reviewed: 2026-11-08
+changes:
+  - date: 2026-11-08
+    note: "Reviewed 8 November, not applied. No result found since 8 September meets the three conditions. The search covered arXiv and the main journals, not chemistry or materials journals specifically. The answer stays Not yet."
 would_change_it:
   - "A result published by domain scientists — chemists, materials scientists, engineers — who wanted the answer for their own work."
   - "A classical community given the problem and the data, failing to match the result after a serious attempt."

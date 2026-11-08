@@ -3,7 +3,10 @@ order: 2
 question: Logical qubits with useful operations
 status: early
 status_label: Early
-reviewed: 2026-09-08
+reviewed: 2026-11-08
+changes:
+  - date: 2026-11-08
+    note: "Reviewed 8 November, not applied. Three experiments ran non-Clifford operations on logical qubits: fault-tolerant execution of small algorithms with a logical T gate on trapped ions (arXiv:2603.04584), magic state distillation at distances 3 and 5 on neutral atoms (arXiv:2412.15165), and magic state cultivation at distance 3 on a superconducting processor (arXiv:2611.00404). The first is near break-even against unencoded circuits, and the third discards most attempts. None shows error rates that stay flat across deep circuits, or distillation at the cost in published resource estimates. The answer stays Early."
 would_change_it:
   - "A universal logical gate set, including non-Clifford operations, running with error correction active throughout."
   - "Logical error rates that stay flat across a deep sequence of logical gates rather than degrading with circuit depth."

@@ -3,7 +3,10 @@ order: 4
 question: Fault-tolerant machine at useful scale
 status: not-yet
 status_label: Not yet
-reviewed: 2026-09-08
+reviewed: 2026-11-08
+changes:
+  - date: 2026-11-08
+    note: "Reviewed 8 November, not applied. The largest error-corrected algorithm found runs on 12 logical qubits (arXiv:2603.04584), far below the scale in published resource estimates. The answer stays Not yet."
 would_change_it:
   - "A machine executing a user-chosen algorithm of real depth, with error correction active for the full run and a verifiable answer."
   - "Resource estimates and delivered hardware converging, rather than estimates falling while hardware stays flat."

@@ -3,8 +3,10 @@ order: 1
 question: Stable, repeated error correction below threshold
 status: early
 status_label: Early
-reviewed: 2026-09-24
+reviewed: 2026-11-08
 changes:
+  - date: 2026-11-08
+    note: "Raised 8 November, reviewed 8 November, not applied. A preprint (arXiv:2610.24077) reports below-threshold color-code operation on a trapped-ion processor at distances 3, 5 and 7, with error suppression of about 12 per distance step. That is a second platform, with a suppression factor of about 12 against 2.14 for the earlier surface-code memory (arXiv:2408.13687), but it is a preprint, it uses a different code from the surface code, and the abstract does not report operation over hours. The answer stays Early."
   - date: 2026-09-24
     note: "Raised 20 September, reviewed 24 September, not applied. The published
       below-threshold memory (arXiv:2408.13687) decodes in real time for a million cycles at
