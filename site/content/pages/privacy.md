@@ -1,14 +1,14 @@
 ---
 title: Privacy / Datenschutzerklärung
 summary: What this site stores about you, which is almost nothing, and the rights you have over it.
-updated: 2026-09-19
+updated: 2026-11-08
 ---
 
 Stark Quantum is a static site. Every page is a file generated ahead of time
 and served as it is. This page describes only what the site actually does; it
 does not list practices that do not apply here.
 
-Last updated: 19 September 2026.
+Last updated: 8 November 2026.
 
 ## Controller
 
@@ -79,7 +79,7 @@ Nothing else is written to your device. No other `localStorage` key, no
 
 Visits are counted with Umami, an open-source statistics tool that the
 controller runs on the controller's own server. Every page loads its script
-from `umami.homomorphicprivacy.com`, a hostname the controller operates. No
+from `umami.christianstark.net`, a hostname the controller operates. No
 outside analytics company is involved.
 
 For each page view the script sends the address of the page, the referring
