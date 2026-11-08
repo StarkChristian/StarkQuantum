@@ -4,7 +4,7 @@
 checked_on: 2026-10-23
 claims:
   - claim: "A 2048-bit RSA number can be factored with fewer than one million noisy qubits in less than a week, under the hardware assumptions in the paper."
-    where: [/learn/what-quantum-computers-are-for/]
+    where: [/learn/what-quantum-computers-are-for/, /pqc/what-a-quantum-computer-breaks/]
     source: 'Gidney, "How to factor 2048 bit RSA integers with less than a million noisy qubits", arXiv:2505.15917, 21 May 2025'
     url: https://arxiv.org/abs/2505.15917
     status: checked
@@ -172,8 +172,101 @@ claims:
     note: Textbook results, cited and not re-derived. The simulation on the page samples from the quantum prediction and does not test it.
 
   - claim: "A March 2026 preprint estimates that Shor's algorithm could run with as few as 10,000 reconfigurable neutral-atom qubits: a few days for discrete logarithms on the P-256 curve with 26,000 qubits, and one to two orders of magnitude longer for RSA-2048, under stated assumptions."
-    where: [/learn/what-quantum-computers-are-for/]
+    where: [/learn/what-quantum-computers-are-for/, /pqc/what-a-quantum-computer-breaks/]
     source: 'Cain, Xu, King, Picard, Levine, Endres, Preskill, Huang and Bluvstein, "Shor''s algorithm is possible with as few as 10,000 reconfigurable atomic qubits", arXiv:2603.28627 (30 March 2026)'
     url: https://arxiv.org/abs/2603.28627
     status: checked
     note: Abstract read on 23 October 2026. A theoretical estimate and a preprint. The authors state that substantial engineering challenges remain.
+
+  - claim: "In 2019 Gidney and Ekerå estimated that a 2048-bit RSA number could be factored in eight hours by a quantum computer with 20 million noisy qubits."
+    where: [/pqc/what-a-quantum-computer-breaks/]
+    source: 'Gidney and Ekerå, "How to factor 2048 bit RSA integers in 8 hours using 20 million noisy qubits", arXiv:1905.09749 (2019)'
+    url: https://arxiv.org/abs/1905.09749
+    status: checked
+    checked_on: 2026-11-08
+    note: Title read, and the figures confirmed by the abstract of Gidney's 2025 paper, which restates them.
+
+  - claim: "Shor's algorithm factors integers and computes discrete logarithms in polynomial time on a quantum computer."
+    where: [/pqc/what-a-quantum-computer-breaks/]
+    source: 'Shor, "Polynomial-time algorithms for prime factorization and discrete logarithms on a quantum computer", arXiv:quant-ph/9508027'
+    url: https://arxiv.org/abs/quant-ph/9508027
+    status: standard
+    note: Title and authorship confirmed. The result is textbook material, cited and not re-derived.
+
+  - claim: "Grover's algorithm searches an unstructured space of size N in about the square root of N steps, and the square root cannot be improved for unstructured search, including by running many machines in parallel."
+    where: [/pqc/symmetric-cryptography-survives/]
+    source: 'Grover, arXiv:quant-ph/9605043; Zalka, "Grover''s quantum searching algorithm is optimal", arXiv:quant-ph/9711070'
+    url: https://arxiv.org/abs/quant-ph/9711070
+    status: standard
+    note: Titles and authorship confirmed. Textbook results, cited and not re-derived. The statement about parallel machines was not re-read in Zalka's paper.
+
+  - claim: "NIST IR 8547, published in October 2026, says quantum-vulnerable signature and key-establishment algorithms will be deprecated after 2030 and disallowed under NIST standards after 2035."
+    where: [/pqc/, /pqc/harvest-now-decrypt-later/, /pqc/are-you-already-late/]
+    source: 'NIST IR 8547, "Transition to Post-Quantum Cryptography Standards", October 2026'
+    url: https://doi.org/10.6028/NIST.IR.8547
+    status: checked
+    checked_on: 2026-11-08
+    note: The report was read, including the signature table and the key-establishment passage. The tables list RSA and ECDSA at 112 bits or more, EdDSA at 128 bits or more, and elliptic-curve DH and MQV at 112 bits or more.
+
+  - claim: "The report says federal high-value assets and other prioritised systems are held to earlier deadlines under EO 14412 and OMB Memorandum M-26-15, including quantum-resistant key establishment by 31 December 2030."
+    where: [/pqc/are-you-already-late/]
+    source: 'NIST IR 8547, October 2026, as it describes OMB Memorandum M-26-15'
+    url: https://doi.org/10.6028/NIST.IR.8547
+    status: checked
+    checked_on: 2026-11-08
+    note: Read in NIST IR 8547. The memorandum itself was not read, so this records what NIST says it requires.
+
+  - claim: "NIST IR 8547 names harvest now, decrypt later as a reason for requiring or recommending migration of key establishment before the classical schemes are generally disallowed."
+    where: [/pqc/harvest-now-decrypt-later/]
+    source: 'NIST IR 8547, October 2026'
+    url: https://doi.org/10.6028/NIST.IR.8547
+    status: checked
+    checked_on: 2026-11-08
+    note: Read in the key-establishment passage of the report.
+
+  - claim: "NIST published FIPS 203, 204 and 205 on 13 August 2024, and lists FN-DSA as FIPS 206 in development and HQC as selected for standardization on 11 March 2025."
+    where: [/pqc/]
+    source: 'NIST, Post-Quantum Cryptography project and PQC standardization process pages, each showing "Updated October 27, 2026"'
+    url: https://csrc.nist.gov/projects/post-quantum-cryptography/post-quantum-cryptography-standardization
+    status: checked
+    checked_on: 2026-11-08
+    note: Both pages were read on 8 November 2026. A draft of FIPS 206 or of an HQC standard may exist elsewhere on the NIST site; the pages read do not mention one.
+
+  - claim: "Apple's iOS, iPadOS, macOS and visionOS 26 advertise hybrid quantum-secure key exchange in TLS 1.3, including X25519MLKEM768."
+    where: [/pqc/harvest-now-decrypt-later/]
+    source: 'Apple, "Prepare your network for quantum-secure encryption in TLS" (published 18 June 2026)'
+    url: https://support.apple.com/122756
+    status: checked
+    checked_on: 2026-11-08
+    note: Page read. It describes what the client advertises; the server must also support the exchange for it to be used.
+
+  - claim: "Firefox 132 added support for a post-quantum key exchange mechanism for TLS 1.3."
+    where: [/pqc/harvest-now-decrypt-later/]
+    source: 'Mozilla, Firefox 132.0 release notes (29 October 2024)'
+    url: https://www.firefox.com/en-US/firefox/132.0/releasenotes/
+    status: checked
+    checked_on: 2026-11-08
+    note: Release note read. It does not say whether the exchange is on by default, and the lesson does not claim that.
+
+  - claim: "Cloudflare reported in October 2025 that the majority of human-initiated traffic it handled used post-quantum encryption."
+    where: [/pqc/harvest-now-decrypt-later/]
+    source: 'Cloudflare, "State of the post-quantum Internet in 2025" (28 October 2025)'
+    url: https://blog.cloudflare.com/pq-2025/
+    status: vendor
+    note: The company's own measurement of its own traffic. The live Cloudflare Radar figure could not be read, so no newer value is given.
+
+  - claim: "X25519MLKEM768 hybrid key exchange for TLS is specified in the IETF Internet-Draft draft-ietf-tls-ecdhe-mlkem."
+    where: [/pqc/harvest-now-decrypt-later/, /pqc/]
+    source: 'IETF datatracker, draft-ietf-tls-ecdhe-mlkem'
+    url: https://datatracker.ietf.org/doc/draft-ietf-tls-ecdhe-mlkem/
+    status: checked
+    checked_on: 2026-11-08
+    note: The draft record was read through the datatracker (revision 05, last changed 10 August 2026). Its progress toward an RFC was not checked, and the lesson does not state it.
+
+  - claim: "Mosca's framework compares the time data must stay secret, the time a migration takes, and the time until a machine that breaks current cryptography exists."
+    where: [/pqc/are-you-already-late/]
+    source: 'Mosca, "Cybersecurity in an era with quantum computers: will we be ready?", IACR ePrint 2015/1075'
+    url: https://eprint.iacr.org/2015/1075
+    status: standard
+    checked_on: 2026-11-08
+    note: Abstract read. The three-quantity inequality is the commonly cited form of the framework and was not re-read in the full paper. The paper also gives a probability estimate for the hardware, which this site does not repeat.

@@ -14,7 +14,7 @@
   <h2>What the status means</h2>
   <dl class="claims-key">
     <dt>Checked</dt>
-    <dd>The source was read for that claim on {{ checked_on | longdate }}.</dd>
+    <dd>The source was read for that claim on the date shown beside it, or on {{ checked_on | longdate }} where no date is shown.</dd>
     <dt>Vendor-reported</dt>
     <dd>The figure comes from the company that built the device and has not been independently verified.</dd>
     <dt>Derived here</dt>
@@ -35,6 +35,7 @@
       <p class="claim-text">{{ c.claim }}</p>
       <p class="claim-meta">
         <span class="claim-status">{{ {"checked": "Checked", "vendor": "Vendor-reported", "derived": "Derived here", "standard": "Standard result"}[c.status] }}</span>
+        {% if c.get('checked_on') %}· Read {{ c.checked_on | longdate_iso }}{% endif %}
         · Used on
         {% for w in c.where %}<a href="{{ w }}">{{ w }}</a>{% if not loop.last %}, {% endif %}{% endfor %}
       </p>

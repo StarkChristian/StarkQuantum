@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Post-quantum cryptography — {{ site.name }}{% endblock %}
+{% block description %}{{ page.summary }}{% endblock %}
+
+{% block content %}
+<div class="wrap prose">
+  <h1>{{ page.title }}</h1>
+  <p class="standfirst">{{ page.summary }}</p>
+
+  {{ page.body_html | safe }}
+
+  <h2>Where things stand</h2>
+  <p class="muted">Each line was checked against the source named beside it. See the <a href="/claims/">claims register</a> for what was done with each source.</p>
+  <ul class="pqc-status">
+    {% for item in page.status %}
+    <li>
+      <strong>{{ item.title }}</strong> {{ item.text }}
+      <a href="{{ item.url }}" rel="noopener">{{ item.source }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+
+  <h2>Lessons</h2>
+  <ol class="path">
+    {% for lesson in lessons %}
+    <li>
+      <div>
+        <a class="entry-title" href="{{ lesson.url }}">{{ lesson.title }}</a>
+        <p>{{ lesson.summary }}</p>
+        <div class="entry-meta">
+          <span>{{ lesson.level }}</span>
+          <span>{{ lesson.minutes }} min read</span>
+        </div>
+      </div>
+    </li>
+    {% endfor %}
+  </ol>
+
+  <h2>Where to read next</h2>
+  <ul class="pqc-resources">
+    {% for r in page.resources %}
+    <li><a href="{{ r.url }}" rel="noopener">{{ r.name }}</a> — {{ r.note }}</li>
+    {% endfor %}
+  </ul>
+  <p class="muted">Updated {{ page.updated | longdate }}. The <a href="/glossary/">glossary</a> defines the terms.</p>
+</div>
+{% endblock %}

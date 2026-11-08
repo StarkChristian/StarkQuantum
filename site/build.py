@@ -413,10 +413,21 @@ def kb(n: int) -> str:
     return f"{n / 1024:.0f} KB" if n >= 10240 else f"{n / 1024:.1f} KB"
 
 
-def load_lessons() -> list[dict]:
-    """Learn: a short ordered path. Doctrine section 7."""
+TRACKS = {
+    "learn": ("/learn/", "Learn"),
+    "pqc": ("/pqc/", "Post-quantum cryptography"),
+}
+
+
+def load_lessons(track: str = "learn") -> list[dict]:
+    """A short ordered path of lessons. Doctrine section 7.
+
+    Two tracks share one format: Learn (quantum computing) and the
+    post-quantum cryptography section.
+    """
+    prefix, track_title = TRACKS[track]
     lessons = []
-    for path in sorted((CONTENT / "learn").glob("*.md")):
+    for path in sorted((CONTENT / track).glob("[0-9]*.md")):
         meta, body = read_doc(path)
         if not meta:
             continue
@@ -445,7 +456,10 @@ def load_lessons() -> list[dict]:
         lessons.append({
             "kind": "lesson",
             "slug": slug,
-            "url": f"/learn/{slug}/",
+            "url": f"{prefix}{slug}/",
+            "track": track,
+            "track_url": prefix,
+            "track_title": track_title,
             "order": meta.get("order", 99),
             "title": meta.get("title", slug),
             "summary": meta.get("summary", ""),
@@ -533,6 +547,26 @@ def collect_corrections(essays, briefs, lessons, cells) -> list[dict]:
             out.append(entry(c["date"], "Reality Board", cell["question"], "/reality/", c["note"]))
     out.sort(key=lambda e: (e["date"], e["title"]), reverse=True)
     return out
+
+
+def load_pqc_index() -> dict:
+    """The landing page of the post-quantum cryptography section."""
+    path = CONTENT / "pqc" / "index.md"
+    meta, body = read_doc(path)
+    check_language(path, body)
+    check_forbidden(path, body)
+    for field in ("title", "summary", "updated", "status", "resources"):
+        if not meta.get(field):
+            fail(path.name, f"missing required field '{field}'")
+    return {
+        "title": meta["title"],
+        "summary": meta["summary"],
+        "updated": as_date(meta.get("updated"), path, "updated"),
+        "status": meta["status"],
+        "resources": meta["resources"],
+        "body_html": render_markdown(body, path.name),
+        "body_text": body,
+    }
 
 
 def load_page(name: str) -> dict:
@@ -728,7 +762,10 @@ def main() -> int:
     essays = load_essays()
     briefs = load_briefs()
     terms = load_glossary()
-    lessons = load_lessons()
+    learn_lessons = load_lessons("learn")
+    pqc_lessons = load_lessons("pqc")
+    pqc_page = load_pqc_index()
+    lessons = learn_lessons + pqc_lessons
     threshold = load_threshold()
     claims = load_claims()
     cells = load_reality()
@@ -785,7 +822,7 @@ def main() -> int:
     write_og_images(essays, briefs, lessons)
 
     write(env, "/", "home.html", essays=essays[:6], briefs=briefs[:5],
-          cells=cells, start_here=start_here, lessons=lessons)
+          cells=cells, start_here=start_here, lessons=learn_lessons)
     write(env, "/about/", "page.html", page=about)
     write(env, "/privacy/", "page.html", page=privacy)
     write(env, "/impressum/", "page.html", page=impressum)
@@ -819,13 +856,15 @@ def main() -> int:
     write(env, "/decoder/", "decoder.html")
     write(env, "/claims/", "claims.html", claims=claims["claims"],
           checked_on=claims["checked_on"])
-    write(env, "/learn/", "learn_index.html", lessons=lessons)
-    for i, lesson in enumerate(lessons):
-        write(env, lesson["url"], "lesson.html", lesson=lesson,
-              og_image=lesson["og_image"], ld=article_ld(SITE, lesson),
-              cite=bibtex(SITE, lesson),
-              previous=lessons[i - 1] if i > 0 else None,
-              following=lessons[i + 1] if i + 1 < len(lessons) else None)
+    write(env, "/learn/", "learn_index.html", lessons=learn_lessons)
+    write(env, "/pqc/", "pqc_index.html", page=pqc_page, lessons=pqc_lessons)
+    for track_lessons in (learn_lessons, pqc_lessons):
+        for i, lesson in enumerate(track_lessons):
+            write(env, lesson["url"], "lesson.html", lesson=lesson,
+                  og_image=lesson["og_image"], ld=article_ld(SITE, lesson),
+                  cite=bibtex(SITE, lesson),
+                  previous=track_lessons[i - 1] if i > 0 else None,
+                  following=track_lessons[i + 1] if i + 1 < len(track_lessons) else None)
     write(env, "/404.html", "page.html", page={
         "title": "Not here",
         "summary": "",
@@ -922,10 +961,11 @@ def main() -> int:
         ("/sources/", sources_date),
         ("/overhead/", dt.date(2026, 10, 22)),
         ("/threshold/", dt.date.fromisoformat(threshold["generated"])),
-        ("/claims/", claims["checked_on"]),
+        ("/claims/", newest([claims["checked_on"]] + [c["checked_on"] for c in claims["claims"] if c.get("checked_on")])),
         ("/decoder/", dt.date(2026, 10, 22)),
         ("/colophon/", dt.date(2026, 10, 22)),
-        ("/learn/", newest([l["reviewed"] or l["published"] for l in lessons])),
+        ("/learn/", newest([l["reviewed"] or l["published"] for l in learn_lessons])),
+        ("/pqc/", newest([l["reviewed"] or l["published"] for l in pqc_lessons] + [pqc_page["updated"]])),
         ("/privacy/", privacy["updated"]),
         ("/impressum/", impressum["updated"]),
         ("/disclaimer/", disclaimer["updated"]),

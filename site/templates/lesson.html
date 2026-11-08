@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}{{ lesson.title }} — Learn — {{ site.name }}{% endblock %}
+{% block title %}{{ lesson.title }} — {{ lesson.track_title }} — {{ site.name }}{% endblock %}
 {% block description %}{{ lesson.summary }}{% endblock %}
 {% block head_extra %}
 <link rel="alternate" type="text/markdown" href="{{ lesson.url }}index.md">
@@ -9,7 +9,7 @@
 {% block content %}
 <div class="progress" aria-hidden="true"></div>
 <article class="wrap prose" data-pagefind-body data-pagefind-meta="type:Lesson" data-pagefind-filter="type:Lesson">
-  <p class="crumbs"><a href="/learn/">Learn</a> / Lesson {{ lesson.number }}</p>
+  <p class="crumbs"><a href="{{ lesson.track_url }}">{{ lesson.track_title }}</a> / Lesson {{ lesson.number }}</p>
   <h1>{{ lesson.title }}</h1>
   <p class="standfirst">{{ lesson.summary }}</p>
   <p class="dateline">
@@ -93,10 +93,17 @@
       <span class="pager-title">{{ following.title }}</span>
     </a>
     {% else %}
+    {% if lesson.track == "pqc" %}
+    <a class="pager-next" href="/pqc/">
+      <span class="pager-dir">Finished the lessons</span>
+      <span class="pager-title">Back to post-quantum cryptography</span>
+    </a>
+    {% else %}
     <a class="pager-next" href="/articles/">
       <span class="pager-dir">Finished the path</span>
       <span class="pager-title">Read the essays</span>
     </a>
+    {% endif %}
     {% endif %}
   </nav>
 </article>

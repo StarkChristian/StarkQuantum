@@ -1,7 +1,7 @@
 ---
 title: About
 summary: Who writes Stark Quantum, what it tries to do, and what it refuses to be.
-updated: 2026-09-20
+updated: 2026-11-08
 ---
 
 Stark Quantum is written by Christian Stark. It is a small independent
@@ -21,6 +21,8 @@ The work is unpaid and the site is non-commercial.
 
 The subject is future technologies: examining them, and writing from primary
 sources. Quantum computing is the part of that subject this site covers.
+The site has one adjacent section, on [post-quantum cryptography](/pqc/): the
+part of the quantum story that reaches ordinary systems first.
 
 What that does not make me. I am not a lab, not a vendor, and not a
 consultant. I do not present other people's experiments as my own results:
