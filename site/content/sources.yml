@@ -61,8 +61,8 @@ allowed:
       - name: Quantinuum
         url: https://www.quantinuum.com/
         note: Hardware specifications and papers.
-      - name: IonQ research
-        url: https://ionq.com/resources/research
+      - name: IonQ publications
+        url: https://ionq.com/publications
         note: Research output only.
       - name: QuEra
         url: https://www.quera.com/
