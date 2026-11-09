@@ -342,3 +342,10 @@ claims:
     status: checked
     checked_on: 2026-11-08
     note: Passages read.
+
+  - claim: "Several fully homomorphic encryption schemes, including BFV and CKKS, rest on the ring Learning With Errors problem, which belongs to the same family of lattice problems as the Module-LWE problem behind ML-KEM and ML-DSA."
+    where: [/pqc/]
+    source: 'Fan and Vercauteren, "Somewhat practical fully homomorphic encryption" (IACR ePrint 2012/144), for BFV; Cheon, Kim, Kim and Song, "Homomorphic encryption for arithmetic of approximate numbers" (2017), for CKKS'
+    status: standard
+    note: Textbook background, cited by name and not re-read for this page. The link on the page goes to a site by the same author and is labelled as such.
+

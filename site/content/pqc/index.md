@@ -54,3 +54,9 @@ standards bodies, which are policy, not prediction.
 
 It is guidance for reading and planning, not a product, an audit or advice for a
 particular system.
+
+One neighbouring topic is outside this section. The lattice problems behind
+ML-KEM and ML-DSA also underlie several fully homomorphic encryption schemes,
+which compute on data that stays encrypted. For that subject, which this site
+does not cover, see [Homomorphic Privacy](https://homomorphicprivacy.com/), an
+independent guide to fully homomorphic encryption by the same author.
