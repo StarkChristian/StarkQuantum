@@ -105,6 +105,14 @@ html[data-theme="dark"] { color-scheme: dark; }
 
 html { -webkit-text-size-adjust: 100%; }
 
+/* Wide monitors. Every size on the site is in rem, so enlarging the root size
+   enlarges the page as a whole: text, column widths and figures together. It
+   grows from 100% at 1440px to 125% at 2560px and stops at 150%, and it starts
+   from the reader's own default size, not from a fixed number of pixels. */
+@media (min-width: 90rem) {
+  html { font-size: clamp(100%, calc(100% + (100vw - 90rem) * 0.0036), 150%); }
+}
+
 body {
   margin: 0;
   background-color: var(--paper);
